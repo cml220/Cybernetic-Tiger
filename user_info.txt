@@ -1,5 +1,12 @@
-NAME			      USERNAME		    NSID              EMAIL
---------------------------------------------------------------------
-Colin Larson		cml220		      cml220  	        cml220@mail.usask.ca   dev.colinl@gmail.com
-Jake Bolam      jakebolam       jwb037            jwb037@mail.usask.ca
-Diacre B.       kunta           dib699            dib699@mail.usask.ca
+NAME			      USERNAME		    NSID              EMAIL                         PHONE NUM
+-------------------------------------------------------------------------------------------
+Colin Larson		cml220		      cml220  	        dev.colinl@gmail.com          980-5359
+Jake Bolam      jakebolam       jwb037            
+Diacre B.       kunta           dib699            
+Adam Demkey                     asd270
+Jason Knight                    jwk881                                          630-5213
+Brad Johnson    baj231          baj231
+Khaled Haggay                   kyh471
+Jeremy Guebert                  jlg327
+Nigel Jurgens                   nwj830
+Michael Scoles                  mjs429
