@@ -1,5 +1,5 @@
 NAME			USERNAME		EMAIL
 --------------------------------------------------------------------
-Colin Larson		cml220			cml220@mail.usask.ca
+Colin Larson		cml220			cml220@mail.usask.ca   dev.colinl@gmail.com
 Jake Bolam      jakebolam   jwb037@mail.usask.ca
 Diacre B.       kunta       dib699@mail.usask.ca
