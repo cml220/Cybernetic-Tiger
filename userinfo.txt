@@ -1,7 +1,7 @@
-NAME  		USERNAME	NSID            EMAIL				PHONE NUM
+NAME    		USERNAME	  NSID          EMAIL				PHONE NUM
 ----------------------------------------------------------------------------------------------------
 Colin Larson		cml220		  cml220  	dev.colinl@gmail.com          	980-5359
-Jake Bolam      	jakebolam         jwb037           				290=5174
+Jake Bolam      	jakebolam      	  jwb037           				290=5174
 Diacre B.       	kunta             dib699           				341-3857
 Adam Demkey                     	  asd270					381-4183
 Jason Knight            jknightdoeswork   jwk881                                        630-5213
