@@ -1,12 +1,12 @@
-NAME    		USERNAME	  NSID          EMAIL				PHONE NUM
+NAME    		USERNAME	  NSID          EMAIL				            PHONE NUM
 ----------------------------------------------------------------------------------------------------
-Colin Larson		cml220		  cml220  	dev.colinl@gmail.com          	980-5359
-Jake Bolam      	jakebolam      	  jwb037           				290-5174
-Diacre B.       	kunta             dib699           				341-3857
-Adam Demkey                     	  asd270					381-4183
-Jason Knight            jknightdoeswork   jwk881                                        630-5213
-Brad Johnson    	baj231            baj231	bradjohnson.se@gmail.com	291-0027	
-Khaled Haggay                   	  kyh471					381-7996
-Jeremy Guebert                  	  jlg327					261-0392
-Nigel Jurgens                   	  nwj830					291-3468
-Michael Scoles          mscoles        	  mjs429					220-6040
+Colin Larson		cml220		  cml220  	dev.colinl@gmail.com   	980-5359
+Jake Bolam      	jakebolam      	  jwb037           				  290-5174
+Diacre B.       	kunta             dib699           				  341-3857
+Adam Demkey                     	  asd270					          381-4183
+Jason Knight            jknightdoeswork   jwk881              630-5213
+Brad Johnson    	baj231    baj231	bradjohnson.se@gmail.com	291-0027	
+Khaled Haggay   Bibo77  kyh471        kyh471@mail.usask.ca		381-7996
+Jeremy Guebert                  	  jlg327					          261-0392
+Nigel Jurgens                   	  nwj830					          291-3468
+Michael Scoles          mscoles        	  mjs429					    220-6040
