@@ -1,3 +1,0 @@
-NAME			USERNAME		EMAIL
---------------------------------------------------------------------
-Colin Larson		cml220			cml220@mail.usask.ca
