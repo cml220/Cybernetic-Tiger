@@ -20,9 +20,10 @@ public class MainFrame extends JFrame {
 		
 		this.setTitle("NextBooks 2.0");
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		this.setBounds(100, 100, 900, 700);
+		this.setBounds(300, 100, 1000, 700);
 		this.setResizable(false);
 		this.setLayout(new BorderLayout());
+		
 		
 		SidePanel sidePanel = new SidePanel();
 		MainPanel mainPanel = new MainPanel();
