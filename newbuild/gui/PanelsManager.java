@@ -29,6 +29,11 @@ public class PanelsManager {
 	public static final LineBorder defaultBorder = new LineBorder(PanelsManager.selectedBlue,5);
 	
 	/*
+	 * Fonts used throughout the program
+	 */
+	public static final String bodyFont = "Tahoma";
+	
+	/*
 	 * The default tab
 	 */
 	private static Tab defaultTab;
@@ -71,7 +76,7 @@ public class PanelsManager {
 		
 		panelsArray[ADVSEARCH] = new JPanel(); //new AdvancedSearchPanel();
 		
-		panelsArray[SEARCHRESULTS] = new SearchResultsPanel();
+		panelsArray[SEARCHRESULTS] = new DisplayScrollPane(new SearchResultsPanel());
 		
 		panelsArray[MYACCOUNT] = new MyAccountPanel(); //new MyAccountPanel();
 		

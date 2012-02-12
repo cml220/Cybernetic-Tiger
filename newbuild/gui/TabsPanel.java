@@ -40,6 +40,7 @@ public class TabsPanel extends JPanel {
 	public TabsPanel(){
 		
 		this.setLayout(new GridLayout(0,1));
+		this.setBackground(PanelsManager.backgroundBlue);
 	
 		/*
 		 * Book search tab
