@@ -4,7 +4,7 @@ public class User {
     private String username;
     private String password;
 
-    public User(String name, String password) throws Exception {
+    public User(String name, String password) {
         username=name;
         this.password=password;
     }

@@ -1,4 +1,4 @@
-import controller.DatabaseProcess;
+import dbprocess.DatabaseProcess;
 import obj.User;
 
 /**

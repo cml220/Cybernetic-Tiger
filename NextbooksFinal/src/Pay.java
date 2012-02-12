@@ -1,4 +1,4 @@
-import controller.DatabaseProcess;
+import dbprocess.DatabaseProcess;
 import obj.*;
 
 /**
@@ -74,7 +74,7 @@ public class Pay extends javax.swing.JFrame {
         }
         try {
             for(int i = 0; i < cart.countBook(); i++) {
-                db.addBooktoUser(cart.getBookByIndex(i), u);
+                db.addBookToUser(cart.getBookByIndex(i), u);
             }
         } catch (Exception e) {
             e.printStackTrace();

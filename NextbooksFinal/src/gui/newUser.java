@@ -2,6 +2,7 @@ package gui;
 
 import java.sql.SQLException;
 import controller.*;
+import dbprocess.DatabaseProcess;
 import obj.*;
 
 /**

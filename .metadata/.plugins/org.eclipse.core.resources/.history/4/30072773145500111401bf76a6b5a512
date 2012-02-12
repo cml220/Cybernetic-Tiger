@@ -1,0 +1,39 @@
+package dbprocess;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+public class VerificationProcess extends DatabaseProcess {
+    /* name of the database */
+    private static String dbname = "cmpt370group04";
+    /* connection to the database */
+    private Connection conn;
+    
+    private VerificationProcess() throws SQLException {
+    	super();
+    }
+    
+    /**
+     * Check to see if a user is registered in the system
+     * @param	userName	the login name to be searched for
+     * @param	password	the password to be searched for
+     * @return 	true if username and password are registered to a user; false otherwise
+     */
+    public boolean checkLogin(String username, String password) throws SQLException {
+        if(username==null || password==null) {
+            return false;
+        }
+        Statement stmt=conn.createStatement();
+        ResultSet rs=stmt.executeQuery("SELECT * FROM " + dbname + ".users WHERE (users.username=\"" + username + "\") AND (users.password=\"" + password + "\");");
+        if(rs.first()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    
+
+}

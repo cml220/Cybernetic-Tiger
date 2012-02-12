@@ -3,7 +3,7 @@ package obj;
 public class Book {
     private String title;
     private String author;
-    private float price;
+    private double price;
     private String URL;
     private String ISBN;
     private int ID;
@@ -20,15 +20,15 @@ public class Book {
      * @param picURL		cover image of the book
      * @param description	description of the book
      */
-    public Book(String title, String author, float price, String URL, String ISBN, String picURL, String description) {
+    public Book(String title, String author, double price, String URL, String ISBN, String picURL, String description) {
         return Book(title,author,price,URL,ISBN,0,picURL,description);
     }
 
-    /**
+	/**
      * Constructs a book incl. the id. Used by the back end since IDs are set at this point (auto_inc)
      * @param ID	the id of the book
      */
-    public Book(String title, String author, float price, String URL, String ISBN, int ID, String picURL, String description) {
+    public Book(String title, String author, double price, String URL, String ISBN, int ID, String picURL, String description) {
         this.title=title;
         this.author=author;
         this.price=price;
@@ -47,7 +47,7 @@ public class Book {
         return author;
     }
 
-    public float getBookPrice() {
+    public double getBookPrice() {
         return price;
     }
 

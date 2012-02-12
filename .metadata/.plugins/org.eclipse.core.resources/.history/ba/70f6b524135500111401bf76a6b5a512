@@ -1,0 +1,37 @@
+package dbprocess;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+import obj.Book;
+import obj.User;
+
+public class InsertionProcess extends DatabaseProcess {
+	/* name of the database */
+    private static String dbname = "cmpt370group04";
+	/* connection to the database */
+    private Connection conn;
+    
+    private InsertionProcess() throws SQLException {
+    	super();
+    }
+    
+	/**
+     * Add a book to a user's rentals
+     * @param	u	the user/renter
+     * @param 	b	the book to be rented
+     */
+    public void addBookToUser(Book b, User u) throws SQLException {
+        if(b==null || u==null) {
+            return;
+        }
+        Statement stmt=conn.createStatement();
+        ResultSet rs=stmt.executeQuery("SELECT * FROM " + dbname + ".books WHERE books.id=" + b.getBookID() + ";");
+        if(rs.first()) {
+            stmt.execute("INSERT INTO " + dbname + ".userRentals (username,bookID) VALUES (\"" +
+                         u.getUserName() + "\"," + b.getBookID() + ");");
+        }
+    }
+}

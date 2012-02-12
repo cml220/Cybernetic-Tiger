@@ -1,0 +1,76 @@
+package obj;
+
+public class Book {
+    private String title;
+    private String author;
+    private double price;
+    private String URL;
+    private String ISBN;
+    private int ID;
+    private String picURL;
+    private String description;
+
+    /**
+     * Constructs a book without the id. Used by the UI since the admin is not allowed to set IDs.
+     * @param title			title of the book
+     * @param author		author of the book
+     * @param price			price of the book
+     * @param URL			URL of the pdf
+     * @param ISBN			ISBN of the book
+     * @param picURL		cover image of the book
+     * @param description	description of the book
+     */
+    public Book(String title, String author, float price, String URL, String ISBN, String picURL, String description) {
+        return Book(title,author,price,URL,ISBN,0,picURL,description);
+    }
+
+    /**
+     * Constructs a book incl. the id. Used by the back end since IDs are set at this point (auto_inc)
+     * @param ID	the id of the book
+     */
+    public Book(String title, String author, double price, String URL, String ISBN, int ID, String picURL, String description) {
+        this.title=title;
+        this.author=author;
+        this.price=price;
+        this.URL=URL;
+        this.ISBN=ISBN;
+        this.ID=ID;
+        this.picURL=picURL;
+        this.description=description;
+    }
+
+    public String getBookTitle() {
+        return title;
+    }
+
+    public String getBookAuthor() {
+        return author;
+    }
+
+    public float getBookPrice() {
+        return price;
+    }
+
+    public String getBookURL() {
+        return URL;
+    }
+
+    public String getBookISBN() {
+        return ISBN;
+    }
+
+    public int getBookID() {
+        return ID;
+    }
+    public String getBookPicURL() {
+        return picURL;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String toString() {
+        return title + ", " + author + ", " + price + ", " + URL + ", " + ISBN + ", " + ID + ", " + picURL + ", " + description;
+    }
+}

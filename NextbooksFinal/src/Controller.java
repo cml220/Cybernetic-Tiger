@@ -10,6 +10,7 @@ import javax.swing.*;
 import com.sun.pdfview.PDFViewer;
 
 import controller.*;
+import dbprocess.DatabaseProcess;
 import obj.*;
 /*
  * To change this template, choose Tools | Templates
@@ -120,7 +121,7 @@ public class Controller extends javax.swing.JFrame {
         String img = null;
         try {
             DatabaseProcess db = DatabaseProcess.getInstance();
-            img = db.getUserIMG(user);
+            // img = db.getUserInfo(user);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1466,7 +1467,7 @@ public class Controller extends javax.swing.JFrame {
                 catalogue = db.getBookByAuthor(term);
             } else if (field == 2) {
                 catalogue.clear();
-                catalogue.add(db.getBookByISBN(term));
+                catalogue.add(db.getBookByIsbn(term));
             }
         } catch (Exception e) {
         }

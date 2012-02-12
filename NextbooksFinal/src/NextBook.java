@@ -1,9 +1,10 @@
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-import controller.DatabaseProcess;
 import obj.*;
 import javax.swing.*;
+
+import dbprocess.DatabaseProcess;
 
 
 /*

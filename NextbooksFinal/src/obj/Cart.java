@@ -6,7 +6,7 @@ import java.util.Iterator;
 
 public class Cart {
 
-    private float totalPrice;
+    private double totalPrice;
     private LinkedList<Book> books;
     private int numBooks;
 
@@ -16,7 +16,7 @@ public class Cart {
         numBooks=0;
     }
 
-    public float getTotalPrice() {
+    public double getTotalPrice() {
         return totalPrice;
     }
 

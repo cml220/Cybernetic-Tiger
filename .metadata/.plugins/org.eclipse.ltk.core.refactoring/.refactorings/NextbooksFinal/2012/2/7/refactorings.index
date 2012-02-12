@@ -1,0 +1,5 @@
+1329005690101	Move compilation units
+1329006660863	Rename method 'getBookByID'
+1329006677617	Rename method 'getBookByISBN'
+1329007573509	Rename method 'addBooktoUser'
+1329007586601	Rename method 'addBooktoUser'

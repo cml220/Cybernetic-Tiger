@@ -1,0 +1,17 @@
+package dbprocess;
+
+import java.sql.Connection;
+
+public class VerificationProcess extends DatabaseProcess {
+    /* name of the database */
+    private static String dbname = "cmpt370group04";
+    /* connection to the database */
+    private Connection conn;
+    
+    private VerificationProcess() throws SQLException {
+    	super();
+    }
+    
+    
+
+}

@@ -1,0 +1,94 @@
+package dbprocess;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+import obj.Book;
+import obj.User;
+
+public class InsertionProcess extends DatabaseProcess {
+	/* name of the database */
+    private static String dbname = "cmpt370group04";
+    
+    private InsertionProcess() throws SQLException {
+    	super();
+    }
+    
+	/**
+     * Add a book to a user's rentals
+     * @param	u	the user/renter
+     * @param 	b	the book to be rented
+     */
+    public void addBookToUser(Book b, User u) throws SQLException {
+        if(b==null || u==null) {
+            return;
+        }
+        Statement stmt=conn.createStatement();
+        ResultSet rs=stmt.executeQuery("SELECT * FROM " + dbname + ".books WHERE books.id=" + b.getBookID() + ";");
+        if(rs.first()) {
+            stmt.execute("INSERT INTO " + dbname + ".userRentals (username,bookID) VALUES (\"" +
+                         u.getUserName() + "\"," + b.getBookID() + ");");
+        }
+    }
+    
+    /**
+     * Add a book to the catalogue
+     * @param	b	book to be added to the catalogue
+     * @postcond	book has been added to the catalogue if it was not present already
+     */
+    public void addBookToCatalogue(Book b) throws SQLException {
+        if(b==null) {
+            return;
+        }
+        Statement stmt=conn.createStatement();
+        ResultSet rs=stmt.executeQuery("SELECT * FROM " + dbname + ".books WHERE books.isbn=\"" + b.getBookISBN() + "\";");
+        if(rs.first()) {
+            return;    //book with this isbn already exists
+        } else {
+            stmt.execute("INSERT INTO " + dbname + ".books (title,author,price,url,isbn,id,picURL,description) VALUES (\"" +
+                         b.getBookTitle() + "\",\"" + b.getBookAuthor() + "\"," + b.getBookPrice() + ",\"" + b.getBookURL() +
+                         "\",\"" + b.getBookISBN() + "\"," + b.getBookID() + ",\"" + b.getBookPicURL() + "\",\"" + b.getDescription() + "\");");
+            rs=stmt.executeQuery("SELECT * FROM " + dbname + ".books WHERE books.isbn=\"" + b.getBookISBN() +"\";");
+            rs.first();
+        }
+    }
+    
+    /**
+     * Create a new user for the system
+     * @param	u	user to be added to the system
+     * @postcond	user has been added to the system
+     * @return 		user ID if successful; or -1 (username in use)
+     */
+    public int createUser(User u) throws SQLException {
+        if(u==null) {
+            return -1;
+        }
+        if(stringIsEmpty(u.getUserName()) || stringIsEmpty(u.getPassword())) {
+            return -2;
+        }
+        Statement stmt=conn.createStatement();
+        ResultSet rs=stmt.executeQuery("SELECT * FROM " + dbname + ".users WHERE users.username=\"" + u.getUserName() + "\";");
+        if(rs.first()) {
+            return -1;    //value in result set; user already exists
+        } else {
+            stmt.execute("INSERT INTO " + dbname + ".users (username,password) VALUES (\"" + u.getUserName() + "\",\"" + u.getPassword() + "\");");
+            rs=stmt.executeQuery("SELECT * FROM " + dbname + ".users WHERE users.username=\"" + u.getUserName() +"\";");
+            rs.first();
+            return 0;
+        }
+    }
+    
+    
+    /**
+     * Helper method to validate that a string is not empty, null or ""
+     * @param str	the string to check
+     * @return		true if "not empty", otherwise false
+     */
+    private boolean stringIsEmpty(String str) {
+        if (str == null || str.isEmpty() || str.equals("")) {
+            return true;
+        }
+        return false;
+    }
+}
