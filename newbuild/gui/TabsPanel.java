@@ -14,85 +14,72 @@ import javax.swing.JPanel;
  * to the user
  * @author Brad Johnson
  * NextBooks 2011-2012
+ * @modified Jake Bolam - Refactored tab buttons into array
  */
 public class TabsPanel extends JPanel {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 3357923531295006611L;
+	private static final long serialVersionUID = 3357923531295006611L;	
 	
-	/*
-	 * Tabs
-	 * Should the code below be merged into an array and looped through?
-	 */
-	private static Tab bookSearchButton;
-	private static Tab myBooksButton;
-	private static Tab myAccountButton;
-	private static Tab myCartButton;
-	private static Tab tab5Button;
-	private static Tab tab6Button;
-	private static Tab tab7Button;
-	private static Tab tab8Button;
-	private static Tab tab9Button;
-	private static Tab tab10Button;
-	private static Tab tab11Button;
+	private static Tab[] tabArray;
+	private static int activeTabs;
 
 	public TabsPanel(){
 		
 		this.setLayout(new GridLayout(0,1));
 		this.setBackground(PanelsManager.backgroundBlue);
+		tabArray = new Tab[11]; // Maximum of 11 tabs
+		activeTabs = 4; // There are 4 tabs that contain relative information
 	
-		/*
-		 * Book search tab
-		 * On click opens up search results
-		 */
-		bookSearchButton = new Tab("Book Search", PanelsManager.SEARCHRESULTS);
 		
-		/*
-		 * "My Books" tab
-		 * On click opens up customer's book inventory
-		 */
-		myBooksButton = new Tab("My Books", PanelsManager.MYBOOKS);
+		// 1st Tab, Book search tab
+		// On click opens up search results		
+		tabArray[0] = new Tab("Book Search", PanelsManager.SEARCHRESULTS);		
 		
-		/*
-		 * "My Account" tab
-		 * On click opens up customer's account settings 
-		 */
-		myAccountButton = new Tab("My Account", PanelsManager.MYACCOUNT);
+		// 2nd Tab, "My Books" tab
+		// On click opens up customer's book inventory		
+		tabArray[1] = new Tab("My Books", PanelsManager.MYBOOKS);		
 		
-		myCartButton = new Tab("My Cart", PanelsManager.MYCART);
+		// 3rd Tab, "My Account" tab
+		// On click opens up customer's account settings 		
+		tabArray[2] = new Tab("My Account", PanelsManager.MYACCOUNT);
 		
-		tab5Button = new Tab("");
+		// 4th Tab, "My Cart" tab
+		// On click opens up the shopping cart - start of the checkout process 	
+		tabArray[3] = new Tab("My Cart", PanelsManager.MYCART);
 		
-		tab6Button = new Tab("");
+		// 5th Tab, unused tab
+		tabArray[4] = new Tab("");
 		
-		tab7Button = new Tab("");
+		// 6th Tab, unused tab
+		tabArray[5] = new Tab("");
 		
-		tab8Button = new Tab("");
+		// 7th Tab, unused tab
+		tabArray[6] = new Tab("");
 		
-		tab9Button = new Tab("");
+		// 8th Tab, unused tab
+		tabArray[7] = new Tab("");
 		
-		tab10Button = new Tab("");
+		// 9th Tab, unused tab
+		tabArray[8] = new Tab("");
 		
-		tab11Button = new Tab("");
+		// 10th Tab, unused tab
+		tabArray[9] = new Tab("");
 		
-		this.add(bookSearchButton);
-		this.add(myBooksButton);
-		this.add(myAccountButton);
-		this.add(myCartButton);
-		this.add(tab5Button);
-		this.add(tab6Button);
-		this.add(tab7Button);
-		this.add(tab8Button);
-		this.add(tab9Button);
-		this.add(tab10Button);
-		this.add(tab11Button);
+		// 11th Tab, unused tab
+		tabArray[10] = new Tab("");
 		
-		/*
-		 * Setting the default tab
-		 */
-		PanelsManager.setDefaultPanel(myBooksButton);
+		
+		// Load in all the Tabs
+		for(int ii=0;ii<tabArray.length;ii++) {
+		this.add(tabArray[ii]);
+		}
+		
+		
+		// Setting the default tab, My Books (tab array 1)		
+		PanelsManager.setDefaultPanel(tabArray[1]);
 		
 	}
 	
@@ -100,16 +87,12 @@ public class TabsPanel extends JPanel {
 	 * Changes the color of all functional tabs to "unselected blue"
 	 * @postcond - the color of all functional tabs is PanelsManager.unselectedBlue
 	 */
-	public static void deselectAllTabs(){
-		
-		/*
-		 * This only applies to functional tabs, not empty "placeholder" tabs
-		 */
-		bookSearchButton.setBackground(PanelsManager.unselectedBlue);
-		myBooksButton.setBackground(PanelsManager.unselectedBlue);
-		myAccountButton.setBackground(PanelsManager.unselectedBlue);
-		myCartButton.setBackground(PanelsManager.unselectedBlue);
-		
+	public static void deselectAllTabs(){		
+	
+		//This only applies to functional tabs, not empty "placeholder" tabs		
+		for(int ii=0;ii<activeTabs;ii++) {
+		tabArray[ii].setBackground(PanelsManager.unselectedBlue);
+		}		
 	}
 	
 }
