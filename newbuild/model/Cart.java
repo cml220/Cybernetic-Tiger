@@ -26,4 +26,8 @@ public class Cart {
 		}
 		cart.remove(book);
 	}
+
+	public LinkedList<Book> getCart() {
+		return cart;
+	}
 }
