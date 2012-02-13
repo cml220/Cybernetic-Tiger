@@ -45,7 +45,7 @@ public class PanelsManager {
 	public static final int ADVSEARCH = 1;
 	public static final int SEARCHRESULTS = 2;
 	public static final int MYACCOUNT = 3;
-	public static final int SHOPPINGCART = 4;
+	public static final int MYCART = 4;
 	
 	/*
 	 * how many panels the array will hold
@@ -80,7 +80,7 @@ public class PanelsManager {
 		
 		panelsArray[MYACCOUNT] = new MyAccountPanel(); //new MyAccountPanel();
 		
-		panelsArray[SHOPPINGCART] = new JPanel(); //new ShoppingCartPanel();
+		panelsArray[MYCART] = new CheckoutMyCartSTARTPanel(); //new MyCheckoutPanel();
 		
 		initialized = true;
 

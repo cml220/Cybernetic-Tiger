@@ -24,11 +24,12 @@ public class TabsPanel extends JPanel {
 	
 	/*
 	 * Tabs
+	 * Should the code below be merged into an array and looped through?
 	 */
 	private static Tab bookSearchButton;
 	private static Tab myBooksButton;
 	private static Tab myAccountButton;
-	private static Tab tab4Button;
+	private static Tab myCartButton;
 	private static Tab tab5Button;
 	private static Tab tab6Button;
 	private static Tab tab7Button;
@@ -60,7 +61,7 @@ public class TabsPanel extends JPanel {
 		 */
 		myAccountButton = new Tab("My Account", PanelsManager.MYACCOUNT);
 		
-		tab4Button = new Tab("");
+		myCartButton = new Tab("My Cart", PanelsManager.MYCART);
 		
 		tab5Button = new Tab("");
 		
@@ -79,7 +80,7 @@ public class TabsPanel extends JPanel {
 		this.add(bookSearchButton);
 		this.add(myBooksButton);
 		this.add(myAccountButton);
-		this.add(tab4Button);
+		this.add(myCartButton);
 		this.add(tab5Button);
 		this.add(tab6Button);
 		this.add(tab7Button);
@@ -107,6 +108,7 @@ public class TabsPanel extends JPanel {
 		bookSearchButton.setBackground(PanelsManager.unselectedBlue);
 		myBooksButton.setBackground(PanelsManager.unselectedBlue);
 		myAccountButton.setBackground(PanelsManager.unselectedBlue);
+		myCartButton.setBackground(PanelsManager.unselectedBlue);
 		
 	}
 	
