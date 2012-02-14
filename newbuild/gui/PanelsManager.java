@@ -11,164 +11,239 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
-public class PanelsManager {
+/**
+ * Singleton to store the panels used by this program as well as fonts and
+ * colors.
+ * @author Brad
+ *
+ */
+public final class PanelsManager {
 
-	private static boolean initialized;
-	
-	/*
-	 * Colors used throughout the program
-	 */
-	public static final Color unselectedBlue = new Color(82, 112, 139);
-	public static final Color selectedBlue = new Color(43, 105, 162);
-	public static final Color backgroundBlue = new Color(33, 44, 66);
-	public static final Color raisedButtonsBlue = new Color(121,199,255);
-	
-	/*
-	 * Borders used throughout the program
-	 */
-	public static final LineBorder defaultBorder = new LineBorder(PanelsManager.selectedBlue,5);
-	
-	/*
-	 * Fonts used throughout the program
-	 */
-	public static final String bodyFont = "Tahoma";
-	
-	/*
-	 * The default tab
-	 */
-	private static Tab defaultTab;
-	
-	/*
-	 * indices for the "search area" panel
-	 */
-	public static final int MYBOOKS = 0;
-	public static final int ADVSEARCH = 1;
-	public static final int SEARCHRESULTS = 2;
-	public static final int MYACCOUNT = 3;
-	public static final int MYCART = 4;
-	
-	/*
-	 * how many panels the array will hold
-	 * THIS MUST BE CHANGED MANUALLY
-	 */
-	private static final int numPanels = 5;	
-	
-	/*
-	 * An array holding each of the panels that can go in the "search results" space
-	 */
-	private static JComponent[] panelsArray;
-	
-	public static void Initialize(){
+   /**
+    * Hidden constructor.
+    */
+    private PanelsManager() {
 
-		/*
-		 * Set the default tab to null.
-		 * We do this so that the program can check if the default is being set twice.
-		 * This is not allowed.
-		 */
-		defaultTab = null;
-		
-		panelsArray = new JComponent[numPanels];
-		
-		/*
-		 * Define each of the display panels that will be used in the GUI
-		 */
-		panelsArray[MYBOOKS] = new DisplayScrollPane(new MyBooksPanel());
-		
-		panelsArray[ADVSEARCH] = new JPanel(); //new AdvancedSearchPanel();
-		
-		panelsArray[SEARCHRESULTS] = new DisplayScrollPane(new SearchResultsPanel());
-		
-		panelsArray[MYACCOUNT] = new MyAccountPanel(); //new MyAccountPanel();
-		
-		panelsArray[MYCART] = new CheckoutMyCartSTARTPanel(); //new MyCheckoutPanel();
-		
-		initialized = true;
+        //hiding the constructor
 
-	}
-	
-	/*
-	 * Returns the desired JPanel when passed in a constant defined in this
-	 * class
-	 * @precond PanelsManager is initialized ==> panelsArray is initialized
-	 * @precond panelNum is not outside the range of panelsArray
-	 * @precond panelNum is not negative
-	 * @returns a descendent of JPanel from panelsArray, using panelNum as an
-	 * index of panelsArray.
-	 */
-	public static JComponent GetPanel(int panelNum){
-		
-		/*
-		 * precond PanelsManager is initialized ==> panelsArray is initialized
-		 */
-		if(!initialized){
-			throw new RuntimeException("Tried to fetch panel when panels manager not initialized.");
-		}
-		
-		/*
-		 * precond panelNum is not outside the range of panelsArray
-		 */
-		if(panelNum >= numPanels){
-			
-			throw new RuntimeException("Invalid panel request, " + panelNum + 
-					".  Max: " + (numPanels - 1));
-			
-		}
-		
-		/*
-		 * panelNum is not negative
-		 */
-		if(panelNum < 0){
-			
-			throw new RuntimeException("Invalid panel request, " + panelNum + 
-					".  Only positive integers allowed");
-			
-		}
+    }
 
-		/*
-		 * returns a descendent of JPanel from panelsArray, using panelNum as an
-		 * index of panelsArray.
-		 */
-		return panelsArray[panelNum];
+    /**
+     * status variable used to ensure that the panels manager has been
+     * initialised.
+     */
+    private static boolean initialised;
 
-	}
-	
-	/*
-	 * @return the number of panels managed by this class
-	 */
-	public static int getNumPanels(){
-		
-		return numPanels;
-		
-	}
-	
-	public static void setDefaultPanel(Tab defaultPanelTab){
-		
-		if(defaultTab != null){
-			
-			throw new RuntimeException("Default tab was set twice.  " 
-					+ " Check for duplicate calls to 'setDefaultPanel'");
-			
-		}
-		
-		defaultTab = defaultPanelTab;
-		
-	}
-	
-	/*
-	 * Click the tab to take us to the default panel
-	 */
-	public static void goToDefaultPanel(){
-		
-		if(defaultTab == null){
-			
-			throw new RuntimeException("Default tab was never set.  Set exactly one tab"
-					+ " in TabsPanel.java using PanelsManager.setDefaultpanel(Tab)");
-			
-		}
-		
-		defaultTab.doClick();
-		
-	}
-	
-	
+    /*
+     * Colours used throughout the program
+     */
+
+    /**
+     * Colour primarily used for unselected tabs.
+     */
+    public static final Color UNSELECTEDBLUE = new Color(82, 112, 139);
+
+    /**
+     * Colour primarily used for selected tabs.
+     */
+    public static final Color SELECTEDBLUE = new Color(43, 105, 162);
+
+    /**
+     * Colour primarily used for the background.
+     */
+    public static final Color BACKGROUNDBLUE = new Color(33, 44, 66);
+
+    /**
+     * Colour primarily used for raised-style buttons like search and
+     * advanced.
+     */
+    public static final Color RAISEDBUTTONBLUE = new Color(121, 199, 255);
+
+    /**
+     * Borders used throughout the program.
+     */
+    public static final LineBorder DEFAULTBORDER =
+            new LineBorder(PanelsManager.SELECTEDBLUE, 5);
+
+    /**
+     * Fonts used throughout the program.
+     */
+    public static final String BODYFONT = "Tahoma";
+
+    /**
+     * The default tab, selected on startup of the app.
+     */
+    private static Tab defaultTab;
+
+    /*
+     * indices for the "search area" panel
+     */
+
+    /**
+     * My books panel.
+     */
+    public static final int MYBOOKS = 0;
+
+    /**
+     * Advanced search panel.
+     */
+    public static final int ADVSEARCH = 1;
+
+    /**
+     * Search results panel.
+     */
+    public static final int SEARCHRESULTS = 2;
+
+    /**
+     * My account panel.
+     */
+    public static final int MYACCOUNT = 3;
+
+    /**
+     * My cart panel.
+     */
+    public static final int MYCART = 4;
+
+    /**
+     * how many panels the array will hold.
+     * THIS MUST BE CHANGED MANUALLY
+     */
+    private static final int NUMPANELS = 5;
+
+    /**
+     * An array holding each of the panels that can go in the "search results"
+     * space.
+     */
+    private static JComponent[] panelsArray;
+
+    /**
+     * Initializes the Panels Manager by constructing the array of panels
+     * and filling it with all of the panels to be used by the app.
+     */
+    public static void initialise() {
+
+        /*
+         * Set the default tab to null.
+         * We do this so that the program can check if the default is being
+         * set
+         * twice.
+         * This is not allowed.
+         */
+        defaultTab = null;
+
+        panelsArray = new JComponent[NUMPANELS];
+
+        /*
+         * Define each of the display panels that will be used in the GUI
+         */
+        panelsArray[MYBOOKS]
+                = new DisplayScrollPane(new MyBooksPanel());
+
+        panelsArray[ADVSEARCH]
+                = new JPanel(); //new AdvancedSearchPanel();
+
+        panelsArray[SEARCHRESULTS]
+                = new DisplayScrollPane(new SearchResultsPanel());
+
+        panelsArray[MYACCOUNT]
+                = new MyAccountPanel(); //new MyAccountPanel();
+
+        panelsArray[MYCART] =
+                new CheckoutMyCartSTARTPanel(); //new MyCheckoutPanel();
+
+        initialised = true;
+
+    }
+
+    /**
+     * Returns the desired JPanel when passed in a constant defined in this
+     * class.
+     * @param panelNum the index of the panel to fetch from panelsArray
+     * @precond PanelsManager is initialized ==> panelsArray is initialized
+     * @precond panelNum is not outside the range of panelsArray
+     * @precond panelNum is not negative
+     * @return a descendent of JPanel from panelsArray, using panelNum as an
+     * index of panelsArray.
+     */
+    public static JComponent getPanel(final int panelNum) {
+
+        /*
+         * precond PanelsManager is initialized ==> panelsArray is initialized
+         */
+        if (!initialised) {
+            throw new RuntimeException("Tried to fetch panel when panels "
+                    + "manager not initialized.");
+        }
+
+        /*
+         * precond panelNum is not outside the range of panelsArray
+         */
+        if (panelNum >= NUMPANELS) {
+
+            throw new RuntimeException("Invalid panel request, " + panelNum
+                    + ".  Max: " + (NUMPANELS - 1));
+
+        }
+
+        /*
+         * panelNum is not negative
+         */
+        if (panelNum < 0) {
+
+            throw new RuntimeException("Invalid panel request, " + panelNum
+                    + ".  Only positive integers allowed");
+
+        }
+
+        /*
+         * returns a descendent of JPanel from panelsArray, using panelNum as an
+         * index of panelsArray.
+         */
+        return panelsArray[panelNum];
+
+    }
+
+    /**
+     * @return the number of panels managed by this class
+     */
+    public static int getNumPanels() {
+
+        return NUMPANELS;
+
+    }
+
+    /**
+     * Sets the default panel that the app will open on startup.
+     * @param defaultPanelTab - the tab which, when pressed, opens the
+     * default panel
+     */
+    public static void setDefaultPanel(final Tab defaultPanelTab) {
+
+        if (defaultTab != null) {
+
+            throw new RuntimeException("Default tab was set twice.  "
+                    + " Check for duplicate calls to 'setDefaultPanel'");
+
+        }
+
+        defaultTab = defaultPanelTab;
+
+    }
+
+    /**
+     * Clicks the tab to take us to the default panel.
+     */
+    public static void goToDefaultPanel() {
+
+        if (defaultTab == null) {
+
+            throw new RuntimeException("Default tab was never set.  Set exactly"
+                    + " one tab in TabsPanel.java using"
+                    + " PanelsManager.setDefaultpanel(Tab)");
+
+        }
+
+        defaultTab.doClick();
+
+    }
 }
