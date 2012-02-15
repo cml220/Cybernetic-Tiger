@@ -53,7 +53,7 @@ public class Tab extends JButton {
         /*
          * All tabs are 120 wide by 40 tall
          */
-        this.setPreferredSize(new Dimension(TABHEIGHT, TABWIDTH));
+        this.setPreferredSize(new Dimension(TABWIDTH, TABHEIGHT));
 
         /*
          * All buttons default to unselectedBlue (defined in PanelsManager)
@@ -106,7 +106,7 @@ public class Tab extends JButton {
         /*
          * All tabs are 120 wide by 40 tall
          */
-        this.setPreferredSize(new Dimension(TABHEIGHT, TABWIDTH));
+        this.setPreferredSize(new Dimension(TABWIDTH, TABHEIGHT));
 
         /*
          * All non-functional tabs are "background blue", this doesn't change
