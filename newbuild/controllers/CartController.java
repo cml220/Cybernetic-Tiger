@@ -17,7 +17,7 @@ public class CartController {
 	 * @throws CartException if book is already in the current user's cart
 	 */
 	public void addBookToCart(Book book) throws CartException{
-		Controller.currentUser.cart.addBookToCart(book);
+		Controller.getCurrentUser().cart.addBookToCart(book);
 	}
 
 	/**
@@ -26,7 +26,7 @@ public class CartController {
 	 * @throws CartException if book is not in the current user's cart
 	 */
 	public void removeBookFromCart(Book book) throws CartException{
-		Controller.currentUser.cart.removeBook(book);
+		Controller.getCurrentUser().cart.removeBook(book);
 	}
 
 	/**
@@ -34,7 +34,7 @@ public class CartController {
 	 */
 	public float getTotal(){
 		// Get the current books in the cart
-		LinkedList<Book> cart = Controller.currentUser.cart.getCart();
+		LinkedList<Book> cart = Controller.getCurrentUser().cart.getCart();
 		int total = 0;
 		// Go through every book, adding its price to the running total
 		for (Book b : cart){

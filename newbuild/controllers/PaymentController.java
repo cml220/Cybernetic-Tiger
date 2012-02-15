@@ -21,11 +21,11 @@ public class PaymentController {
 	 * Adds the books in the current cart to the current user's rentals
 	 */
 	public void addCurrentCart() {
-		LinkedList<Book> cart = Controller.currentUser.cart.getCart();
+		LinkedList<Book> cart = Controller.getCurrentUser().cart.getCart();
 		for (Book b : cart)
 		{
 			// Possible TODO: add in check for addings duplicate books to user?
-			Controller.currentUser.rentals.add(b);
+			Controller.getCurrentUser().rentals.add(b);
 		}
 	}
 }

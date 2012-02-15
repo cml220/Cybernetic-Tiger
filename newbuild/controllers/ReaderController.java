@@ -1,4 +1,6 @@
 package controllers;
+import javax.swing.JPanel;
+
 import model.Book;
 
 public class ReaderController {
@@ -8,8 +10,8 @@ public class ReaderController {
 		
 	}
 	
-	public void openBook(Book book)
+	public JPanel openBook(Book book)
 	{
-		
+		return null;
 	}
 }
