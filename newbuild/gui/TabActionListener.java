@@ -9,37 +9,53 @@ package gui;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class TabActionListener implements ActionListener{
+/**
+ * Actionlistener for tabs which allows the actionlistener to change the tab
+ * itself.
+ * @author Brad
+ *
+ */
+public class TabActionListener implements ActionListener {
 
-	private Tab caller;
-	private int intention;
-	
-	/*
-	 * Creates a special actionlistener specifically suited for tabs.
-	 * Allows the actionlistener to change the color of the tab when the tab 
-	 * is pressed.
-	 * @param intention - the intention of the tab, ie: open "My Books".  Use values from PanelsManager.java.
-	 * @param caller - the tab using this actionlistener
+    /**
+     * The tab who contained this actionlistener.
+     */
+    private Tab caller;
 
-	 */
-	public TabActionListener(int intention, Tab caller){
-		
-		this.caller = caller;
-		this.intention = intention;
-		
-	}
+    /**
+     * The intended action of the tab.
+     */
+    private int intention;
+
+    /**
+     * Creates a special actionlistener specifically suited for tabs.
+     * Allows the actionlistener to change the color of the tab when the tab
+     * is pressed.
+     * @param inIntention - the intention of the tab, ie: open "My Books".
+     * Use values from PanelsManager.java.
+     * @param inCaller - the tab using this actionlistener
+     */
+    public TabActionListener(final int inIntention, final Tab inCaller) {
+
+        this.caller = inCaller;
+        this.intention = inIntention;
+
+    }
 
 
-	/*
-	 * @postcond - MainPanel.java's displayPanel will be changed to the appropriate panel
-	 * @postcond - This tab will turn "selected blue" and the others will turn "unselected blue"
-	 */
-	public void actionPerformed(ActionEvent arg0) {
+    /**
+     * @param arg0 - the action which triggers this listener
+     * @postcond - MainPanel.java's displayPanel will be changed to the
+     * appropriate panel
+     * @postcond - This tab will turn "selected blue" and the others will turn
+     * "unselected blue"
+     */
+    public void actionPerformed(final ActionEvent arg0) {
 
-		MainPanel.changeDisplayPanel(intention);
-		TabsPanel.deselectAllTabs();
-		caller.setBackground(PanelsManager.selectedBlue);
-		
-	}
-	
+        MainPanel.changeDisplayPanel(intention);
+        TabsPanel.deselectAllTabs();
+        caller.setBackground(PanelsManager.SELECTEDBLUE);
+
+    }
+
 }

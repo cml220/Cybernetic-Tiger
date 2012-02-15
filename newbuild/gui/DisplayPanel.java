@@ -14,16 +14,19 @@ import javax.swing.JPanel;
  */
 public class DisplayPanel extends JPanel {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 192006444394364516L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 192006444394364516L;
 
-	public DisplayPanel(){
-		
-		super();
-		this.setBorder(PanelsManager.defaultBorder);
-		
-	}
-	
+    /**
+     * Constructs the panel with style modification.
+     */
+    public DisplayPanel() {
+
+        super();
+        this.setBorder(PanelsManager.DEFAULTBORDER);
+
+    }
+
 }

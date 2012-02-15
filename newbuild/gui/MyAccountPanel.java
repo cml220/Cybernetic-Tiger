@@ -10,21 +10,30 @@ import java.awt.GridLayout;
 
 import javax.swing.JLabel;
 
+/**
+ * Panel for editing and viewing a users own account information.
+ * @author Brad
+ *
+ */
 public class MyAccountPanel extends DisplayPanel {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -6750536388415434300L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = -6750536388415434300L;
 
-	public MyAccountPanel(){
-		
-		this.setLayout(new GridLayout(0,1));
-		
-		JLabel placeholder = new JLabel("Account Details");
-		
-		this.add(placeholder);
-		
-	}
-	
+    /**
+     * Constructs the panel.
+     * TODO: Everything
+     */
+    public MyAccountPanel() {
+
+        this.setLayout(new GridLayout(0, 1));
+
+        JLabel placeholder = new JLabel("Account Details");
+
+        this.add(placeholder);
+
+    }
+
 }
