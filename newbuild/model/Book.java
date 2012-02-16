@@ -5,13 +5,13 @@ import java.awt.Image;
 public class Book {
 	public String title;
     public String author;
-    public float price;
+    public Double price;
     public String pdfURL;
     public String ISBN;
     public String img;
     public String description;
     
-    public Book(String title, String author, float price, String pdfURL, String ISBN, String picURL, String description) {
+    public Book(String title, String author, Double price, String pdfURL, String ISBN, String picURL, String description) {
         this.title=title;
         this.author=author;
         this.price=price;

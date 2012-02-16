@@ -83,6 +83,16 @@ public final class Controller {
         initialised = true;
 
     }
+    
+    /**
+     * Checks if the controller is initialised
+     * @return initialised 
+     */
+    public static boolean isInitialised(){
+        
+        return initialised;
+        
+    }
 
     /**
      * The current user of the system.

@@ -16,11 +16,11 @@ public class CheckoutMyCartBookPanel extends BookPanel {
 
 		DecimalFormat df = new DecimalFormat("###,###,###.##");
 		
-		primaryButton.setText("Remove from cart");
-		buttonsPanel.add(primaryButton);
+		super.getPrimaryButton().setText("Remove from cart");
+		super.getButtonsPanel().add(super.getPrimaryButton());
 
-		rentalInfoLabel.setText("Price: " + df.format(price));
-		rentalInfoPanel.add(rentalInfoLabel);
+		super.getRentalInfoLabel().setText("Price: " + df.format(price));
+		super.getRentalInfoPanel().add(super.getRentalInfoLabel());
 		
 	}
 	

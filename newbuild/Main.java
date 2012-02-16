@@ -8,7 +8,7 @@ public class Main {
 		/*
 		 * Initialize the GUI manager
 		 */
-		PanelsManager.Initialize();
+		PanelsManager.initialise();
 		
 		/*
 		 * Construct the GUI
