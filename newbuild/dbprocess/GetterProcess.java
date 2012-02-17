@@ -30,7 +30,7 @@ public class GetterProcess extends DatabaseProcess {
         Statement stmt=conn.createStatement();
         ResultSet rs=stmt.executeQuery("SELECT * FROM tblAccountInfo WHERE UserName = " + "\"" + username + "\"");
         if(rs.first()) {
-           	User u = new User(rs.getString("FirstName"), rs.getString("LastName"));
+           	User u = new User(rs.getString("FirstName"), false, rs.getString("email"));
             return u;
         } else {
             return null;
@@ -48,7 +48,7 @@ public class GetterProcess extends DatabaseProcess {
             LinkedList<Book> booklist = new LinkedList<Book>();
             while(!rs.isAfterLast()) {
                 Book tmp = new Book(rs.getString("Title"), rs.getString("Author"), rs.getDouble("Price"), rs.getString("Url"), 
-                		rs.getString("ISBN"), rs.getInt("BookID"), rs.getString("picURL"), rs.getString("Description"));
+                		rs.getString("ISBN"), rs.getString("picURL"), rs.getString("Description"));
                 booklist.add(tmp);
                 rs.next();
             }
@@ -73,7 +73,7 @@ public class GetterProcess extends DatabaseProcess {
             LinkedList<Book> booklist = new LinkedList<Book>();
             while (!rs.isAfterLast()) {
                 Book tmp = new Book(rs.getString("Title"), rs.getString("Author"), rs.getDouble("Price"), rs.getString("Url"), 
-                		rs.getString("ISBN"), rs.getInt("BookID"), rs.getString("picURL"), rs.getString("Description"));
+                		rs.getString("ISBN"), rs.getString("picURL"), rs.getString("Description"));
                 booklist.add(tmp);
                 rs.next();
             }
@@ -98,7 +98,7 @@ public class GetterProcess extends DatabaseProcess {
             LinkedList<Book> booklist = new LinkedList<Book>();
             while (!rs.isAfterLast()) {
                 Book tmp = new Book(rs.getString("Title"), rs.getString("Author"), rs.getDouble("Price"), rs.getString("Url"), 
-                		rs.getString("ISBN"), rs.getInt("BookID"), rs.getString("picURL"), rs.getString("Description"));
+                		rs.getString("ISBN"), rs.getString("picURL"), rs.getString("Description"));
                 booklist.add(tmp);
                 rs.next();
             }
@@ -121,7 +121,7 @@ public class GetterProcess extends DatabaseProcess {
         ResultSet rs=stmt.executeQuery("SELECT * FROM tblBook WHERE ISBN=\"" + isbn + "\";");
         if (rs.first()) {
             return new Book(rs.getString("Title"), rs.getString("Author"), rs.getDouble("Price"), rs.getString("Url"), 
-            		rs.getString("ISBN"), rs.getInt("BookID"), rs.getString("picURL"), rs.getString("Description"));
+            		rs.getString("ISBN"), rs.getString("picURL"), rs.getString("Description"));
         } else {	//no book found
             return null;
         }
@@ -137,7 +137,7 @@ public class GetterProcess extends DatabaseProcess {
         ResultSet rs=stmt.executeQuery("SELECT * FROM tblBook WHERE BookID=" + ID + ";");
         if (rs.first()) {
             return new Book(rs.getString("Title"), rs.getString("Author"), rs.getDouble("Price"), rs.getString("Url"), 
-            		rs.getString("ISBN"), rs.getInt("BookID"), rs.getString("picURL"), rs.getString("Description"));
+            		rs.getString("ISBN"), rs.getString("picURL"), rs.getString("Description"));
         } else {	//no book found
             return null;
         }

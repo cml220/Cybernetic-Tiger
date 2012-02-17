@@ -5,6 +5,7 @@ import java.util.LinkedList;
 public class User {
 	public PaymentInfo paymentInfo;
 	public String username;
+	public String password;
 	public LinkedList<Book> rentals;
 	public boolean isAdmin;
 	public String email;
@@ -20,5 +21,13 @@ public class User {
 		this.isAdmin = isAdmin;
 		this.email = email;
 		cart = new Cart();
+	}
+	
+	public String getUserName() {
+		return username;
+	}
+	
+	public String getPassword() {
+		return password;
 	}
 }

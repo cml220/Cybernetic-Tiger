@@ -11,7 +11,35 @@ public class Book {
     public String img;
     public String description;
     
-    public Book(String title, String author, Double price, String pdfURL, String ISBN, String picURL, String description) {
+    public String getBookTitle() {
+		return title;
+	}
+
+	public String getBookAuthor() {
+		return author;
+	}
+
+	public Double getBookPrice() {
+		return price;
+	}
+
+	public String getBookPdfURL() {
+		return pdfURL;
+	}
+
+	public String getBookISBN() {
+		return ISBN;
+	}
+
+	public String getBookImg() {
+		return img;
+	}
+
+	public String getBookDescription() {
+		return description;
+	}
+    
+    public Book(String title, String author, double price, String pdfURL, String ISBN, String picURL, String description) {
         this.title=title;
         this.author=author;
         this.price=price;

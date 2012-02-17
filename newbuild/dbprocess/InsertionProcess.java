@@ -25,6 +25,7 @@ public class InsertionProcess extends DatabaseProcess {
      * @param	u	the user/renter
      * @param 	b	the book to be rented
      */
+    /*
     public void addBookToUser(Book b, User u, int rentalID) throws SQLException {
         if(b==null || u==null) {
             return;
@@ -35,12 +36,14 @@ public class InsertionProcess extends DatabaseProcess {
         	stmt.execute("INSERT INTO tblBookRental(RentalID, BookID) VALUES (\"" + rentalID + "\"," + b.getBookID() + ");");
         }
     }
+    */
     
     /**
      * Add a book to the catalogue
      * @param	b	book to be added to the catalogue
      * @postcond	book has been added to the catalogue if it was not present already
      */
+    /*
     public void addBookToCatalogue(Book b) throws SQLException {
         if(b==null) {
             return;
@@ -52,12 +55,13 @@ public class InsertionProcess extends DatabaseProcess {
         } else {
         	stmt.execute("INSERT INTO tblBook (Title,Author,Price,Url,ISBN,BookID,picURL,Description) VALUES (\"" 
         			+ b.getBookTitle() + 		"\",\"" + b.getBookAuthor() + "\"," + b.getBookPrice() 
-        			+ ",\"" + b.getBookURL() + "\",\"" + b.getBookISBN() + "\"," + b.getBookID() 		
-        			+ ",\"" + b.getBookPicURL() + "\",\"" + b.getDescription() + "\");");
+        			+ ",\"" + b.getBookPdfURL() + "\",\"" + b.getBookISBN() + "\"," + b.getBookID() 		
+        			+ ",\"" + b.getBookImg() + "\",\"" + b.getBookDescription() + "\");");
         	rs=stmt.executeQuery("SELECT * FROM tblBook WHERE ISBN=\"" + b.getBookISBN() +"\";");
             rs.first();
         }
     }
+    */
     
     /**
      * Create a new user for the system
