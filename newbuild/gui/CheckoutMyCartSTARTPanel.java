@@ -11,6 +11,7 @@ package gui;
 
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 
 public class CheckoutMyCartSTARTPanel extends JPanel 
@@ -25,11 +26,11 @@ public class CheckoutMyCartSTARTPanel extends JPanel
 	public CheckoutMyCartSTARTPanel()
 	{
 		
-		//		Stack panels vertically, 1 column, rows don't have fixed height
+		// Stack panels vertically, 1 column, rows don't have fixed height
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		
 		// Load items in the cart
-		this.add(new DisplayScrollPane(new CheckoutMyCartPanel()));
+		this.add(new JScrollPane(new CheckoutMyCartPanel()));
 		
 		
 		// Load the totalCost and Payment button

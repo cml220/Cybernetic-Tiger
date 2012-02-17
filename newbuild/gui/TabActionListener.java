@@ -54,6 +54,8 @@ public class TabActionListener implements ActionListener {
 
         MainPanel.changeDisplayPanel(intention);
         TabsPanel.deselectAllTabs();
+        SearchBarPanel.setPreSearchText(intention);
+        SearchBarPanel.showPreSearchText();
         caller.setBackground(PanelsManager.SELECTEDBLUE);
 
     }

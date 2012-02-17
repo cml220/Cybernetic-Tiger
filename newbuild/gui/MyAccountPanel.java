@@ -26,8 +26,8 @@ public class MyAccountPanel extends DisplayPanel {
      * Constructs the panel.
      * TODO: Everything
      */
-    public MyAccountPanel() {
-
+    public MyAccountPanel() { 
+        
         this.setLayout(new GridLayout(0, 1));
 
         JLabel placeholder = new JLabel("Account Details");

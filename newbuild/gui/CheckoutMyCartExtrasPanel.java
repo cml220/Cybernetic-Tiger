@@ -8,6 +8,8 @@ package gui;
 
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
@@ -46,7 +48,21 @@ public class CheckoutMyCartExtrasPanel extends JPanel {
 		
 		// Now add the proceed button
 		JButton paymentButton = new JButton("Proceed to Payment");
+		paymentButton.addActionListener(new ActionListener(){
+
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                
+                CheckoutPanel.nextPaymentStep();
+                
+            }
+		    
+		    
+		    
+		});
+		
 		this.add(paymentButton);
+		
 		
 	}
 	

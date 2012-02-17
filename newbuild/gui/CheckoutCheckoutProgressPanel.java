@@ -8,8 +8,12 @@ package gui;
 
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.*;
+
+import exceptions.GUINoSuchPanelException;
 
 public class CheckoutCheckoutProgressPanel extends JPanel {
 
@@ -81,24 +85,115 @@ public class CheckoutCheckoutProgressPanel extends JPanel {
 		
 		// 1 text -- Cart
 		buttonArray[1].setText("Cart");
+		buttonArray[1].addActionListener(new ActionListener(){
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                
+                try {
+                    
+                    CheckoutPanel.jumpToPaymentStep(CheckoutPanel.CART);
+                    
+                } catch (GUINoSuchPanelException e1) {
+
+                    JOptionPane.showMessageDialog(null, "Could not load " +
+                    		"shopping cart.  \nPlease contact technical " +
+                    		"support.", "GUINoSuchPanelException",
+                    		JOptionPane.ERROR_MESSAGE);
+                    
+                }
+                
+            }
+		    
+		    
+		});
 		
 		// 2 fancy text -- line
 		buttonArray[2].setText("---");
 		
 		// 3 text -- Payment
 		buttonArray[3].setText("Payment");
+		buttonArray[3].addActionListener(new ActionListener(){
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                
+                try {
+                    
+                    CheckoutPanel.jumpToPaymentStep(CheckoutPanel.PAYMENT);
+                    
+                } catch (GUINoSuchPanelException e1) {
+
+                    JOptionPane.showMessageDialog(null, "Could not load " +
+                            "payment step.  \nPlease contact technical " +
+                            "support.", "GUINoSuchPanelException",
+                            JOptionPane.ERROR_MESSAGE);
+                    
+                }
+                
+            }
+            
+            
+        });
+        
 				
 		// 4 fancy text -- line
 		buttonArray[4].setText("---");
 				
 		// 5 text -- Verify Cart/Payment
 		buttonArray[5].setText("Verify Cart/Payment");
+		buttonArray[5].addActionListener(new ActionListener(){
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                
+                try {
+                    
+                    CheckoutPanel.jumpToPaymentStep(CheckoutPanel.VERIFY);
+                    
+                } catch (GUINoSuchPanelException e1) {
+
+                    JOptionPane.showMessageDialog(null, "Could not load " +
+                            "verification.  \nPlease contact technical " +
+                            "support.", "GUINoSuchPanelException",
+                            JOptionPane.ERROR_MESSAGE);
+                    
+                }
+                
+            }
+            
+            
+        });
+        
 				
 		// 6 fancy text -- line
 		buttonArray[6].setText("---");
 				
 		// 7 text -- Cart
 		buttonArray[7].setText("Thankyou");
+		buttonArray[7].addActionListener(new ActionListener(){
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                
+                try {
+                    
+                    CheckoutPanel.jumpToPaymentStep(CheckoutPanel.THANKYOU);
+                    
+                } catch (GUINoSuchPanelException e1) {
+
+                    JOptionPane.showMessageDialog(null, "Could not load " +
+                            "thank you dialog.  \nPlease contact technical " +
+                            "support.", "GUINoSuchPanelException",
+                            JOptionPane.ERROR_MESSAGE);
+                    
+                }
+                
+            }
+            
+            
+        });
+        
 				
 		// 8 fancy text -- right arrow
 		buttonArray[8].setText("-->");		

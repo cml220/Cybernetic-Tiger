@@ -115,6 +115,18 @@ public final class PanelsManager {
      * space.
      */
     private static JComponent[] panelsArray;
+    
+    /**
+     * An array holding custom 'pre search' strings that will go in the search
+     * bar if it is empty and not selected
+     */
+    private static String[] preSearchStringsArray;
+    
+    /**
+     * The default 'pre search' string for panels who don't have a custom
+     * string assigned to them
+     */
+    private static String defaultPreSearchString = " Search Available Books";
 
     /**
      * Initializes the Panels Manager by constructing the array of panels
@@ -132,12 +144,14 @@ public final class PanelsManager {
         defaultTab = null;
 
         panelsArray = new JComponent[NUMPANELS];
+        preSearchStringsArray = new String[NUMPANELS];
 
         /*
          * Define each of the display panels that will be used in the GUI
          */
         panelsArray[MYBOOKS]
                 = new DisplayScrollPane(new MyBooksPanel());
+        preSearchStringsArray[MYBOOKS] = " Search My Books";
 
         panelsArray[ADVSEARCH]
                 = new JPanel(); //new AdvancedSearchPanel();
@@ -149,7 +163,8 @@ public final class PanelsManager {
                 = new MyAccountPanel(); //new MyAccountPanel();
 
         panelsArray[MYCART] =
-                new CheckoutMyCartSTARTPanel(); //new MyCheckoutPanel();
+                new CheckoutPanel(); //new MyCheckoutPanel();
+        preSearchStringsArray[MYCART] = " Search My Cart";
 
         initialised = true;
 
@@ -211,7 +226,23 @@ public final class PanelsManager {
         return NUMPANELS;
 
     }
-
+    
+    /**
+     * @return the 'pre search string' that goes in the searchbox before any
+     * text is entered.
+     */
+    public static String getPreSearchString(int panelNum){
+        
+        if(preSearchStringsArray[panelNum] == null){
+            
+            return defaultPreSearchString;
+            
+        }
+        
+        return preSearchStringsArray[panelNum];
+        
+    }
+        
     /**
      * Sets the default panel that the app will open on startup.
      * @param defaultPanelTab - the tab which, when pressed, opens the
@@ -244,6 +275,7 @@ public final class PanelsManager {
         }
 
         defaultTab.doClick();
+        defaultTab.requestFocus();
 
     }
 }

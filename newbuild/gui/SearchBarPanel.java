@@ -7,9 +7,12 @@
 package gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -23,9 +26,24 @@ import javax.swing.border.LineBorder;
 public class SearchBarPanel extends JPanel {
 
     /**
-
+     * VersionUID.
      */
     private static final long serialVersionUID = -8388903742748016888L;
+
+    /**
+     * The search text field itself.
+     */
+    private static JTextField searchField;
+
+    /**
+     * The string that shows in the search bar when nothing has been entered.
+     */
+    private static String panelSpecificPreSearchText;
+
+    /**
+     * Fonts used in this panel.
+     */
+    private static Font normalSearchFont, graySearchFont;
 
     /**
      * Search bar font size.
@@ -52,16 +70,59 @@ public class SearchBarPanel extends JPanel {
      */
     public SearchBarPanel() {
 
+        normalSearchFont = new Font("Times New Roman", Font.BOLD,
+                searchFontSize);
+
+        graySearchFont = new Font("Times New Roman", Font.ITALIC,
+                searchFontSize);
+
         this.setLayout(new BorderLayout());
 
         /*
          * Search entry field
          */
-        JTextField searchField = new JTextField();
-        searchField.requestFocus();
+        searchField = new JTextField();
         searchField.setFont(new Font("Times New Roman", Font.BOLD,
                 searchFontSize));
         searchField.setBorder(PanelsManager.DEFAULTBORDER);
+
+        searchField.addFocusListener(new FocusListener() {
+
+            @Override
+            public void focusGained(final FocusEvent arg0) {
+
+                /*
+                 * When the user gives the search bar focus, clear it out and
+                 * set the font to black
+                 */
+                if (searchField.getText().equals(panelSpecificPreSearchText)) {
+
+                    searchField.setText("");
+                    searchField.setForeground(Color.BLACK);
+                    searchField.setFont(normalSearchFont);
+
+                }
+
+            }
+
+            @Override
+            public void focusLost(final FocusEvent arg0) {
+
+                /*
+                 * When the user takes focus away from an empty searchbox, put
+                 * the placeholder text there
+                 */
+                if (searchField.getText().isEmpty()) {
+
+                    showPreSearchText();
+
+                }
+
+
+            }
+
+
+        });
 
         /*
          * Search start button
@@ -99,6 +160,29 @@ public class SearchBarPanel extends JPanel {
         this.add(searchField, BorderLayout.CENTER);
         this.add(searchBarButtonsPanel, BorderLayout.EAST);
 
+    }
+
+    /**
+     * Swap out whatever is in this search bar with the 'pre search text'
+     * associated with the current panel.
+     */
+    public static void showPreSearchText() {
+
+        //TODO: log4j showing intended text.
+        searchField.setText(panelSpecificPreSearchText);
+        searchField.setForeground(Color.LIGHT_GRAY);
+        searchField.setFont(graySearchFont);
+
+    }
+
+    /**
+     * set the the 'pre search text' based on which panel is being loaded.
+     * @param panelNum - the index of the panel, as defined in
+     * PanelsManager.java
+     */
+    public static void setPreSearchText(final int panelNum) {
+
+        panelSpecificPreSearchText = PanelsManager.getPreSearchString(panelNum);
 
     }
 
