@@ -4,22 +4,22 @@ import static org.junit.Assert.*;
 
 import java.sql.SQLException;
 import java.util.LinkedList;
-
+import org.apache.log4j.Logger;
 import model.Book;
 import model.User;
 
-import org.junit.Before;
 import org.junit.Test;
 
 public class DatabaseProcessJUnit {
 
 	private DatabaseProcess db;
-	
+	Logger log = Logger.getLogger(DatabaseProcessJUnit.class);
 	/**
 	 * Test cases for User based database operations.
 	 */
 	@Test
 	public void testCreateUser() {
+		log.debug("testCreateUser Entered.");
 		User u = new User("Test", false, "1234@google.se");
 		User u2 = new User(null, false, null);
 		User u3 = new User("", false, "");
@@ -40,6 +40,7 @@ public class DatabaseProcessJUnit {
 	
 	@Test
 	public void testGetUserInfo() {
+		log.debug("testGetUserInfo Entered.");
 		User u = new User("Test", false, "1234@google.se");
 		try {
 			db.createUser(u);
@@ -55,6 +56,7 @@ public class DatabaseProcessJUnit {
 
 	@Test
 	public void testGetAdminStatus() {
+		log.debug("testGetAdminStatus Entered.");
 		User u = new User("Test", false, "1234@google.se");
 		try {
 			User res = db.getUserInfo("Test");
@@ -70,6 +72,7 @@ public class DatabaseProcessJUnit {
 	 */
 	@Test
 	public void testAddBookToCatalogue() {
+		log.debug("testAddBookToCatalogue Entered.");
 		Book b = new Book("THISISAUNIQUESTRING","THISISAUNIQUESTRING",(float) 1.10,"THISISAUNIQUESTRING", "2309580932902385","THISISAUNIQUESTRING","THISISAUNIQUESTRING");
 		try {
 			db.addBookToCatalogue(b);
@@ -81,6 +84,7 @@ public class DatabaseProcessJUnit {
 	
 	@Test
 	public void testAddBookToUser() {
+		log.debug("testAddBookToUser Entered.");
 		User u = new User("Test", false, "1234@google.se");
 		Book b = new Book("THISISAUNIQUESTRING","THISISAUNIQUESTRING",(float) 1.10,"THISISAUNIQUESTRING", "2309580932902385","THISISAUNIQUESTRING","THISISAUNIQUESTRING");
 		try {
@@ -93,7 +97,7 @@ public class DatabaseProcessJUnit {
 
 	@Test
 	public void testGetCatalogue() {
-		
+		log.debug("testGetCatalogue Entered.");
 		try {
 			LinkedList<Book> booklist= db.getCatalogue();
 			assertTrue(!booklist.isEmpty());
@@ -105,7 +109,7 @@ public class DatabaseProcessJUnit {
 
 	@Test
 	public void testGetBookByTitle() {
-		
+		log.debug("testGetBookByTitle Entered.");
 		LinkedList<Book> booklist;
 		try {
 			booklist = db.getBookByTitle("THISISAUNIQUESTRING");
@@ -120,6 +124,7 @@ public class DatabaseProcessJUnit {
 
 	@Test
 	public void testGetBookByAuthor() {
+		log.debug("testGetBookByAuthor Entered.");
 		LinkedList<Book> booklist;
 		try {
 			booklist = db.getBookByAuthor("THISISAUNIQUESTRING");
@@ -132,6 +137,7 @@ public class DatabaseProcessJUnit {
 
 	@Test
 	public void testGetBookByIsbn() {
+		log.debug("testGetBookByIsbn Entered.");
 		Book b = new Book("THISISAUNIQUESTRING","THISISAUNIQUESTRING",(float) 1.10,"THISISAUNIQUESTRING", "2309580932902385","THISISAUNIQUESTRING","THISISAUNIQUESTRING");
 		Book found;
 		try {
@@ -146,6 +152,7 @@ public class DatabaseProcessJUnit {
 
 	@Test
 	public void testGetBookById() {
+		log.debug("testGetBookById Entered.");
 		//Unsure of the usefulness of searching by id since object class lacks support for ID
 		//and ISBN is unique to specific book (International)
 		/*Book b = new Book("THISISAUNIQUESTRING","THISISAUNIQUESTRING",(float) 1.10,"THISISAUNIQUESTRING", "2309580932902385","THISISAUNIQUESTRING","THISISAUNIQUESTRING");
@@ -161,6 +168,7 @@ public class DatabaseProcessJUnit {
 
 	@Test
 	public void testGetBooksByUser() {
+		log.debug("testGetBooksByUser Entered.");
 		LinkedList<Book> booklist;
 		User u = new User("Test", false, "1234@google.se");
 		try {
@@ -176,6 +184,7 @@ public class DatabaseProcessJUnit {
 
 	@Test
 	public void testRemoveBookFromCatalogue() {
+		log.debug("testRemoveBookFromCatalogue Entered.");
 		Book b;
 		try {
 			b = db.getBookByIsbn("2309580932902385");
@@ -193,6 +202,7 @@ public class DatabaseProcessJUnit {
 	 */
 	@Test
 	public void testCheckLogin() {
+		log.debug("testCheckLogin Entered.");
 		boolean res;
 		try {
 			res = db.checkLogin("Test", "1234@google.se");
@@ -205,6 +215,7 @@ public class DatabaseProcessJUnit {
 
 	@Test
 	public void testCheckNameAvailable() {
+		log.debug("testCheckNameAvailable Entered.");
 		boolean res;
 		try {
 			res = db.checkNameAvailable("Test2");
@@ -217,6 +228,7 @@ public class DatabaseProcessJUnit {
 
 	@Test
 	public void testEditUserProfilePic() {
+		log.debug("testEditUserProfilePic Entered.");
 		//Unsure of how a test could be made.
 	}
 
@@ -224,6 +236,7 @@ public class DatabaseProcessJUnit {
 
 	@Test
 	public void testGetBookInfo() {
+		log.debug("testGetBookInfo Entered.");
 		// Unsure why/how book id is being used)
 	}
 
