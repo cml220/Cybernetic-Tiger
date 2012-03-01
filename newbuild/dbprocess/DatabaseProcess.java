@@ -159,6 +159,17 @@ public class DatabaseProcess {
     	InsertionProcess db = (InsertionProcess) getInstance();
         return db.createUser(u);
     }
+    
+    /**
+     * Save a cart and its contents in the appropriate tables
+     * @param c			the cart to be saved
+     * @param username	the user for it to be saved to
+     * @param shopdate	the date in which it was saved
+     */
+    public void saveShoppingCart(Cart c, String username, Date shopdate) throws SQLException {
+    	InsertionProcess db = (InsertionProcess) getInstance();
+    	db.saveShoppingCart(c, username, shopdate);
+    }
 
     /**
      * Check to see if a user is registered in the system

@@ -24,5 +24,14 @@ public class RemovalProcess extends DatabaseProcess {
         stmt.execute("DELETE FROM " + dbname + ".books WHERE books.id=" + bookid + ";");
         stmt2.execute("DELETE FROM " + dbname + ".userRentals WHERE userRentals.bookID=" + bookid + ";");
     }
+    
+    /**
+     * Remove a user from the db
+     * @param username	the user to be removed
+     */
+    protected void removeUser(String username) throws SQLException {
+    	Statement stmt=conn.createStatement();
+    	stmt.execute("DELETE FROM tblUser WHERE UserName=\"" + username + "\")");
+    }
 
 }

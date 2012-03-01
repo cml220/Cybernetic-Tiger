@@ -5,11 +5,14 @@
 
 package dbprocess;
 
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.LinkedList;
 
 import model.Book;
+import model.Cart;
 import model.User;
 
 public class InsertionProcess extends DatabaseProcess {
@@ -25,25 +28,24 @@ public class InsertionProcess extends DatabaseProcess {
      * @param	u	the user/renter
      * @param 	b	the book to be rented
      */
-    /*
+    //TODO: Change DB tblUserRental so it uses ISBN instead of BookID (?)
     public void addBookToUser(Book b, User u, int rentalID) throws SQLException {
         if(b==null || u==null) {
             return;
         }
         Statement stmt=conn.createStatement();
-        ResultSet rs=stmt.executeQuery("SELECT * FROM tblBook WHERE BookID=" + b.getBookID() + ";");
+        ResultSet rs=stmt.executeQuery("SELECT * FROM tblBook WHERE ISBN=" + b.getBookISBN() + ";");
         if(rs.first()) {
-        	stmt.execute("INSERT INTO tblBookRental(RentalID, BookID) VALUES (\"" + rentalID + "\"," + b.getBookID() + ");");
+        	stmt.execute("INSERT INTO tblBookRental(RentalID, BookID) VALUES (\"" + rentalID + "\"," + b.getBookISBN() + ");");
         }
     }
-    */
     
     /**
      * Add a book to the catalogue
      * @param	b	book to be added to the catalogue
      * @postcond	book has been added to the catalogue if it was not present already
      */
-    /*
+    //TODO: Change TB tblBook to no longer use BookID (?)
     public void addBookToCatalogue(Book b) throws SQLException {
         if(b==null) {
             return;
@@ -53,15 +55,14 @@ public class InsertionProcess extends DatabaseProcess {
         if(rs.first()) {
             return;    //book with this isbn already exists
         } else {
-        	stmt.execute("INSERT INTO tblBook (Title,Author,Price,Url,ISBN,BookID,picURL,Description) VALUES (\"" 
+        	stmt.execute("INSERT INTO tblBook (Title,Author,Price,Url,ISBN,picURL,Description) VALUES (\"" 
         			+ b.getBookTitle() + 		"\",\"" + b.getBookAuthor() + "\"," + b.getBookPrice() 
-        			+ ",\"" + b.getBookPdfURL() + "\",\"" + b.getBookISBN() + "\"," + b.getBookID() 		
-        			+ ",\"" + b.getBookImg() + "\",\"" + b.getBookDescription() + "\");");
+        			+ ",\"" + b.getBookPdfURL() + "\",\"" + b.getBookISBN() + "\",\"" + b.getBookImg() 
+        			+ "\",\"" + b.getBookDescription() + "\");");
         	rs=stmt.executeQuery("SELECT * FROM tblBook WHERE ISBN=\"" + b.getBookISBN() +"\";");
             rs.first();
         }
     }
-    */
     
     /**
      * Create a new user for the system
@@ -105,9 +106,24 @@ public class InsertionProcess extends DatabaseProcess {
         return false;
     }
     
-    public void saveShoppingCart() {
-    	//DO STUFF HERE
-    	//Statement stmt=conn.createStatement();
-    	//stmt.execute("INSERT INTO tblCartContent(CartNumber, BookID) VALUES (\"" + r.getRentalNum() + ")");
+    /**
+     * Save a cart and its contents in the appropriate tables
+     * @param c			the cart to be saved
+     * @param username	the user for it to be saved to
+     * @param shopdate	the date in which it was saved
+     */
+    //TODO: Change appropriate tables to use ISBN instead of ID (?)
+    public void saveShoppingCart(Cart c, String username, Date shopdate) throws SQLException {
+    	Statement stmt=conn.createStatement();
+    	stmt.execute("INSERT INTO tblShoppingCart (UserName, ShopDate) VALUES (\"" + username + "\"," + shopdate +")");
+    	ResultSet rs=stmt.executeQuery("SELECT * FROM tblShoppingCart WHERE UserName=\"" + username +"\"");
+    	rs.first();
+    	int cartNum = rs.getInt("CartNumber");
+    	
+    	LinkedList<Book> cartBooks = c.getCart();
+    	
+    	for(Book b : cartBooks) {
+    		stmt.execute("INSERT INTO tblCartContent (CartNumber, BookISBN) VALUES (" + cartNum + ",\"" + b.getBookISBN() + "\"");
+    	}
     }
 }

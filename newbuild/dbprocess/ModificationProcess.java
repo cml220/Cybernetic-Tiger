@@ -26,7 +26,10 @@ public class ModificationProcess extends DatabaseProcess {
         stmt.execute("UPDATE tblUser SET Img=\"" + url + "\" WHERE UserName=\"" + username + "\";");
     }
     
-    public void editUserInfo(User u) throws SQLException {
-    	//TODO
+    //TODO: Have to figure out how we handle users and what we want to change before this can be completed!
+    public void editUserInfo(String oldname, User newinfo) throws SQLException {
+    	RemovalProcess db = (RemovalProcess) getInstance();
+    	db.removeUser(oldname);
+    	db.createUser(newinfo);   	
     }
 }

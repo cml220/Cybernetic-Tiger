@@ -31,6 +31,10 @@ public class VerificationProcess extends DatabaseProcess {
         }
     }
     
+    /**
+     * Check to see if a username is available
+     * @param	username	the username to check
+     */
     public boolean checkNameAvailable(String username) throws SQLException {
     	if(username==null) {
             return false;
