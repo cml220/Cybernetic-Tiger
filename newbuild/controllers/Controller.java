@@ -10,12 +10,17 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import model.Book;
+import model.PaymentInfo;
+import model.User;
+
+import org.apache.log4j.Logger;
+
 import exceptions.CartException;
 import exceptions.ControllerNotInitializedException;
 import exceptions.ImageLoadFailedException;
-
-import model.Book;
-import model.User;
+import exceptions.IntermediateException;
+import exceptions.PurchaseFailedException;
 
 /**
  * Main controller.
@@ -43,7 +48,11 @@ public final class Controller {
 
     //private static CatalogueController catalogueController;
     //private static LoginController loginController;
-    //private static PaymentController paymentController;
+
+    /**
+     * Payment controller.
+     */
+    private static PaymentController paymentController;
 
     /**
      * Reader controller.
@@ -53,9 +62,9 @@ public final class Controller {
     //private static RentalsController rentalsController;
 
     /**
-     * Variable for keeping track of if this singleton has been initialised.
+     * Variable for keeping track of if this singleton has been initialized.
      */
-    private static boolean initialised;
+    private static boolean initialized;
 
     /**
      * @return the currentUser
@@ -67,31 +76,31 @@ public final class Controller {
     }
 
     /**
-     * Initialised the singleton controller for use.
+     * initialized the singleton controller for use.
      * Must be run before any other methods will work.
      */
-    public static void initialise() {
+    public static void initialize() {
 
         accountController = new AccountController();
         cartController = new CartController();
         //catalogueController = new CatalogueController();
         //loginController = new LoginController();
-        //paymentController = new PaymentController();
+        paymentController = new PaymentController();
         readerController = new ReaderController();
         //rentalsController = new RentalsController();
 
-        initialised = true;
+        initialized = true;
 
     }
-    
+
     /**
-     * Checks if the controller is initialised
-     * @return initialised 
+     * Checks if the controller is initialized
+     * @return initialized
      */
-    public static boolean isInitialised(){
-        
-        return initialised;
-        
+    public static boolean isinitialized(){
+
+        return initialized;
+
     }
 
     /**
@@ -120,7 +129,7 @@ public final class Controller {
     public static User getUserInfo(final String username)
             throws ControllerNotInitializedException {
 
-        if (!initialised) {
+        if (!initialized) {
 
             throw new ControllerNotInitializedException();
 
@@ -138,7 +147,7 @@ public final class Controller {
     public static void changeUserInfo(final User user)
             throws ControllerNotInitializedException {
 
-        if (!initialised) {
+        if (!initialized) {
 
             throw new ControllerNotInitializedException();
 
@@ -146,6 +155,162 @@ public final class Controller {
 
         //TODO: Confirm need for (or remove) username parameter
         accountController.changeUserInfo(user.username, user);
+
+    }
+
+    /**
+     * Pass payment info to the GUI so that the customer can confirm their
+     * credit card number, etc.
+     * @return PaymentInfo object containing user's payment info.
+     * @throws ControllerNotInitializedException if the controller isn't loaded
+     */
+    public static PaymentInfo getPaymentInfo()
+            throws ControllerNotInitializedException {
+
+        if (!initialized) {
+
+            throw new ControllerNotInitializedException();
+
+        }
+
+        //TODO: return paymentController.getPaymentInfo();
+        return null;
+
+    }
+
+    /**
+     * Updates the user's payment info as provided in 'piNew'.
+     * @param piNew object containing user's new payment info.
+     * @throws ControllerNotInitializedException if the controller isn't loaded
+     */
+    public static void setPaymentInfo(PaymentInfo piNew)
+            throws ControllerNotInitializedException {
+
+        if (!initialized) {
+
+            throw new ControllerNotInitializedException();
+
+        }
+
+        //TODO: return paymentController.setPaymentInfo();
+
+    }
+
+    /**
+     * Complete the payment for the books.  Then confirm that the user's
+     * rentals have been updated correctly.  If not, refund the purchase and
+     * inform the user.
+     * @throws IntermediateException if the transaction failed.
+     */
+    public static void processPurchase() throws IntermediateException {
+
+        /*
+         * Initialize the log4J logger.
+         */
+        Logger log = Logger.getLogger(Controller.class);
+
+        /*
+         * Initialize reference lists of books so that the transaction can be
+         * confirmed.
+         */
+        //TODO: LinkedList<Book> userBooksBeforePurchase = rentalsController.getBooks();
+        //TODO: LinkedList<Book> cartBooksBeforePurchase = cartController.getBooks();
+        LinkedList<Book> userBooksAfterPurchase;
+
+        /*
+         * Log the books in the user's rental account before the purchase.
+         */
+        /*
+        log.debug("Books in account before purchase:");
+        for (int i = 0; i < userBooksBeforePurchase.length; i++) {
+
+            log.debug(userBooksBeforePurchase[i].ISBN);
+
+        }
+         */
+
+        /*
+         * Log the books in the user's cart before the purchase.
+         */
+        /*
+        log.debug("Books in cart before purchase:");
+        for (int i = 0; i < cartBooksBeforePurchase.length; i++) {
+
+            log.debug(cartBooksBeforePurchase[i].ISBN);
+
+        }
+         */
+
+        /*
+         * confirm that the payment went through, then add the cart books to
+         * the user's account.
+         */
+        /*
+        if (paymentController.confirmPayment()) {
+
+            paymentController.addCurrentCart();
+            cartBooksAfterPurchase = rentalsController.getBooks();
+
+        }
+         */
+
+        try {
+            /*
+             * Log the books in the user's rental account after the purchase
+             * and confirm that they are correct.
+             */
+            /*
+            log.debug("Checking transaction results:");
+
+            //check that the books that were in the rental account before the
+            //purchase are still there .
+            for (int i = 0; i < userBooksBeforePurchase.length; i++) {
+
+                log.debug(userBooksBeforePurchase[i].ISBN);
+                if(userBooksAfterPurchase.contains(userBooksBeforePurchase[i]) {
+
+                    log.debug("Item verified as in cart.");
+
+                }else{
+
+                    log.debug("Exception thrown:  Item expected in rentals but"
+                    + "not found.");
+                    throw new PurchaseFailedException();
+
+                }
+
+            }
+
+            //check that the books that were in the cart are now all in the
+            //rental account.
+            for (int i = 0; i < cartBooksBeforePurchase.length; i++) {
+
+                log.debug(cartBooksBeforePurchase[i].ISBN);
+                if(userBooksAfterPurchase.contains(cartBooksBeforePurchase[i]) {
+
+                    log.debug("Item verified as in cart.");
+
+                }else{
+
+                    throw new PurchaseFailedException();
+
+                }
+
+            }
+             */
+
+            //this is just to get rid of errors while the above is commented out
+            throw new PurchaseFailedException();
+
+        } catch (PurchaseFailedException pfe) {
+
+            //reverse the transaction
+            //paymentController.reversePayment;
+            //pass an error message to the GUI
+            throw new IntermediateException("Purchase failed.  Payment has been refunded");
+
+        }
+
 
     }
 
@@ -158,7 +323,7 @@ public final class Controller {
     public static void addToCart(final Book book)
             throws CartException, ControllerNotInitializedException {
 
-        if (!initialised) {
+        if (!initialized) {
 
             throw new ControllerNotInitializedException();
 
@@ -177,7 +342,7 @@ public final class Controller {
     public static void removeFromCart(final Book book)
             throws CartException, ControllerNotInitializedException {
 
-        if (!initialised) {
+        if (!initialized) {
 
             throw new ControllerNotInitializedException();
 
@@ -195,17 +360,37 @@ public final class Controller {
      * @throws ControllerNotInitializedException if the controller isn't loaded
      */
     public static LinkedList<Book> getCartContents()
-        throws CartException, ControllerNotInitializedException {
+            throws CartException, ControllerNotInitializedException {
 
-            if (!initialised) {
+        if (!initialized) {
 
-                throw new ControllerNotInitializedException();
+            throw new ControllerNotInitializedException();
 
-            }
+        }
 
-            //TODO:
-            //cartController.getBooks();
-            return null;
+        //TODO:
+        //cartController.getBooks();
+        return null;
+
+    }
+
+    /**
+     * Get the total price of the contents of the user's cart so it can be
+     * displayed in the GUI.
+     * @return the total price of all items in the user's cart.
+     * @throws CartException
+     * @throws ControllerNotInitializedException
+     */
+    public static float getCartTotal()
+            throws CartException, ControllerNotInitializedException {
+
+        if (!initialized) {
+
+            throw new ControllerNotInitializedException();
+
+        }
+
+        return cartController.getTotal();
 
     }
 
@@ -217,7 +402,7 @@ public final class Controller {
     public static LinkedList<Book> getUserBooks()
             throws ControllerNotInitializedException {
 
-        if (!initialised) {
+        if (!initialized) {
 
             throw new ControllerNotInitializedException();
 
@@ -240,7 +425,7 @@ public final class Controller {
             throws ImageLoadFailedException,
             ControllerNotInitializedException {
 
-        if (!initialised) {
+        if (!initialized) {
 
             throw new ControllerNotInitializedException();
 
@@ -297,7 +482,7 @@ public final class Controller {
     public static JPanel openReader(final Book book)
             throws ControllerNotInitializedException {
 
-        if (!initialised) {
+        if (!initialized) {
 
             throw new ControllerNotInitializedException();
 
