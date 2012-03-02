@@ -42,4 +42,11 @@ public class CartController {
 		}
 		return total;
 	}
+
+	/**
+	 * @return Returns the entire list of books that are in the current user's cart
+	 */
+	public LinkedList<Book> getBooks() {
+		return Controller.getCurrentUser().cart.getCart();
+	}
 }

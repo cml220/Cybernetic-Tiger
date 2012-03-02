@@ -1,4 +1,6 @@
 package controllers;
+import java.util.LinkedList;
+
 import model.*;
 
 public class RentalsController {
@@ -26,5 +28,9 @@ public class RentalsController {
 	public void removeBookFromCurrentUser(Book book)
 	{
 		Controller.getCurrentUser().rentals.remove(book);		
+	}
+
+	public LinkedList<Book> getBooks() {
+		return Controller.getCurrentUser().rentals;
 	}
 }

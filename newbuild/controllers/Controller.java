@@ -3,6 +3,7 @@ package controllers;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.LinkedList;
 
 import javax.imageio.ImageIO;
@@ -63,7 +64,11 @@ public final class Controller {
      * Interface to the ICEPDF reader.
      */
     private static ReaderController readerController;
-    //private static RentalsController rentalsController;
+
+    /**
+     * Rentals controller.
+     */
+    private static RentalsController rentalsController;
 
     /**
      * Variable for keeping track of if this singleton has been initialized.
@@ -91,7 +96,7 @@ public final class Controller {
         loginController = new LoginController();
         paymentController = new PaymentController();
         readerController = new ReaderController();
-        //rentalsController = new RentalsController();
+        rentalsController = new RentalsController();
 
         initialized = true;
 
@@ -129,9 +134,10 @@ public final class Controller {
      * @param username - the name of the user to get a User object for
      * @return a User object containing all of 'username's account information
      * @throws ControllerNotInitializedException if the controller isn't loaded
+     * @throws SQLException if no connection to the database can be obtained
      */
     public static User getUserInfo(final String username)
-            throws ControllerNotInitializedException {
+            throws ControllerNotInitializedException, SQLException {
 
         if (!initialized) {
 
@@ -147,9 +153,10 @@ public final class Controller {
      * Changes a users information using the data inside of a User object.
      * @param user - the object containing the user data.
      * @throws ControllerNotInitializedException if the controller isn't loaded
+     * @throws SQLException if no connection to the database can be obtained
      */
     public static void changeUserInfo(final User user)
-            throws ControllerNotInitializedException {
+            throws ControllerNotInitializedException, SQLException {
 
         if (!initialized) {
 
@@ -177,8 +184,7 @@ public final class Controller {
 
         }
 
-        //TODO: return paymentController.getPaymentInfo();
-        return null;
+        return paymentController.getPaymentInfo();
 
     }
 
@@ -196,7 +202,7 @@ public final class Controller {
 
         }
 
-        //TODO: return paymentController.setPaymentInfo();
+        paymentController.setPaymentInfo(piNew);
 
     }
 
@@ -217,61 +223,59 @@ public final class Controller {
          * Initialize reference lists of books so that the transaction can be
          * confirmed.
          */
-        //TODO: LinkedList<Book> userBooksBeforePurchase = rentalsController.getBooks();
-        //TODO: LinkedList<Book> cartBooksBeforePurchase = cartController.getBooks();
-        LinkedList<Book> userBooksAfterPurchase;
+        LinkedList<Book> userBooksBeforePurchase = rentalsController.getBooks();
+        LinkedList<Book> cartBooksBeforePurchase = cartController.getBooks();
+        LinkedList<Book> userBooksAfterPurchase = new LinkedList<Book>();
 
         /*
          * Log the books in the user's rental account before the purchase.
          */
-        /*
+        
         log.debug("Books in account before purchase:");
-        for (int i = 0; i < userBooksBeforePurchase.length; i++) {
+        for (Book b : userBooksBeforePurchase) {
 
-            log.debug(userBooksBeforePurchase[i].ISBN);
+            log.debug(b.ISBN);
 
         }
-         */
 
         /*
          * Log the books in the user's cart before the purchase.
          */
-        /*
+        
         log.debug("Books in cart before purchase:");
-        for (int i = 0; i < cartBooksBeforePurchase.length; i++) {
+        for (Book b : cartBooksBeforePurchase) {
 
-            log.debug(cartBooksBeforePurchase[i].ISBN);
+            log.debug(b.ISBN);
 
         }
-         */
 
         /*
          * confirm that the payment went through, then add the cart books to
          * the user's account.
          */
-        /*
+        
         if (paymentController.confirmPayment()) {
 
             paymentController.addCurrentCart();
-            cartBooksAfterPurchase = rentalsController.getBooks();
+            userBooksAfterPurchase = rentalsController.getBooks();
 
         }
-         */
+         
 
         try {
             /*
              * Log the books in the user's rental account after the purchase
              * and confirm that they are correct.
              */
-            /*
+            
             log.debug("Checking transaction results:");
 
             //check that the books that were in the rental account before the
             //purchase are still there .
-            for (int i = 0; i < userBooksBeforePurchase.length; i++) {
+            for (Book b : userBooksBeforePurchase) {
 
-                log.debug(userBooksBeforePurchase[i].ISBN);
-                if(userBooksAfterPurchase.contains(userBooksBeforePurchase[i]) {
+                log.debug(b.ISBN);
+                if(userBooksAfterPurchase.contains(b)) {
 
                     log.debug("Item verified as in cart.");
 
@@ -287,10 +291,10 @@ public final class Controller {
 
             //check that the books that were in the cart are now all in the
             //rental account.
-            for (int i = 0; i < cartBooksBeforePurchase.length; i++) {
+            for (Book b : cartBooksBeforePurchase) {
 
-                log.debug(cartBooksBeforePurchase[i].ISBN);
-                if(userBooksAfterPurchase.contains(cartBooksBeforePurchase[i]) {
+                log.debug(b.ISBN);
+                if(userBooksAfterPurchase.contains(b)) {
 
                     log.debug("Item verified as in cart.");
 
@@ -301,7 +305,6 @@ public final class Controller {
                 }
 
             }
-             */
 
             //this is just to get rid of errors while the above is commented out
             throw new PurchaseFailedException();
@@ -372,9 +375,7 @@ public final class Controller {
 
         }
 
-        //TODO:
-        //cartController.getBooks();
-        return null;
+        return cartController.getBooks();
 
     }
 
@@ -412,9 +413,7 @@ public final class Controller {
 
         }
 
-        return null;
-        //TODO:
-        //return rentalsController.getUserBooks();
+        return rentalsController.getBooks();
 
     }
 

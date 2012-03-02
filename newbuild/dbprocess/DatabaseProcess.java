@@ -203,6 +203,16 @@ public class DatabaseProcess {
     }
 
     /**
+     * Update a user
+     * @param username		the username of the user
+     * @param user			the actual user to modify
+     */
+    public void editUserInfo(String username, User user)	throws SQLException {
+    	ModificationProcess db = (ModificationProcess) getInstance();
+        db.editUserInfo(username, user);
+    }
+
+    /**
      * Get the admin status of a user
      * @param	username	the username of the user
      */
