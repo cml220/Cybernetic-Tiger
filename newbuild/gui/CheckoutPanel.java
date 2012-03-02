@@ -11,9 +11,15 @@ import exceptions.GUINoSuchPanelException;
 
 public class CheckoutPanel extends DisplayPanel {
 
-    private static int curPanelNum;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -44778006080533928L;
+	private static int curPanelNum;
     private static int totalPanelsNum;
     private static JPanel cartMainPanel;
+    private static CheckoutActionsPanel cartActionsPanel;
+    private static CheckoutProgressPanel cartProgressPanel;
     
     public static final int CART = 0;
     public static final int PAYMENT = 1;
@@ -41,8 +47,10 @@ public class CheckoutPanel extends DisplayPanel {
         
         JPanel bottomPanel = new JPanel();
         bottomPanel.setLayout(new GridLayout(0,1));
-        bottomPanel.add(new CheckoutMyCartExtrasPanel());
-        bottomPanel.add(new CheckoutCheckoutProgressPanel(0));
+        cartActionsPanel = new CheckoutActionsPanel();
+        bottomPanel.add(cartActionsPanel);
+        cartProgressPanel = new CheckoutProgressPanel();
+        bottomPanel.add(cartProgressPanel);
         
         this.add(bottomPanel, BorderLayout.SOUTH);
         
@@ -56,6 +64,21 @@ public class CheckoutPanel extends DisplayPanel {
         
     }
     
+    private static void updateStage(int inCheckoutStage)
+    {   	    	
+		// Updates the actions panel and progress panel where appropriate		
+		
+		switch (inCheckoutStage)
+		{
+		case(CART):		CheckoutActionsPanel.loadCartActions(); 	cartProgressPanel.loadCartProgress(); 		break;	// Cart
+		case(PAYMENT):	CheckoutActionsPanel.loadPaymentActions(); 	cartProgressPanel.loadPaymentProgress();	break;	// Payment
+		case(VERIFY):	CheckoutActionsPanel.loadVerifyActions(); 	cartProgressPanel.loadVerifyProgress();		break;	// Verify Cart/Payment
+		case(THANKYOU):	CheckoutActionsPanel.loadThankyouActions(); cartProgressPanel.loadThankyouProgress();	break;	// Thankyou
+		default: 		throw new IllegalArgumentException("Invalid checkout stage.");								// Throw exception, invalid checkout stage
+		}
+    	
+    }
+    
     
     public static void nextPaymentStep(){
 
@@ -64,14 +87,21 @@ public class CheckoutPanel extends DisplayPanel {
             curPanelNum++;
             CardLayout cl = (CardLayout) cartMainPanel.getLayout();
             cl.show(cartMainPanel, Integer.toString(curPanelNum));
+            
+            updateStage(curPanelNum);
 
-            //TODO: Jake 
-            //Use ProgressPanel and just enable the buttons as the payment
-            //progresses.
-            //Rather than having seperate "Extra" panels for each step, just
-            //have a static method that changes the text on the button.
-            //CheckoutCheckoutProgressPanel.nextPaymentStep()
+        }
+    }
+    
+    public static void previousPaymentStep(){
 
+        if(curPanelNum > -1){
+            
+            curPanelNum--;
+            CardLayout cl = (CardLayout) cartMainPanel.getLayout();
+            cl.show(cartMainPanel, Integer.toString(curPanelNum));
+            
+            updateStage(curPanelNum);
         }
     }
     
@@ -87,6 +117,8 @@ public class CheckoutPanel extends DisplayPanel {
         cl.show(cartMainPanel, Integer.toString(stepNo));
         
         curPanelNum = stepNo;
+        
+        updateStage(curPanelNum);
         
     }
     
