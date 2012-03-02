@@ -26,6 +26,7 @@ public class CheckoutPanel extends DisplayPanel {
     public static final int PAYMENT = 1;
     public static final int VERIFY = 2;
     public static final int THANKYOU = 3;
+    private static final int SCROLLSPEED = 20;
 
     public CheckoutPanel(){
 
@@ -39,7 +40,9 @@ public class CheckoutPanel extends DisplayPanel {
         /*
          * Add the payment panels in order
          */
-        this.addIndexedPanel(new JScrollPane(new CheckoutMyCartPanel()), CART);
+        JScrollPane cartContentsScrollPane = new JScrollPane(new CheckoutMyCartPanel());
+        cartContentsScrollPane.getVerticalScrollBar().setUnitIncrement(SCROLLSPEED);
+        this.addIndexedPanel(cartContentsScrollPane, CART);
         this.addIndexedPanel(new CheckoutPaymentPanel(), PAYMENT);
         this.addIndexedPanel(new CheckoutVerifyPanel(), VERIFY);
         this.addIndexedPanel(new CheckoutThankyouPanel(), THANKYOU);
