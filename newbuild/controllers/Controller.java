@@ -103,10 +103,10 @@ public final class Controller {
     }
 
     /**
-     * Checks if the controller is initialized
+     * Checks if the controller is initialized.
      * @return initialized
      */
-    public static boolean isinitialized(){
+    public static boolean isinitialized() {
 
         return initialized;
 
@@ -275,11 +275,11 @@ public final class Controller {
             for (Book b : userBooksBeforePurchase) {
 
                 log.debug(b.ISBN);
-                if(userBooksAfterPurchase.contains(b)) {
+                if (userBooksAfterPurchase.contains(b)) {
 
                     log.debug("Item verified as in cart.");
 
-                }else{
+                } else {
 
                     log.debug("Exception thrown:  Item expected in rentals but"
                     + "not found.");
@@ -294,11 +294,11 @@ public final class Controller {
             for (Book b : cartBooksBeforePurchase) {
 
                 log.debug(b.ISBN);
-                if(userBooksAfterPurchase.contains(b)) {
+                if (userBooksAfterPurchase.contains(b)) {
 
                     log.debug("Item verified as in cart.");
 
-                }else{
+                } else {
 
                     throw new PurchaseFailedException();
 

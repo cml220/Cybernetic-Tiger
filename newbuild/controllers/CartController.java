@@ -12,32 +12,32 @@ import exceptions.CartException;
 public class CartController {
 
 	/**
-	 * Adds a given book to the current user's cart, using the Cart class method
+	 * Adds a given book to the current user's cart, using the Cart class method.
 	 * @param book The book to add
 	 * @throws CartException if book is already in the current user's cart
 	 */
-	public void addBookToCart(Book book) throws CartException{
+	public void addBookToCart(Book book) throws CartException {
 		Controller.getCurrentUser().cart.addBookToCart(book);
 	}
 
 	/**
-	 * Removes a given book from the current user's cart, using the Cart class method
+	 * Removes a given book from the current user's cart, using the Cart class method.
 	 * @param book The book to remove
 	 * @throws CartException if book is not in the current user's cart
 	 */
-	public void removeBookFromCart(Book book) throws CartException{
+	public void removeBookFromCart(Book book) throws CartException {
 		Controller.getCurrentUser().cart.removeBook(book);
 	}
 
 	/**
 	 * @return The total dollar value of the books in the current user's cart
 	 */
-	public float getTotal(){
+	public float getTotal() {
 		// Get the current books in the cart
 		LinkedList<Book> cart = Controller.getCurrentUser().cart.getCart();
 		int total = 0;
 		// Go through every book, adding its price to the running total
-		for (Book b : cart){
+		for (Book b : cart) {
 			total += b.price;
 		}
 		return total;

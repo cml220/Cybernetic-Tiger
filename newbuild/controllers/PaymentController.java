@@ -11,7 +11,7 @@ import model.PaymentInfo;
 public class PaymentController {
 
     /**
-     * Confirms that a payment is successful
+     * Confirms that a payment is successful.
      * @return True if payment is successful, false otherwise
      */
     public boolean confirmPayment() {
@@ -22,13 +22,12 @@ public class PaymentController {
     }
 
     /**
-     * Adds the books in the current cart to the current user's rentals
+     * Adds the books in the current cart to the current user's rentals.
      */
     public void addCurrentCart() {
         LinkedList<Book> cart = Controller.getCurrentUser().cart.getCart();
         RentalsController rc = new RentalsController();
-        for (Book b : cart)
-        {
+        for (Book b : cart) {
             rc.addBookToCurrentUser(b);
         }
     }
@@ -42,7 +41,7 @@ public class PaymentController {
 	}
 
 	/**
-	 * Updates the current user's payment information to be the info contained in piNew
+	 * Updates the current user's payment information to be the info contained in piNew.
 	 * @param piNew The new payment information to set
 	 */
 	public void setPaymentInfo(PaymentInfo piNew) {

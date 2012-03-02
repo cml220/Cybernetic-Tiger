@@ -6,23 +6,19 @@ import exceptions.CatalogueException;
 public class CatalogueController {
 	private Catalogue catalogue;
 	
-	public CatalogueController()
-	{
+	public CatalogueController() {
 		catalogue = new Catalogue();
 	}
 	
-	public Catalogue getCatalogue()
-	{
+	public Catalogue getCatalogue() {
 		return catalogue;
 	}
 	
-	public void addBookToCatalogue(Book book) throws CatalogueException
-	{
+	public void addBookToCatalogue(Book book) throws CatalogueException {
 		catalogue.addBook(book);
 	}
 	
-	public void removeBookFromCatalogue(Book book) throws CatalogueException
-	{
+	public void removeBookFromCatalogue(Book book) throws CatalogueException {
 		catalogue.removeBook(book);
 	}
 	
