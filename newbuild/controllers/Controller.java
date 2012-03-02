@@ -3,7 +3,6 @@ package controllers;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.LinkedList;
 
 import javax.imageio.ImageIO;
@@ -48,7 +47,8 @@ public final class Controller {
     private static CartController cartController;
 
     //private static CatalogueController catalogueController;
-    //private static LoginController loginController;
+
+    private static LoginController loginController;
 
     /**
      * Payment controller.
@@ -85,7 +85,7 @@ public final class Controller {
         accountController = new AccountController();
         cartController = new CartController();
         //catalogueController = new CatalogueController();
-        //loginController = new LoginController();
+        loginController = new LoginController();
         paymentController = new PaymentController();
         readerController = new ReaderController();
         //rentalsController = new RentalsController();
@@ -465,7 +465,16 @@ public final class Controller {
 
     }
 
-    public static void openLogin() {
+    public static boolean checkLogin(String username, String password)
+            throws ControllerNotInitializedException {
+
+        if (!initialized) {
+
+            throw new ControllerNotInitializedException();
+
+        }
+
+        return loginController.checkLogin(username, password);
 
     }
 
@@ -479,10 +488,9 @@ public final class Controller {
      * @return a newly constructed JPanel containing the ICEPDF reader with
      * 'book' loaded in it.
      * @throws ControllerNotInitializedException if the controller isn't loaded
-     * @throws MalformedURLException 
      */
     public static JPanel openReader(final Book book)
-            throws ControllerNotInitializedException, MalformedURLException {
+            throws ControllerNotInitializedException {
 
         if (!initialized) {
 
