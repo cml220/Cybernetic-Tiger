@@ -48,6 +48,9 @@ public final class Controller {
 
     //private static CatalogueController catalogueController;
 
+    /**
+     * Login controller.
+     */
     private static LoginController loginController;
 
     /**
