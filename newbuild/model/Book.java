@@ -1,7 +1,5 @@
 package model;
 
-import java.awt.Image;
-
 public class Book {
 	public String title;
     public String author;
@@ -52,7 +50,7 @@ public class Book {
     //TODO
     public boolean equals(Book other)
     {
-    	return title.equals(other.title);
+    	return ISBN.equals(other.ISBN);
     	
     }
 }
