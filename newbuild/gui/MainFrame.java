@@ -7,6 +7,9 @@
 package gui;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Toolkit;
+
 import javax.swing.JFrame;
 
 /**
@@ -23,13 +26,38 @@ public class MainFrame extends JFrame {
     private static final long serialVersionUID = 2269971701250845501L;
 
     /**
+     * The width of the window.
+     */
+    private final int windowWidth = 700;
+
+    /**
+     * The height of the window.
+     */
+    private final int windowHeight = 1000;
+
+    /**
      * Constructor; positions the window and adds the inner sections.
      */
     public MainFrame() {
 
         this.setTitle("NextBooks 2.0");
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        this.setBounds(300, 100, 1000, 700);
+
+        this.setSize(new Dimension(windowWidth, windowHeight));
+
+        /*
+         * Center the window
+         */
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+
+        int x = (dim.width - windowWidth) / 2;
+        int y = (dim.height - windowHeight) / 2;
+
+        /*
+         * Move the window
+         */
+        this.setLocation(x, y);
+
         this.setResizable(false);
         this.setLayout(new BorderLayout());
 
