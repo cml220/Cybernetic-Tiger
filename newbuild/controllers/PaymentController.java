@@ -1,5 +1,6 @@
 package controllers;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import model.Book;
 import model.PaymentInfo;
@@ -25,7 +26,7 @@ public class PaymentController {
      * Adds the books in the current cart to the current user's rentals.
      */
     public void addCurrentCart() {
-        LinkedList<Book> cart = Controller.getCurrentUser().cart.getCart();
+        ArrayList<Book> cart = Controller.getCurrentUser().cart.getCart();
         RentalsController rc = new RentalsController();
         for (Book b : cart) {
             rc.addBookToCurrentUser(b);

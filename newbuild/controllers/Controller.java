@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.net.MalformedURLException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 import javax.imageio.ImageIO;
@@ -225,7 +226,7 @@ public final class Controller {
          * confirmed.
          */
         LinkedList<Book> userBooksBeforePurchase = rentalsController.getBooks();
-        LinkedList<Book> cartBooksBeforePurchase = cartController.getBooks();
+        ArrayList<Book> cartBooksBeforePurchase = cartController.getBooks();
         LinkedList<Book> userBooksAfterPurchase = new LinkedList<Book>();
 
         /*
@@ -367,7 +368,7 @@ public final class Controller {
      * @throws CartException if the cart operation failed
      * @throws ControllerNotInitializedException if the controller isn't loaded
      */
-    public static LinkedList<Book> getCartContents()
+    public static ArrayList<Book> getCartContents()
             throws CartException, ControllerNotInitializedException {
 
         if (!initialized) {

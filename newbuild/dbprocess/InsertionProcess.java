@@ -5,22 +5,60 @@
 
 package dbprocess;
 
+import java.sql.Connection;
 import java.sql.Date;
+import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 import model.Book;
 import model.Cart;
 import model.User;
 
-public class InsertionProcess extends DatabaseProcess {
+public class InsertionProcess {
 	/* name of the database */
-    private static String dbname = "cmpt370group04";
+	private static String dbname = "cmpt371group_CTiger";
     
-    private InsertionProcess() throws SQLException {
-    	super();
+    protected Connection conn;
+
+    private static InsertionProcess instance;
+    
+    /**
+     * Constructor
+     */
+    protected InsertionProcess() throws SQLException {
+        initDatabaseConnection();
+    }
+
+    /**
+     * Singleton pattern DatabaseProcess init
+     * @return	single instance of DatabaseProcess
+     */
+    public static synchronized InsertionProcess getInstance() {
+        if (instance == null) {
+            try {
+                instance = new InsertionProcess();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return instance;
+    }
+
+    /**
+     * Initialize a connection to the database
+     * @postcond	connection to the database initialized
+     */
+    private void initDatabaseConnection() throws SQLException {
+        try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            String url="jdbc:mysql://edjo.usask.ca/" + dbname + "?user=cmpt371gCT_user&password=TiggerTyger1";
+            conn=DriverManager.getConnection(url);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     
 	/**
@@ -120,7 +158,7 @@ public class InsertionProcess extends DatabaseProcess {
     	rs.first();
     	int cartNum = rs.getInt("CartNumber");
     	
-    	LinkedList<Book> cartBooks = c.getCart();
+    	ArrayList<Book> cartBooks = c.getCart();
     	
     	for(Book b : cartBooks) {
     		stmt.execute("INSERT INTO tblCartContent (CartNumber, BookISBN) VALUES (" + cartNum + ",\"" + b.getBookISBN() + "\"");

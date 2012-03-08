@@ -1,5 +1,5 @@
 package dbprocess;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.sql.*;
 
 import model.*;
@@ -8,20 +8,13 @@ import model.*;
  * @author cml220
  */
 public class DatabaseProcess {
-    /* name of the database */
-    private static String dbname = "cmpt370group04";
-    /* connection to the database */
-    protected Connection conn;
 
     private static DatabaseProcess instance;
 
-    /**
-     * Constructor
-     */
-    protected DatabaseProcess() throws SQLException {
-        initDatabaseConnection();
+    private DatabaseProcess() {
+    	//
     }
-
+    
     /**
      * Singleton pattern DatabaseProcess init
      * @return	single instance of DatabaseProcess
@@ -38,86 +31,53 @@ public class DatabaseProcess {
     }
 
     /**
-     * Initialize a connection to the database
-     * @postcond	connection to the database initialized
-     */
-    private void initDatabaseConnection() throws SQLException {
-        try {
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            String url="jdbc:mysql://papyrus.usask.ca/" + dbname + "?user=cmpt370group04&password=74jv1vde";
-            conn=DriverManager.getConnection(url);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
      * Get the image url associated with a single user
      * @param user	the user whose assoc. img is to be found
      * @return	the url (as a string) if found, otherwise null
      */
     public User getUserInfo(String user) throws SQLException {
-    	GetterProcess db = (GetterProcess) getInstance();
+    	GetterProcess db = GetterProcess.getInstance();
         return db.getUserInfo(user);
     }
 
     /**
-     * Get a list of all the books in the catalogue
-     * @return	a list of all the books currently in the catalogue (books table)
+     * Find books by specified query, using specific option
+     * @param	option	Define parameters of search (eg. search by Title, Author, Username or Catalogue)
+     * @param	query	Define what to search for.
+     * @return			A list of books that satisfy the search parameters.
      */
-    public LinkedList<Book> getCatalogue() throws SQLException {
-    	GetterProcess db = (GetterProcess) getInstance();
-        return db.getCatalogue();
+    public ArrayList<Book> getBooksBy(String option, String query) throws SQLException {
+    	GetterProcess db = GetterProcess.getInstance();
+    	return db.getBooksBy(option, query);
     }
-
-    /**
-     * Find books by title (pattern match)
-     * @param	title	title to search for
-     * @return	a list of books that are exactly or contain the substring in their title field
-     */
-    public LinkedList<Book> getBookByTitle(String title) throws SQLException {
-    	GetterProcess db = (GetterProcess) getInstance();
-        return db.getBookByTitle(title);
-    }
-
-    /**
-     * Find books by author (pattern match)
-     * @param	author	author to search for
-     * @return	a list of books that are exactly or contain the substring in their author field
-     */
-    public LinkedList<Book> getBookByAuthor(String author) throws SQLException {
-    	GetterProcess db = (GetterProcess) getInstance();
-        return db.getBookByAuthor(author);
-    }
-
+    
     /**
      * Find a book by isbn (exact)
      * @param	ISBN	ISBN to search for
      * @return	the book with the given ISBN if found; otherwise null
      */
     public Book getBookByIsbn(String isbn) throws SQLException {
-    	GetterProcess db = (GetterProcess) getInstance();
+    	GetterProcess db = GetterProcess.getInstance();
         return db.getBookByIsbn(isbn);
     }
-
+    
     /**
-     * Find a book by ID (exact)
-     * @param	ID	ID of the book
-     * @return	the book with the given ID if found; otherwise null
+     * Get the admin status of a user
+     * @param	username	the username of the user
      */
-    public Book getBookById(int id) throws SQLException {
-    	GetterProcess db = (GetterProcess) getInstance();
-        return db.getBookById(id);
+    public String getAdminStatus(String username) throws SQLException {
+    	GetterProcess db = GetterProcess.getInstance();
+        return db.getAdminStatus(username);
     }
 
     /**
-     * Get a list of books being rented by a user
-     * @param	u	the user to find the books being rented by
-     * @return	a list of books being rented by the given user
+     * Get pertinent book info
+     * @param id	of the book to be gotten
+     * @return	the info as a string
      */
-    public LinkedList<Book> getBooksByUser(User u) throws SQLException {
-    	GetterProcess db = (GetterProcess) getInstance();
-        return db.getBooksByUser(u);
+    public String getBookInfo(int id) throws SQLException {
+    	GetterProcess db = GetterProcess.getInstance();
+        return db.getBookInfo(id);
     }
 
     /**
@@ -125,9 +85,9 @@ public class DatabaseProcess {
      * @param	u	the user/renter
      * @param 	b	the book to be rented
      */
-    public void addBookToUser(Book b, User u) throws SQLException {
-    	InsertionProcess db = (InsertionProcess) getInstance();
-        db.addBookToUser(b, u);
+    public void addBookToUser(Book b, User u, int rentalId) throws SQLException {
+    	InsertionProcess db = InsertionProcess.getInstance();
+        db.addBookToUser(b, u, rentalId);
     }
 
     /**
@@ -136,7 +96,7 @@ public class DatabaseProcess {
      * @postcond	book has been added to the catalogue if it was not present already
      */
     public void addBookToCatalogue(Book b) throws SQLException {
-    	InsertionProcess db = (InsertionProcess) getInstance();
+    	InsertionProcess db = InsertionProcess.getInstance();
         db.addBookToCatalogue(b);
     }
 
@@ -145,7 +105,7 @@ public class DatabaseProcess {
      * @param bookid	the id of the book to be removed
      */
     public void removeBookFromCatalogue(int bookid) throws SQLException {
-    	RemovalProcess db = (RemovalProcess) getInstance();
+    	RemovalProcess db = RemovalProcess.getInstance();
         db.removeBookFromCatalogue(bookid);
     }
 
@@ -156,7 +116,7 @@ public class DatabaseProcess {
      * @return 		user ID if successful; or -1 (username in use)
      */
     public int createUser(User u) throws SQLException {
-    	InsertionProcess db = (InsertionProcess) getInstance();
+    	InsertionProcess db = InsertionProcess.getInstance();
         return db.createUser(u);
     }
     
@@ -167,7 +127,7 @@ public class DatabaseProcess {
      * @param shopdate	the date in which it was saved
      */
     public void saveShoppingCart(Cart c, String username, Date shopdate) throws SQLException {
-    	InsertionProcess db = (InsertionProcess) getInstance();
+    	InsertionProcess db = InsertionProcess.getInstance();
     	db.saveShoppingCart(c, username, shopdate);
     }
 
@@ -178,7 +138,7 @@ public class DatabaseProcess {
      * @return 	true if username and password are registered to a user; false otherwise
      */
     public boolean checkLogin(String username, String password) throws SQLException {
-    	VerificationProcess db = (VerificationProcess) getInstance();
+    	VerificationProcess db = VerificationProcess.getInstance();
         return db.checkLogin(username, password);
     }
     
@@ -188,7 +148,7 @@ public class DatabaseProcess {
      * @return 	true if username is available; false otherwise
      */
     public boolean checkNameAvailable(String username) throws SQLException {
-    	VerificationProcess db = (VerificationProcess) getInstance();
+    	VerificationProcess db = VerificationProcess.getInstance();
         return db.checkNameAvailable(username);
     }
 
@@ -198,7 +158,7 @@ public class DatabaseProcess {
      * @param	username	the username of the user
      */
     public void editUserProfilePic(String url, String username)	throws SQLException {
-    	ModificationProcess db = (ModificationProcess) getInstance();
+    	ModificationProcess db = ModificationProcess.getInstance();
         db.editUserProfilePic(url, username);
     }
 
@@ -208,26 +168,7 @@ public class DatabaseProcess {
      * @param user			the actual user to modify
      */
     public void editUserInfo(String username, User user)	throws SQLException {
-    	ModificationProcess db = (ModificationProcess) getInstance();
+    	ModificationProcess db = ModificationProcess.getInstance();
         db.editUserInfo(username, user);
-    }
-
-    /**
-     * Get the admin status of a user
-     * @param	username	the username of the user
-     */
-    public String getAdminStatus(String username) throws SQLException {
-    	GetterProcess db = (GetterProcess) getInstance();
-        return db.getAdminStatus(username);
-    }
-
-    /**
-     * Get pertinent book info
-     * @param id	of the book to be gotten
-     * @return	the info as a string
-     */
-    public String getBookInfo(int id) throws SQLException {
-    	GetterProcess db = (GetterProcess) getInstance();
-        return db.getBookInfo(id);
     }
 }

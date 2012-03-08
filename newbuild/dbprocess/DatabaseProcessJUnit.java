@@ -3,7 +3,7 @@ package dbprocess;
 import static org.junit.Assert.*;
 
 import java.sql.SQLException;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import org.apache.log4j.Logger;
 import model.Book;
 import model.User;
@@ -12,7 +12,7 @@ import org.junit.Test;
 
 public class DatabaseProcessJUnit {
 
-	private DatabaseProcess db;
+	private DatabaseProcess db = DatabaseProcess.getInstance();
 	Logger log = Logger.getLogger(DatabaseProcessJUnit.class);
 	/**
 	 * Test cases for User based database operations.
@@ -88,7 +88,7 @@ public class DatabaseProcessJUnit {
 		User u = new User("Test", false, "1234@google.se");
 		Book b = new Book("THISISAUNIQUESTRING","THISISAUNIQUESTRING",(float) 1.10,"THISISAUNIQUESTRING", "2309580932902385","THISISAUNIQUESTRING","THISISAUNIQUESTRING");
 		try {
-			db.addBookToUser(b, u);
+			db.addBookToUser(b, u, 7);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -99,7 +99,7 @@ public class DatabaseProcessJUnit {
 	public void testGetCatalogue() {
 		log.debug("testGetCatalogue Entered.");
 		try {
-			LinkedList<Book> booklist= db.getCatalogue();
+			ArrayList<Book> booklist= db.getBooksBy("Catalogue", null);
 			assertTrue(!booklist.isEmpty());
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -110,9 +110,9 @@ public class DatabaseProcessJUnit {
 	@Test
 	public void testGetBookByTitle() {
 		log.debug("testGetBookByTitle Entered.");
-		LinkedList<Book> booklist;
+		ArrayList<Book> booklist;
 		try {
-			booklist = db.getBookByTitle("THISISAUNIQUESTRING");
+			booklist = db.getBooksBy("Title", "THISISAUNIQUESTRING");
 			assertTrue(!booklist.isEmpty());
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -125,9 +125,9 @@ public class DatabaseProcessJUnit {
 	@Test
 	public void testGetBookByAuthor() {
 		log.debug("testGetBookByAuthor Entered.");
-		LinkedList<Book> booklist;
+		ArrayList<Book> booklist;
 		try {
-			booklist = db.getBookByAuthor("THISISAUNIQUESTRING");
+			booklist = db.getBooksBy("Author", "THISISAUNIQUESTRING");
 			assertTrue(!booklist.isEmpty());
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -154,10 +154,10 @@ public class DatabaseProcessJUnit {
 	@Test
 	public void testGetBooksByUser() {
 		log.debug("testGetBooksByUser Entered.");
-		LinkedList<Book> booklist;
+		ArrayList<Book> booklist;
 		User u = new User("Test", false, "1234@google.se");
 		try {
-			booklist = db.getBooksByUser(u);
+			booklist = db.getBooksBy("Username", u.getUserName());
 			assertTrue(!booklist.isEmpty());
 			assertTrue(booklist.size() == 1);
 			

@@ -1,14 +1,52 @@
 package dbprocess;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class RemovalProcess extends DatabaseProcess {
+public class RemovalProcess {
 	/* name of the database */
-    private static String dbname = "cmpt370group04";
+	private static String dbname = "cmpt371group_CTiger";
     
-    private RemovalProcess() throws SQLException {
-    	super();
+	protected Connection conn;
+
+    private static RemovalProcess instance;
+    
+    /**
+     * Constructor
+     */
+    protected RemovalProcess() throws SQLException {
+        initDatabaseConnection();
+    }
+
+    /**
+     * Singleton pattern DatabaseProcess init
+     * @return	single instance of DatabaseProcess
+     */
+    public static synchronized RemovalProcess getInstance() {
+        if (instance == null) {
+            try {
+                instance = new RemovalProcess();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return instance;
+    }
+
+    /**
+     * Initialize a connection to the database
+     * @postcond	connection to the database initialized
+     */
+    private void initDatabaseConnection() throws SQLException {
+        try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            String url="jdbc:mysql://edjo.usask.ca/" + dbname + "?user=cmpt371gCT_user&password=TiggerTyger1";
+            conn=DriverManager.getConnection(url);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     
     /**
@@ -21,8 +59,8 @@ public class RemovalProcess extends DatabaseProcess {
         }
         Statement stmt=conn.createStatement();
         Statement stmt2=conn.createStatement();
-        stmt.execute("DELETE FROM " + dbname + ".books WHERE books.id=" + bookid + ";");
-        stmt2.execute("DELETE FROM " + dbname + ".userRentals WHERE userRentals.bookID=" + bookid + ";");
+        stmt.execute("DELETE FROM books WHERE books.id=" + bookid + ";");
+        stmt2.execute("DELETE FROM userRentals WHERE userRentals.bookID=" + bookid + ";");
     }
     
     /**

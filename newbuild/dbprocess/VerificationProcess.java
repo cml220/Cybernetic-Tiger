@@ -1,15 +1,53 @@
 package dbprocess;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class VerificationProcess extends DatabaseProcess {
-    /* name of the database */
-    private static String dbname = "cmpt370group04";
+public class VerificationProcess {
+	/* name of the database */
+	private static String dbname = "cmpt371group_CTiger";
     
-    private VerificationProcess() throws SQLException {
-    	super();
+	protected Connection conn;
+
+    private static VerificationProcess instance;
+    
+    /**
+     * Constructor
+     */
+    protected VerificationProcess() throws SQLException {
+        initDatabaseConnection();
+    }
+
+    /**
+     * Singleton pattern DatabaseProcess init
+     * @return	single instance of DatabaseProcess
+     */
+    public static synchronized VerificationProcess getInstance() {
+        if (instance == null) {
+            try {
+                instance = new VerificationProcess();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return instance;
+    }
+
+    /**
+     * Initialize a connection to the database
+     * @postcond	connection to the database initialized
+     */
+    private void initDatabaseConnection() throws SQLException {
+        try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            String url="jdbc:mysql://edjo.usask.ca/" + dbname + "?user=cmpt371gCT_user&password=TiggerTyger1";
+            conn=DriverManager.getConnection(url);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     
     /**
