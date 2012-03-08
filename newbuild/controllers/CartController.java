@@ -1,5 +1,5 @@
 package controllers;
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 import model.Book;
 import exceptions.CartException;
@@ -34,7 +34,7 @@ public class CartController {
 	 */
 	public float getTotal() {
 		// Get the current books in the cart
-		LinkedList<Book> cart = Controller.getCurrentUser().cart.getCart();
+		ArrayList<Book> cart = Controller.getCurrentUser().cart.getCart();
 		int total = 0;
 		// Go through every book, adding its price to the running total
 		for (Book b : cart) {
@@ -46,7 +46,7 @@ public class CartController {
 	/**
 	 * @return Returns the entire list of books that are in the current user's cart
 	 */
-	public LinkedList<Book> getBooks() {
+	public ArrayList<Book> getBooks() {
 		return Controller.getCurrentUser().cart.getCart();
 	}
 }

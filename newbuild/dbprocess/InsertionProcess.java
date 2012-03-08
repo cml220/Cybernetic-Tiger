@@ -5,22 +5,60 @@
 
 package dbprocess;
 
+import java.sql.Connection;
 import java.sql.Date;
+import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 import model.Book;
 import model.Cart;
 import model.User;
 
-public class InsertionProcess extends DatabaseProcess {
+public class InsertionProcess {
 	/* name of the database */
-    private static String dbname = "cmpt370group04";
+	private static String dbname = "cmpt371group_CTiger";
     
-    private InsertionProcess() throws SQLException {
-    	super();
+    protected Connection conn;
+
+    private static InsertionProcess instance;
+    
+    /**
+     * Constructor
+     */
+    protected InsertionProcess() throws SQLException {
+        initDatabaseConnection();
+    }
+
+    /**
+     * Singleton pattern DatabaseProcess init
+     * @return	single instance of DatabaseProcess
+     */
+    public static synchronized InsertionProcess getInstance() {
+        if (instance == null) {
+            try {
+                instance = new InsertionProcess();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return instance;
+    }
+
+    /**
+     * Initialize a connection to the database
+     * @postcond	connection to the database initialized
+     */
+    private void initDatabaseConnection() throws SQLException {
+        try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            String url="jdbc:mysql://edjo.usask.ca/" + dbname + "?user=cmpt371gCT_user&password=TiggerTyger1";
+            conn=DriverManager.getConnection(url);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     
 	/**
@@ -28,15 +66,11 @@ public class InsertionProcess extends DatabaseProcess {
      * @param	u	the user/renter
      * @param 	b	the book to be rented
      */
-    //TODO: Change DB tblUserRental so it uses ISBN instead of BookID (?)
-    public void addBookToUser(Book b, User u, int rentalID) throws SQLException {
-        if(b==null || u==null) {
-            return;
-        }
+    public void addBookToUser(String isbn, String username, int rentalID) throws SQLException {
         Statement stmt=conn.createStatement();
-        ResultSet rs=stmt.executeQuery("SELECT * FROM tblBook WHERE ISBN=" + b.getBookISBN() + ";");
+        ResultSet rs=stmt.executeQuery("SELECT * FROM tblBook WHERE ISBN=" + isbn + ";");
         if(rs.first()) {
-        	stmt.execute("INSERT INTO tblBookRental(RentalID, BookID) VALUES (\"" + rentalID + "\"," + b.getBookISBN() + ");");
+        	stmt.execute("INSERT INTO tblBookRental(RentalID, BookISBN) VALUES (\"" + rentalID + "\"," + isbn + ");");
         }
     }
     
@@ -45,7 +79,6 @@ public class InsertionProcess extends DatabaseProcess {
      * @param	b	book to be added to the catalogue
      * @postcond	book has been added to the catalogue if it was not present already
      */
-    //TODO: Change TB tblBook to no longer use BookID (?)
     public void addBookToCatalogue(Book b) throws SQLException {
         if(b==null) {
             return;
@@ -79,16 +112,13 @@ public class InsertionProcess extends DatabaseProcess {
         }
         Statement stmt=conn.createStatement();
         ResultSet rs=stmt.executeQuery("SELECT * FROM tblUser WHERE UserName=\"" + u.getUserName() + "\";");
-        if(rs.first()) {
+        if(rs.next()) {
             return -1;    //value in result set; user already exists
         } else {
-        	stmt.execute("INSERT INTO tblUser (UserName, PassWord, IsAdmin) VALUES (\"" + u.getUserName() + "\",\"" + u.getPassword() + "\"," + 0 +");");
-        	rs=stmt.executeQuery("SELECT * FROM tblUser WHERE UserName=\"" + u.getUserName() +"\"");
-        	stmt.execute("SELECT * FROM tblAccountInfo WHERE UserName=\"" + u.getUserName() +"\"");
+        	stmt.execute("INSERT INTO tblUser (UserName, PassWord, IsAdmin) VALUES (\"" + u.getUserName() + "\",\"" + u.getPassword() + "\",\"" + "N" + "\");");
         	//DO STUFF HERE
-        	//stmt.execute("INSERT INTO tblAccountInfo(UserName, FirstName, LastName, Email, PayInfo) VALUES (\"" 
-        	//		+ u.getUserName() + "\",\"" + FirstName + "\",\"" + LastName + "\",\"" + Email + "\",\"" + PayInfo + "\",\"");
-        	rs=stmt.executeQuery("SELECT * FROM " + dbname + ".users WHERE users.username=\"" + u.getUserName() +"\";");
+        	stmt.execute("INSERT INTO tblAccountInfo(UserName, FirstName, LastName, Email) VALUES (\"" + u.getUserName() + "\", \"\", \"\",\"" + u.getEmail() +"\")");
+        	rs=stmt.executeQuery("SELECT * FROM tblUser WHERE UserName=\"" + u.getUserName() +"\";");
             rs.first();
             return 0;
         }
@@ -112,7 +142,6 @@ public class InsertionProcess extends DatabaseProcess {
      * @param username	the user for it to be saved to
      * @param shopdate	the date in which it was saved
      */
-    //TODO: Change appropriate tables to use ISBN instead of ID (?)
     public void saveShoppingCart(Cart c, String username, Date shopdate) throws SQLException {
     	Statement stmt=conn.createStatement();
     	stmt.execute("INSERT INTO tblShoppingCart (UserName, ShopDate) VALUES (\"" + username + "\"," + shopdate +")");
@@ -120,7 +149,7 @@ public class InsertionProcess extends DatabaseProcess {
     	rs.first();
     	int cartNum = rs.getInt("CartNumber");
     	
-    	LinkedList<Book> cartBooks = c.getCart();
+    	ArrayList<Book> cartBooks = c.getCart();
     	
     	for(Book b : cartBooks) {
     		stmt.execute("INSERT INTO tblCartContent (CartNumber, BookISBN) VALUES (" + cartNum + ",\"" + b.getBookISBN() + "\"");

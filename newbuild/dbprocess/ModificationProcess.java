@@ -1,16 +1,54 @@
 package dbprocess;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
 import model.User;
 
-public class ModificationProcess extends DatabaseProcess {
-    /* name of the database */
-    private static String dbname = "cmpt370group04";
+public class ModificationProcess {
+	/* name of the database */
+	private static String dbname = "cmpt371group_CTiger";
     
-    private ModificationProcess() throws SQLException {
-    	super();
+	protected Connection conn;
+
+    private static ModificationProcess instance;
+    
+    /**
+     * Constructor
+     */
+    protected ModificationProcess() throws SQLException {
+        initDatabaseConnection();
+    }
+
+    /**
+     * Singleton pattern DatabaseProcess init
+     * @return	single instance of DatabaseProcess
+     */
+    public static synchronized ModificationProcess getInstance() {
+        if (instance == null) {
+            try {
+                instance = new ModificationProcess();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return instance;
+    }
+
+    /**
+     * Initialize a connection to the database
+     * @postcond	connection to the database initialized
+     */
+    private void initDatabaseConnection() throws SQLException {
+        try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            String url="jdbc:mysql://edjo.usask.ca/" + dbname + "?user=cmpt371gCT_user&password=TiggerTyger1";
+            conn=DriverManager.getConnection(url);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     
     /**
@@ -18,6 +56,7 @@ public class ModificationProcess extends DatabaseProcess {
      * @param	url			the url of the profile image
      * @param	username	the username of the user
      */
+    //deprecated??
     public void editUserProfilePic(String url, String username)	throws SQLException {
         if(username==null || url==null) {
             return;
@@ -28,8 +67,9 @@ public class ModificationProcess extends DatabaseProcess {
     
     //TODO: Have to figure out how we handle users and what we want to change before this can be completed!
     public void editUserInfo(String oldname, User newinfo) throws SQLException {
-    	RemovalProcess db = (RemovalProcess) getInstance();
+    	RemovalProcess db = RemovalProcess.getInstance();
+    	InsertionProcess idb = InsertionProcess.getInstance();
     	db.removeUser(oldname);
-    	db.createUser(newinfo);   	
+    	idb.createUser(newinfo);   	
     }
 }

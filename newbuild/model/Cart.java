@@ -1,13 +1,13 @@
 package model;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import exceptions.CartException;
 
 public class Cart {
-	private LinkedList<Book> cart;
+	private ArrayList<Book> cart;
 
 	public Cart() {
-			cart = new LinkedList<Book>();
+			cart = new ArrayList<Book>();
 	}
 	
 	/*
@@ -17,7 +17,7 @@ public class Cart {
 		if (cart.contains(book)) {
 			throw new CartException("Book is already in cart\n");
 		}
-		cart.addLast(book);
+		cart.add(book);
 	}
 
 	public void removeBook(Book book) throws CartException {
@@ -27,7 +27,7 @@ public class Cart {
 		cart.remove(book);
 	}
 
-	public LinkedList<Book> getCart() {
+	public ArrayList<Book> getCart() {
 		return cart;
 	}
 }

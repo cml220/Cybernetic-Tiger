@@ -5,20 +5,59 @@
 
 package dbprocess;
 
+import java.sql.Connection;
+import org.apache.log4j.Logger;
+import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 import model.Book;
 import model.User;
 
-public class GetterProcess extends DatabaseProcess {
+public class GetterProcess {
 	/* name of the database */
-    private static String dbname = "cmpt370group04";
+	private static String dbname = "cmpt371group_CTiger";
+	Logger log = Logger.getLogger(DatabaseProcessJUnit.class);
+    protected Connection conn;
+
+    private static GetterProcess instance;
     
-    private GetterProcess() throws SQLException {
-    	super();
+    /**
+     * Constructor
+     */
+    protected GetterProcess() throws SQLException {
+        initDatabaseConnection();
+    }
+
+    /**
+     * Singleton pattern DatabaseProcess init
+     * @return	single instance of DatabaseProcess
+     */
+    public static synchronized GetterProcess getInstance() {
+        if (instance == null) {
+            try {
+                instance = new GetterProcess();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return instance;
+    }
+
+    /**
+     * Initialize a connection to the database
+     * @postcond	connection to the database initialized
+     */
+    private void initDatabaseConnection() throws SQLException {
+        try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            String url="jdbc:mysql://edjo.usask.ca/" + dbname + "?user=cmpt371gCT_user&password=TiggerTyger1";
+            conn=DriverManager.getConnection(url);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     
 	/**
@@ -28,9 +67,12 @@ public class GetterProcess extends DatabaseProcess {
      */
     public User getUserInfo(String username) throws SQLException {
         Statement stmt=conn.createStatement();
-        ResultSet rs=stmt.executeQuery("SELECT * FROM tblAccountInfo WHERE UserName = " + "\"" + username + "\"");
-        if(rs.first()) {
-           	User u = new User(rs.getString("FirstName"), false, rs.getString("email"));
+        ResultSet rs=stmt.executeQuery("SELECT * FROM tblUser WHERE UserName = " + "\"" + username + "\"");
+        Statement stmt2 = conn.createStatement();
+        ResultSet rs2 = stmt2.executeQuery("SELECT * FROM tblAccountInfo WHERE UserName = " + "\"" + username + "\"");
+        if(rs.next()) {
+        	rs2.next();
+           	User u = new User(rs.getString("UserName"), rs.getString("PassWord"), false, rs2.getString("email"));
             return u;
         } else {
             return null;
@@ -40,33 +82,33 @@ public class GetterProcess extends DatabaseProcess {
   
     /**
      * Find books by specified query, using specific option
-     * @param	option	Define parameters of search (eg. search by Title, Author, or Catalogue)
+     * @param	option	Define parameters of search (eg. search by Title, Author, Username or Catalogue)
      * @param	query	Define what to search for.
      * @return			A list of books that satisfy the search parameters.
      * To get books by title: db.getBookBy("Title", "A Clockwork Orange");
      * To get books by Author: db.getBookBy("Author", "Bob Loblaw");
+     * To get a user's book library: db.getBookBy("Username", "colin");
      * To get entire catalogue: db.getBookBy("Catalogue", null);
-     */
-    
-    public LinkedList<Book> getBookBy(String option, String query) throws SQLException {
+     */  
+    public ArrayList<Book> getBooksBy(String option, String query) throws SQLException {
     	ResultSet rs = null;
-    	if(option.equals(null))
-    		return null;
-    	if(query.equals(null) && !option.equals("Catalogue"))
-    		return null;
     	Statement stmt = conn.createStatement();
-    	if(option.equals("Author")) {
+    	if(option.equals("Author") && !query.equals(null)) {
     		rs = stmt.executeQuery("SELECT * FROM tblBook WHERE Author LIKE \"%" + query + "%\" ORDER BY Title;");
     	}
-    	if(option.equals("Title")) {
+    	if(option.equals("Title") && !query.equals(null)) {
     		rs = stmt.executeQuery("SELECT * FROM tblBook WHERE Title LIKE \"%" + query + "%\" ORDER BY Title;");
     	}
-    	if(option.equals("Catalogue")) {
-    		rs = stmt.executeQuery("SELECT * FROM tblBook WHERE Catalogue LIKE \"%" + query + "%\" ORDER BY Title;");
+    	if(option.equals("Catalogue") && query.equals(null)) {
+    		rs = stmt.executeQuery("SELECT * FROM tblBook ORDER BY Title;");
     	}
-    	LinkedList<Book> bookList = new LinkedList<Book>();
+    	if(option.equals("Username")) {
+    		rs=stmt.executeQuery("SELECT * FROM tblUserRental, tblBookRental WHERE tblUserRental.RentalID = tblBookRental.RentalID and tblUserRental.UserName=\"" 
+    								+ query + "\";");
+    	}
+    	ArrayList<Book> bookList = new ArrayList<Book>();
     	while(rs.next()) {
-    		bookList.add(new Book(rs.getString("Title"), rs.getString("Author"), rs.getDouble("Price"), rs.getString("Url"), rs.getString("ISBN"), rs.getString("picUrl"), rs.getString("Description")));
+    		bookList.add(new Book(rs.getString("Title"), rs.getString("Author"), rs.getDouble("Price"), rs.getString("Url"), rs.getInt("ISBN"), rs.getString("picUrl"), rs.getString("Description")));
     	}
     	if(bookList.size() == 0)
     		return null;
@@ -75,17 +117,17 @@ public class GetterProcess extends DatabaseProcess {
     
     
     //Possibly depreciated
-    public LinkedList<Book> getBookByTitle(String title) throws SQLException {
+     public ArrayList<Book> getBookByTitle(String title) throws SQLException {
         if(title==null) {
             return null;
         }
         Statement stmt=conn.createStatement();
         ResultSet rs=stmt.executeQuery("SELECT * FROM tblBook WHERE Title LIKE \"%" + title + "%\" ORDER BY Title;");
         if (rs.first()) {
-            LinkedList<Book> booklist = new LinkedList<Book>();
+            ArrayList<Book> booklist = new ArrayList<Book>();
             while (!rs.isAfterLast()) {
                 Book tmp = new Book(rs.getString("Title"), rs.getString("Author"), rs.getDouble("Price"), rs.getString("Url"), 
-                		rs.getString("ISBN"), rs.getString("picURL"), rs.getString("Description"));
+                		Integer.parseInt(rs.getString("ISBN")), rs.getString("picURL"), rs.getString("Description"));
                 booklist.add(tmp);
                 rs.next();
             }
@@ -95,19 +137,16 @@ public class GetterProcess extends DatabaseProcess {
         }
     }
     
+    
     //Possibly depreciated
-    /**
-     * Get a list of all the books in the catalogue
-     * @return	a list of all the books currently in the catalogue (books table)
-     */
-    public LinkedList<Book> getCatalogue() throws SQLException {
+    public ArrayList<Book> getCatalogue() throws SQLException {
         Statement stmt=conn.createStatement();
         ResultSet rs=stmt.executeQuery("SELECT * FROM tblBook ORDER BY Title;");
         if(rs.first()) {
-            LinkedList<Book> booklist = new LinkedList<Book>();
+            ArrayList<Book> booklist = new ArrayList<Book>();
             while(!rs.isAfterLast()) {
                 Book tmp = new Book(rs.getString("Title"), rs.getString("Author"), rs.getDouble("Price"), rs.getString("Url"), 
-                		rs.getString("ISBN"), rs.getString("picURL"), rs.getString("Description"));
+                		Integer.parseInt(rs.getString("ISBN")), rs.getString("picURL"), rs.getString("Description"));
                 booklist.add(tmp);
                 rs.next();
             }
@@ -116,25 +155,22 @@ public class GetterProcess extends DatabaseProcess {
             return null;
         }
     }
+ 
+    
     
     
     //Possibly depreciated
-    /**
-     * Find books by author (pattern match)
-     * @param	author	author to search for
-     * @return	a list of books that are exactly or contain the substring in their author field
-     */
-    public LinkedList<Book> getBookByAuthor(String author) throws SQLException {
+    public ArrayList<Book> getBookByAuthor(String author) throws SQLException {
         if(author==null) {
             return null;
         }
         Statement stmt=conn.createStatement();
         ResultSet rs=stmt.executeQuery("SELECT * FROM tblBook WHERE Author LIKE \"%" + author + "%\" ORDER BY Title;");
         if (rs.first()) {
-            LinkedList<Book> booklist = new LinkedList<Book>();
+            ArrayList<Book> booklist = new ArrayList<Book>();
             while (!rs.isAfterLast()) {
                 Book tmp = new Book(rs.getString("Title"), rs.getString("Author"), rs.getDouble("Price"), rs.getString("Url"), 
-                		rs.getString("ISBN"), rs.getString("picURL"), rs.getString("Description"));
+                		Integer.parseInt(rs.getString("ISBN")), rs.getString("picURL"), rs.getString("Description"));
                 booklist.add(tmp);
                 rs.next();
             }
@@ -143,6 +179,7 @@ public class GetterProcess extends DatabaseProcess {
             return null;
         }
     }
+    
     
     /**
      * Find a book by isbn (exact)
@@ -157,34 +194,15 @@ public class GetterProcess extends DatabaseProcess {
         ResultSet rs=stmt.executeQuery("SELECT * FROM tblBook WHERE ISBN=\"" + isbn + "\";");
         if (rs.first()) {
             return new Book(rs.getString("Title"), rs.getString("Author"), rs.getDouble("Price"), rs.getString("Url"), 
-            		rs.getString("ISBN"), rs.getString("picURL"), rs.getString("Description"));
+            		rs.getInt("ISBN"), rs.getString("picURL"), rs.getString("Description"));
         } else {	//no book found
             return null;
         }
     }
     
-    /**
-     * Find a book by ID (exact)
-     * @param	ID	ID of the book
-     * @return	the book with the given ID if found; otherwise null
-     */
-    public Book getBookById(int ID) throws SQLException {
-        Statement stmt=conn.createStatement();
-        ResultSet rs=stmt.executeQuery("SELECT * FROM tblBook WHERE BookID=" + ID + ";");
-        if (rs.first()) {
-            return new Book(rs.getString("Title"), rs.getString("Author"), rs.getDouble("Price"), rs.getString("Url"), 
-            		rs.getString("ISBN"), rs.getString("picURL"), rs.getString("Description"));
-        } else {	//no book found
-            return null;
-        }
-    }
-    
-    /**
-     * Get a list of books being rented by a user
-     * @param	u	the user to find the books being rented by
-     * @return	a list of books being rented by the given user
-     */
-    public LinkedList<Book> getBooksByUser(User u) throws SQLException {
+    //Possibly depreciated
+    /*
+    public ArrayList<Book> getBooksByUser(User u) throws SQLException {
         if(u==null) {
             return null;
         }
@@ -192,7 +210,7 @@ public class GetterProcess extends DatabaseProcess {
         ResultSet rs=stmt.executeQuery("SELECT * FROM tblUserRental, tblBookRental WHERE tblUserRental.RentalID = tblBookRental.RentalID and tblUserRental.UserName=\"" 
         				+ u.getUserName() + "\";");
         if(rs.first()) {
-            LinkedList<Book> booklist = new LinkedList<Book>();
+            ArrayList<Book> booklist = new ArrayList<Book>();
             while (!rs.isAfterLast()) {
                 Book tmp = getBookById(rs.getInt("BookID"));
                 booklist.add(tmp);
@@ -203,6 +221,7 @@ public class GetterProcess extends DatabaseProcess {
 
         return null;
     }
+    */
     
     /**
      * Get the admin status of a user
@@ -215,6 +234,7 @@ public class GetterProcess extends DatabaseProcess {
         Statement stmt=conn.createStatement();
         ResultSet rs = stmt.executeQuery("SELECT IsAdmin FROM tblUser WHERE UserName=\"" + username + "\";");
         if(rs.first()) {
+        	log.debug(rs.getString("IsAdmin"));
             return rs.getString("IsAdmin");
         } else {
             return "false";
@@ -223,18 +243,18 @@ public class GetterProcess extends DatabaseProcess {
     
     /**
      * Get pertinent book info
-     * @param id	of the book to be gotten
+     * @param isbn	of the book to be gotten
      * @return	the info as a string
      */
-    public String getBookInfo(int id) throws SQLException {
+    public String getBookInfo(int isbn) throws SQLException {
         String info;
-        if(id < 0) {
+        if(isbn < 0) {
             return null;
         }
         Statement stmt=conn.createStatement();
-        ResultSet rs = stmt.executeQuery("SELECT * FROM " + dbname + ".books WHERE (books.id=" + id + ") LIMIT 1;");
+        ResultSet rs = stmt.executeQuery("SELECT * FROM tblBook WHERE (ISBN=" + isbn + ") LIMIT 1;");
         if(rs.first()) {
-            info = "<html>Title: " + rs.getString("title") + "<br>Author: " + rs.getString("author") + "<br>ISBN: " + rs.getString("isbn")  + "<br>ID: " + rs.getString("id") + "<br>Description: <br>" + rs.getString("description");
+            info = "<html>Title: " + rs.getString("title") + "<br>Author: " + rs.getString("author") + "<br>ISBN: " + rs.getString("isbn")  + "<br>Description: <br>" + rs.getString("description");
         } else {
             return "No info found!";
         }

@@ -6,5 +6,6 @@
 	<classpathentry exported="true" kind="lib" path="log4j-1.2.16.jar"/>
 	<classpathentry kind="lib" path="icepdf-core.jar"/>
 	<classpathentry kind="lib" path="icepdf-viewer.jar"/>
+	<classpathentry kind="lib" path="mysql-connector-java-5.1.18-bin.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
