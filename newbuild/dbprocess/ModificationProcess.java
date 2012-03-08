@@ -56,6 +56,7 @@ public class ModificationProcess {
      * @param	url			the url of the profile image
      * @param	username	the username of the user
      */
+    //deprecated??
     public void editUserProfilePic(String url, String username)	throws SQLException {
         if(username==null || url==null) {
             return;

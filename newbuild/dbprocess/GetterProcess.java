@@ -244,18 +244,18 @@ public class GetterProcess {
     
     /**
      * Get pertinent book info
-     * @param id	of the book to be gotten
+     * @param isbn	of the book to be gotten
      * @return	the info as a string
      */
-    public String getBookInfo(int id) throws SQLException {
+    public String getBookInfo(int isbn) throws SQLException {
         String info;
-        if(id < 0) {
+        if(isbn < 0) {
             return null;
         }
         Statement stmt=conn.createStatement();
-        ResultSet rs = stmt.executeQuery("SELECT * FROM " + dbname + ".books WHERE (books.id=" + id + ") LIMIT 1;");
+        ResultSet rs = stmt.executeQuery("SELECT * FROM tblBook WHERE (ISBN=" + isbn + ") LIMIT 1;");
         if(rs.first()) {
-            info = "<html>Title: " + rs.getString("title") + "<br>Author: " + rs.getString("author") + "<br>ISBN: " + rs.getString("isbn")  + "<br>ID: " + rs.getString("id") + "<br>Description: <br>" + rs.getString("description");
+            info = "<html>Title: " + rs.getString("title") + "<br>Author: " + rs.getString("author") + "<br>ISBN: " + rs.getString("isbn")  + "<br>Description: <br>" + rs.getString("description");
         } else {
             return "No info found!";
         }

@@ -66,15 +66,11 @@ public class InsertionProcess {
      * @param	u	the user/renter
      * @param 	b	the book to be rented
      */
-    //TODO: Change DB tblUserRental so it uses ISBN instead of BookID (?)
-    public void addBookToUser(Book b, User u, int rentalID) throws SQLException {
-        if(b==null || u==null) {
-            return;
-        }
+    public void addBookToUser(String isbn, String username, int rentalID) throws SQLException {
         Statement stmt=conn.createStatement();
-        ResultSet rs=stmt.executeQuery("SELECT * FROM tblBook WHERE ISBN=" + b.getBookISBN() + ";");
+        ResultSet rs=stmt.executeQuery("SELECT * FROM tblBook WHERE ISBN=" + isbn + ";");
         if(rs.first()) {
-        	stmt.execute("INSERT INTO tblBookRental(RentalID, BookID) VALUES (\"" + rentalID + "\"," + b.getBookISBN() + ");");
+        	stmt.execute("INSERT INTO tblBookRental(RentalID, BookID) VALUES (\"" + rentalID + "\"," + isbn + ");");
         }
     }
     
@@ -83,7 +79,6 @@ public class InsertionProcess {
      * @param	b	book to be added to the catalogue
      * @postcond	book has been added to the catalogue if it was not present already
      */
-    //TODO: Change TB tblBook to no longer use BookID (?)
     public void addBookToCatalogue(Book b) throws SQLException {
         if(b==null) {
             return;
@@ -150,7 +145,6 @@ public class InsertionProcess {
      * @param username	the user for it to be saved to
      * @param shopdate	the date in which it was saved
      */
-    //TODO: Change appropriate tables to use ISBN instead of ID (?)
     public void saveShoppingCart(Cart c, String username, Date shopdate) throws SQLException {
     	Statement stmt=conn.createStatement();
     	stmt.execute("INSERT INTO tblShoppingCart (UserName, ShopDate) VALUES (\"" + username + "\"," + shopdate +")");

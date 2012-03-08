@@ -51,16 +51,16 @@ public class RemovalProcess {
     
     /**
      * Remove a single book from the catalogue as well as all rentals
-     * @param bookid	the id of the book to be removed
+     * @param bookIsbn	the isbn of the book to be removed
      */
-    public void removeBookFromCatalogue(int bookid) throws SQLException {
-        if(bookid < 0) {
+    public void removeBookFromCatalogue(int bookIsbn) throws SQLException {
+        if(bookIsbn < 0) {
             return;
         }
         Statement stmt=conn.createStatement();
         Statement stmt2=conn.createStatement();
-        stmt.execute("DELETE FROM books WHERE books.id=" + bookid + ";");
-        stmt2.execute("DELETE FROM userRentals WHERE userRentals.bookID=" + bookid + ";");
+        stmt.execute("DELETE FROM tblBook WHERE ISBN=" + bookIsbn + ";");
+        stmt2.execute("DELETE FROM tblBookRental WHERE BookISBN=" + bookIsbn + ";");
     }
     
     /**

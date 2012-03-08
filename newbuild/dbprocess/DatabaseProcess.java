@@ -12,7 +12,7 @@ public class DatabaseProcess {
     private static DatabaseProcess instance;
 
     private DatabaseProcess() {
-    	//
+    	// wat
     }
     
     /**
@@ -85,9 +85,9 @@ public class DatabaseProcess {
      * @param	u	the user/renter
      * @param 	b	the book to be rented
      */
-    public void addBookToUser(Book b, User u, int rentalId) throws SQLException {
+    public void addBookToUser(String isbn, String username, int rentalId) throws SQLException {
     	InsertionProcess db = InsertionProcess.getInstance();
-        db.addBookToUser(b, u, rentalId);
+        db.addBookToUser(isbn, username, rentalId);
     }
 
     /**
@@ -132,6 +132,7 @@ public class DatabaseProcess {
     }
 
     /**
+     * DEPRECATED (DO NOT USE)
      * Check to see if a user is registered in the system
      * @param	userName	the login name to be searched for
      * @param	password	the password to be searched for
@@ -143,6 +144,7 @@ public class DatabaseProcess {
     }
     
     /**
+     * DEPRECATED (DO NOT USE)
      * Check to see if a username is in use in the system
      * @param	userName	the login name to be searched for
      * @return 	true if username is available; false otherwise
@@ -153,6 +155,7 @@ public class DatabaseProcess {
     }
 
     /**
+     * DEPRECATED (DO NOT USE)
      * Update a user's profile image
      * @param	url			the url of the profile image
      * @param	username	the username of the user
