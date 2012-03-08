@@ -150,21 +150,6 @@ public class DatabaseProcessJUnit {
 		}
 	}
 
-	@Test
-	public void testGetBookById() {
-		log.debug("testGetBookById Entered.");
-		//Unsure of the usefulness of searching by id since object class lacks support for ID
-		//and ISBN is unique to specific book (International)
-		/*Book b = new Book("THISISAUNIQUESTRING","THISISAUNIQUESTRING",(float) 1.10,"THISISAUNIQUESTRING", "2309580932902385","THISISAUNIQUESTRING","THISISAUNIQUESTRING");
-		Book found;
-		try {
-			found = db.getBookByIsbn("2309580932902385");
-			assertEquals("2309580932902385", found.getBookISBN(), b.getBookISBN());
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
-	}
 
 	@Test
 	public void testGetBooksByUser() {
@@ -226,18 +211,5 @@ public class DatabaseProcessJUnit {
 		}
 	}
 
-	@Test
-	public void testEditUserProfilePic() {
-		log.debug("testEditUserProfilePic Entered.");
-		//Unsure of how a test could be made.
-	}
-
-	
-
-	@Test
-	public void testGetBookInfo() {
-		log.debug("testGetBookInfo Entered.");
-		// Unsure why/how book id is being used)
-	}
 
 }

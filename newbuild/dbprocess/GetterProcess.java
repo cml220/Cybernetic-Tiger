@@ -37,6 +37,65 @@ public class GetterProcess extends DatabaseProcess {
         }
     }
     
+  
+    /**
+     * Find books by specified query, using specific option
+     * @param	option	Define parameters of search (eg. search by Title, Author, or Catalogue)
+     * @param	query	Define what to search for.
+     * @return			A list of books that satisfy the search parameters.
+     * To get books by title: db.getBookBy("Title", "A Clockwork Orange");
+     * To get books by Author: db.getBookBy("Author", "Bob Loblaw");
+     * To get entire catalogue: db.getBookBy("Catalogue", null);
+     */
+    
+    public LinkedList<Book> getBookBy(String option, String query) throws SQLException {
+    	ResultSet rs = null;
+    	if(option.equals(null))
+    		return null;
+    	if(query.equals(null) && !option.equals("Catalogue"))
+    		return null;
+    	Statement stmt = conn.createStatement();
+    	if(option.equals("Author")) {
+    		rs = stmt.executeQuery("SELECT * FROM tblBook WHERE Author LIKE \"%" + query + "%\" ORDER BY Title;");
+    	}
+    	if(option.equals("Title")) {
+    		rs = stmt.executeQuery("SELECT * FROM tblBook WHERE Title LIKE \"%" + query + "%\" ORDER BY Title;");
+    	}
+    	if(option.equals("Catalogue")) {
+    		rs = stmt.executeQuery("SELECT * FROM tblBook WHERE Catalogue LIKE \"%" + query + "%\" ORDER BY Title;");
+    	}
+    	LinkedList<Book> bookList = new LinkedList<Book>();
+    	while(rs.next()) {
+    		bookList.add(new Book(rs.getString("Title"), rs.getString("Author"), rs.getDouble("Price"), rs.getString("Url"), rs.getString("ISBN"), rs.getString("picUrl"), rs.getString("Description")));
+    	}
+    	if(bookList.size() == 0)
+    		return null;
+    	return bookList;    		
+    }
+    
+    
+    //Possibly depreciated
+    public LinkedList<Book> getBookByTitle(String title) throws SQLException {
+        if(title==null) {
+            return null;
+        }
+        Statement stmt=conn.createStatement();
+        ResultSet rs=stmt.executeQuery("SELECT * FROM tblBook WHERE Title LIKE \"%" + title + "%\" ORDER BY Title;");
+        if (rs.first()) {
+            LinkedList<Book> booklist = new LinkedList<Book>();
+            while (!rs.isAfterLast()) {
+                Book tmp = new Book(rs.getString("Title"), rs.getString("Author"), rs.getDouble("Price"), rs.getString("Url"), 
+                		rs.getString("ISBN"), rs.getString("picURL"), rs.getString("Description"));
+                booklist.add(tmp);
+                rs.next();
+            }
+            return booklist;
+        } else {	//no books found
+            return null;
+        }
+    }
+    
+    //Possibly depreciated
     /**
      * Get a list of all the books in the catalogue
      * @return	a list of all the books currently in the catalogue (books table)
@@ -58,31 +117,8 @@ public class GetterProcess extends DatabaseProcess {
         }
     }
     
-    /**
-     * Find books by title (pattern match)
-     * @param	title	title to search for
-     * @return	a list of books that are exactly or contain the substring in their title field
-     */
-    public LinkedList<Book> getBookByTitle(String title) throws SQLException {
-        if(title==null) {
-            return null;
-        }
-        Statement stmt=conn.createStatement();
-        ResultSet rs=stmt.executeQuery("SELECT * FROM tblBook WHERE Title LIKE \"%" + title + "%\" ORDER BY Title;");
-        if (rs.first()) {
-            LinkedList<Book> booklist = new LinkedList<Book>();
-            while (!rs.isAfterLast()) {
-                Book tmp = new Book(rs.getString("Title"), rs.getString("Author"), rs.getDouble("Price"), rs.getString("Url"), 
-                		rs.getString("ISBN"), rs.getString("picURL"), rs.getString("Description"));
-                booklist.add(tmp);
-                rs.next();
-            }
-            return booklist;
-        } else {	//no books found
-            return null;
-        }
-    }
     
+    //Possibly depreciated
     /**
      * Find books by author (pattern match)
      * @param	author	author to search for

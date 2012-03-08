@@ -13,6 +13,31 @@ public class VerificationProcess extends DatabaseProcess {
     }
     
     /**
+     * Check to see if username is available, also used to see if user is registered in the system.
+     * @param user		the login name to be searched for. Or the username to check 
+     * @param password	the password to be searched for.
+     * @return true		username is free, or also username and password match
+     * To check if username is avail. db.checkUser("username", null)
+     * To see if user is registered in system: db.checkUser("username", "password")
+     */
+    public boolean checkUser(String user, String password) throws SQLException {
+    	if(!user.equals(null) && !password.equals(null)) {
+    		Statement stmt = conn.createStatement();
+    		ResultSet rs = stmt.executeQuery("SELECT * FROM tblUser WHERE Username = \"" + user + "\" AND passWord = \"" + password + "\";");
+    		if(rs.next())
+    			return true;
+    	}
+    	if(!user.equals(null) && password.equals(null)) {
+    		Statement stmt = conn.createStatement();
+    		ResultSet rs = stmt.executeQuery("Select Username FROM tblUser WHERE UserName =\"" + user + "\";");
+    		if(rs.next())
+    			return false;
+    		return true;
+    	}
+    	return false;
+    }
+    
+    /**
      * Check to see if a user is registered in the system
      * @param	userName	the login name to be searched for
      * @param	password	the password to be searched for
