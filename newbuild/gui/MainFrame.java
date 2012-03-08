@@ -28,12 +28,12 @@ public class MainFrame extends JFrame {
     /**
      * The width of the window.
      */
-    private final int windowWidth = 700;
+    private final int windowWidth = 1000;
 
     /**
      * The height of the window.
      */
-    private final int windowHeight = 1000;
+    private final int windowHeight = 700;
 
     /**
      * Constructor; positions the window and adds the inner sections.
