@@ -12,15 +12,20 @@ public class User {
 	public Cart cart;
 	
 	//TODO:
-	public User(String username, boolean isAdmin, String email)
+	public User(String username, String pw, boolean isAdmin, String email)
 	{
 		this.username = username;
+		this.password = pw;
 		//TODO DBINTERFACE
 		//paymentInfo = DBInterface.getPaymentInfo(username)
 		//rentals = DBInterface.getBooksByUser(username)
 		this.isAdmin = isAdmin;
 		this.email = email;
 		cart = new Cart();
+	}
+	
+	public String getEmail() {
+		return email;
 	}
 	
 	public String getUserName() {

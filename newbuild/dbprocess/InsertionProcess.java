@@ -70,7 +70,7 @@ public class InsertionProcess {
         Statement stmt=conn.createStatement();
         ResultSet rs=stmt.executeQuery("SELECT * FROM tblBook WHERE ISBN=" + isbn + ";");
         if(rs.first()) {
-        	stmt.execute("INSERT INTO tblBookRental(RentalID, BookID) VALUES (\"" + rentalID + "\"," + isbn + ");");
+        	stmt.execute("INSERT INTO tblBookRental(RentalID, BookISBN) VALUES (\"" + rentalID + "\"," + isbn + ");");
         }
     }
     
@@ -112,16 +112,13 @@ public class InsertionProcess {
         }
         Statement stmt=conn.createStatement();
         ResultSet rs=stmt.executeQuery("SELECT * FROM tblUser WHERE UserName=\"" + u.getUserName() + "\";");
-        if(rs.first()) {
+        if(rs.next()) {
             return -1;    //value in result set; user already exists
         } else {
-        	stmt.execute("INSERT INTO tblUser (UserName, PassWord, IsAdmin) VALUES (\"" + u.getUserName() + "\",\"" + u.getPassword() + "\"," + 0 +");");
-        	rs=stmt.executeQuery("SELECT * FROM tblUser WHERE UserName=\"" + u.getUserName() +"\"");
-        	stmt.execute("SELECT * FROM tblAccountInfo WHERE UserName=\"" + u.getUserName() +"\"");
+        	stmt.execute("INSERT INTO tblUser (UserName, PassWord, IsAdmin) VALUES (\"" + u.getUserName() + "\",\"" + u.getPassword() + "\",\"" + "N" + "\");");
         	//DO STUFF HERE
-        	//stmt.execute("INSERT INTO tblAccountInfo(UserName, FirstName, LastName, Email, PayInfo) VALUES (\"" 
-        	//		+ u.getUserName() + "\",\"" + FirstName + "\",\"" + LastName + "\",\"" + Email + "\",\"" + PayInfo + "\",\"");
-        	rs=stmt.executeQuery("SELECT * FROM " + dbname + ".users WHERE users.username=\"" + u.getUserName() +"\";");
+        	stmt.execute("INSERT INTO tblAccountInfo(UserName, FirstName, LastName, Email) VALUES (\"" + u.getUserName() + "\", \"\", \"\",\"" + u.getEmail() +"\")");
+        	rs=stmt.executeQuery("SELECT * FROM tblUser WHERE UserName=\"" + u.getUserName() +"\";");
             rs.first();
             return 0;
         }

@@ -20,16 +20,19 @@ public class DatabaseProcessJUnit {
 	@Test
 	public void testCreateUser() {
 		log.debug("testCreateUser Entered.");
-		User u = new User("Test", false, "1234@google.se");
-		User u2 = new User(null, false, null);
-		User u3 = new User("", false, "");
+		User u = new User("Test", "1234", false, "1234@google.se");
+		User u2 = new User(null, null, false, null);
+		User u3 = new User("", "", false, "");
 		try {
 			int res = db.createUser(u);
+			log.debug(res);
 			int res2 = db.createUser(u2);
+			log.debug(res2);
 			int res3 = db.createUser(u3);
+			log.debug(res3);
 			assertTrue(res == 0 || res == -1);	//if test run more than once u1 might exist
 	        assertTrue(res2 == -2);					//the null case
-	        assertTrue(res3 == -3);					//the blank case
+	        assertTrue(res3 == -2);					//the blank case
 			assertTrue(db.checkLogin(u.getUserName(), u.getPassword()));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -41,10 +44,12 @@ public class DatabaseProcessJUnit {
 	@Test
 	public void testGetUserInfo() {
 		log.debug("testGetUserInfo Entered.");
-		User u = new User("Test", false, "1234@google.se");
+		User u = new User("Test", "1234", false, "1234@google.se");
 		try {
 			db.createUser(u);
 			User res = db.getUserInfo("Test");
+			log.debug(u.getUserName() + " " + u.getPassword());
+			log.debug(res.getUserName() + " " + res.getPassword());
 			assertEquals("User Retrival", u.getPassword(), res.getPassword());
 			assertEquals("User Retrival", u.getUserName(), res.getUserName());
 		} catch (SQLException e) {
@@ -57,7 +62,7 @@ public class DatabaseProcessJUnit {
 	@Test
 	public void testGetAdminStatus() {
 		log.debug("testGetAdminStatus Entered.");
-		User u = new User("Test", false, "1234@google.se");
+		User u = new User("Test", "1234", false, "1234@google.se");
 		try {
 			User res = db.getUserInfo("Test");
 			assertEquals("isAdmin Status", u.isAdmin, res.isAdmin);
@@ -73,7 +78,7 @@ public class DatabaseProcessJUnit {
 	@Test
 	public void testAddBookToCatalogue() {
 		log.debug("testAddBookToCatalogue Entered.");
-		Book b = new Book("THISISAUNIQUESTRING","THISISAUNIQUESTRING",(float) 1.10,"THISISAUNIQUESTRING", "2309580932902385","THISISAUNIQUESTRING","THISISAUNIQUESTRING");
+		Book b = new Book("THISISAUNIQUESTRING","THISISAUNIQUESTRING", 1.10,"THISISAUNIQUESTRING", 2309580,"THISISAUNIQUESTRING","THISISAUNIQUESTRING");
 		try {
 			db.addBookToCatalogue(b);
 		} catch (SQLException e) {
@@ -85,10 +90,10 @@ public class DatabaseProcessJUnit {
 	@Test
 	public void testAddBookToUser() {
 		log.debug("testAddBookToUser Entered.");
-		User u = new User("Test", false, "1234@google.se");
-		Book b = new Book("THISISAUNIQUESTRING","THISISAUNIQUESTRING",(float) 1.10,"THISISAUNIQUESTRING", "2309580932902385","THISISAUNIQUESTRING","THISISAUNIQUESTRING");
+		User u = new User("Test", "1234", false, "1234@google.se");
+		Book b = new Book("THISISAUNIQUESTRING","THISISAUNIQUESTRING", 1.10,"THISISAUNIQUESTRING", 2309580,"THISISAUNIQUESTRING","THISISAUNIQUESTRING");
 		try {
-			db.addBookToUser(b, u, 7);
+			db.addBookToUser(String.valueOf(b.getBookISBN()), u.getUserName(), 7);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -100,9 +105,11 @@ public class DatabaseProcessJUnit {
 		log.debug("testGetCatalogue Entered.");
 		try {
 			ArrayList<Book> booklist= db.getBooksBy("Catalogue", null);
+			
+			log.debug("hello" + booklist.size());
 			assertTrue(!booklist.isEmpty());
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			log.error("MYSQL Error");
 			e.printStackTrace();
 		}
 	}
@@ -138,10 +145,10 @@ public class DatabaseProcessJUnit {
 	@Test
 	public void testGetBookByIsbn() {
 		log.debug("testGetBookByIsbn Entered.");
-		Book b = new Book("THISISAUNIQUESTRING","THISISAUNIQUESTRING",(float) 1.10,"THISISAUNIQUESTRING", "2309580932902385","THISISAUNIQUESTRING","THISISAUNIQUESTRING");
+		Book b = new Book("THISISAUNIQUESTRING","THISISAUNIQUESTRING",(float) 1.10,"THISISAUNIQUESTRING", 23095809,"THISISAUNIQUESTRING","THISISAUNIQUESTRING");
 		Book found;
 		try {
-			found = db.getBookByIsbn("2309580932902385");
+			found = db.getBookByIsbn("23095809");
 			assertTrue(found != null);
             assertTrue(found.equals(b));
 		} catch (SQLException e) {
@@ -154,8 +161,8 @@ public class DatabaseProcessJUnit {
 	@Test
 	public void testGetBooksByUser() {
 		log.debug("testGetBooksByUser Entered.");
-		ArrayList<Book> booklist;
-		User u = new User("Test", false, "1234@google.se");
+		ArrayList<Book> booklist = new ArrayList<Book>();
+		User u = new User("Test", "1234", false, "1234@google.se");
 		try {
 			booklist = db.getBooksBy("Username", u.getUserName());
 			assertTrue(!booklist.isEmpty());
@@ -173,7 +180,7 @@ public class DatabaseProcessJUnit {
 		Book b;
 		try {
 			b = db.getBookByIsbn("2309580932902385");
-			db.removeBookFromCatalogue(Integer.parseInt(b.getBookISBN()));
+			db.removeBookFromCatalogue(b.getBookISBN());
 			b = db.getBookByIsbn("2309580932902385");
 			assertTrue(b == null);
 		} catch (SQLException e) {

@@ -6,6 +6,7 @@
 package dbprocess;
 
 import java.sql.Connection;
+import org.apache.log4j.Logger;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,7 +19,7 @@ import model.User;
 public class GetterProcess {
 	/* name of the database */
 	private static String dbname = "cmpt371group_CTiger";
-    
+	Logger log = Logger.getLogger(DatabaseProcessJUnit.class);
     protected Connection conn;
 
     private static GetterProcess instance;
@@ -66,9 +67,12 @@ public class GetterProcess {
      */
     public User getUserInfo(String username) throws SQLException {
         Statement stmt=conn.createStatement();
-        ResultSet rs=stmt.executeQuery("SELECT * FROM tblAccountInfo WHERE UserName = " + "\"" + username + "\"");
-        if(rs.first()) {
-           	User u = new User(rs.getString("FirstName"), false, rs.getString("email"));
+        ResultSet rs=stmt.executeQuery("SELECT * FROM tblUser WHERE UserName = " + "\"" + username + "\"");
+        Statement stmt2 = conn.createStatement();
+        ResultSet rs2 = stmt2.executeQuery("SELECT * FROM tblAccountInfo WHERE UserName = " + "\"" + username + "\"");
+        if(rs.next()) {
+        	rs2.next();
+           	User u = new User(rs.getString("UserName"), rs.getString("PassWord"), false, rs2.getString("email"));
             return u;
         } else {
             return null;
@@ -88,19 +92,15 @@ public class GetterProcess {
      */  
     public ArrayList<Book> getBooksBy(String option, String query) throws SQLException {
     	ResultSet rs = null;
-    	if(option.equals(null))
-    		return null;
-    	if(query.equals(null) && !option.equals("Catalogue"))
-    		return null;
     	Statement stmt = conn.createStatement();
-    	if(option.equals("Author")) {
+    	if(option.equals("Author") && !query.equals(null)) {
     		rs = stmt.executeQuery("SELECT * FROM tblBook WHERE Author LIKE \"%" + query + "%\" ORDER BY Title;");
     	}
-    	if(option.equals("Title")) {
+    	if(option.equals("Title") && !query.equals(null)) {
     		rs = stmt.executeQuery("SELECT * FROM tblBook WHERE Title LIKE \"%" + query + "%\" ORDER BY Title;");
     	}
-    	if(option.equals("Catalogue")) {
-    		rs = stmt.executeQuery("SELECT * FROM tblBook WHERE Catalogue LIKE \"%" + query + "%\" ORDER BY Title;");
+    	if(option.equals("Catalogue") && query.equals(null)) {
+    		rs = stmt.executeQuery("SELECT * FROM tblBook ORDER BY Title;");
     	}
     	if(option.equals("Username")) {
     		rs=stmt.executeQuery("SELECT * FROM tblUserRental, tblBookRental WHERE tblUserRental.RentalID = tblBookRental.RentalID and tblUserRental.UserName=\"" 
@@ -117,7 +117,7 @@ public class GetterProcess {
     
     
     //Possibly depreciated
-    /* public ArrayList<Book> getBookByTitle(String title) throws SQLException {
+     public ArrayList<Book> getBookByTitle(String title) throws SQLException {
         if(title==null) {
             return null;
         }
@@ -127,7 +127,7 @@ public class GetterProcess {
             ArrayList<Book> booklist = new ArrayList<Book>();
             while (!rs.isAfterLast()) {
                 Book tmp = new Book(rs.getString("Title"), rs.getString("Author"), rs.getDouble("Price"), rs.getString("Url"), 
-                		rs.getString("ISBN"), rs.getString("picURL"), rs.getString("Description"));
+                		Integer.parseInt(rs.getString("ISBN")), rs.getString("picURL"), rs.getString("Description"));
                 booklist.add(tmp);
                 rs.next();
             }
@@ -136,10 +136,9 @@ public class GetterProcess {
             return null;
         }
     }
-    */
+    
     
     //Possibly depreciated
-    /*
     public ArrayList<Book> getCatalogue() throws SQLException {
         Statement stmt=conn.createStatement();
         ResultSet rs=stmt.executeQuery("SELECT * FROM tblBook ORDER BY Title;");
@@ -147,7 +146,7 @@ public class GetterProcess {
             ArrayList<Book> booklist = new ArrayList<Book>();
             while(!rs.isAfterLast()) {
                 Book tmp = new Book(rs.getString("Title"), rs.getString("Author"), rs.getDouble("Price"), rs.getString("Url"), 
-                		rs.getString("ISBN"), rs.getString("picURL"), rs.getString("Description"));
+                		Integer.parseInt(rs.getString("ISBN")), rs.getString("picURL"), rs.getString("Description"));
                 booklist.add(tmp);
                 rs.next();
             }
@@ -156,12 +155,11 @@ public class GetterProcess {
             return null;
         }
     }
-    */
+ 
     
     
     
     //Possibly depreciated
-    /*
     public ArrayList<Book> getBookByAuthor(String author) throws SQLException {
         if(author==null) {
             return null;
@@ -172,7 +170,7 @@ public class GetterProcess {
             ArrayList<Book> booklist = new ArrayList<Book>();
             while (!rs.isAfterLast()) {
                 Book tmp = new Book(rs.getString("Title"), rs.getString("Author"), rs.getDouble("Price"), rs.getString("Url"), 
-                		rs.getString("ISBN"), rs.getString("picURL"), rs.getString("Description"));
+                		Integer.parseInt(rs.getString("ISBN")), rs.getString("picURL"), rs.getString("Description"));
                 booklist.add(tmp);
                 rs.next();
             }
@@ -181,7 +179,7 @@ public class GetterProcess {
             return null;
         }
     }
-    */
+    
     
     /**
      * Find a book by isbn (exact)
@@ -236,6 +234,7 @@ public class GetterProcess {
         Statement stmt=conn.createStatement();
         ResultSet rs = stmt.executeQuery("SELECT IsAdmin FROM tblUser WHERE UserName=\"" + username + "\";");
         if(rs.first()) {
+        	log.debug(rs.getString("IsAdmin"));
             return rs.getString("IsAdmin");
         } else {
             return "false";
