@@ -62,7 +62,7 @@ public class DatabaseProcess {
      * @param	query	Define what to search for.
      * @return			A list of books that satisfy the search parameters.
      */
-    public ArrayList<Book> getBooksBy(String option, String query) throws SQLException {
+    public ArrayList<Book> getBooksBy(int option, String query) throws SQLException {
     	GetterProcess db = GetterProcess.getInstance(conn);
     	return db.getBooksBy(option, query);
     }

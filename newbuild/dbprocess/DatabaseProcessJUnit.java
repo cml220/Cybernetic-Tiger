@@ -15,7 +15,7 @@ import exceptions.NullUserException;
 import exceptions.UserAlreadyExistsException;
 
 public class DatabaseProcessJUnit {
-
+	
 	private DatabaseProcess db = DatabaseProcess.getInstance();
 	Logger log = Logger.getLogger(DatabaseProcessJUnit.class);
 	/**
@@ -109,7 +109,7 @@ public class DatabaseProcessJUnit {
 	public void testGetCatalogue() {
 		log.debug("testGetCatalogue Entered.");
 		try {
-			ArrayList<Book> booklist = db.getBooksBy("Catalogue", "");
+			ArrayList<Book> booklist = db.getBooksBy(DBConsts.CATALOGUE, "");
 			
 			log.debug("hello" + booklist.size());
 			assertTrue(!booklist.isEmpty());
@@ -124,7 +124,7 @@ public class DatabaseProcessJUnit {
 		log.debug("testGetBookByTitle Entered.");
 		ArrayList<Book> booklist;
 		try {
-			booklist = db.getBooksBy("Title", "THISISAUNIQUESTRING");
+			booklist = db.getBooksBy(DBConsts.TITLE, "THISISAUNIQUESTRING");
 			assertTrue(!booklist.isEmpty());
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -139,7 +139,7 @@ public class DatabaseProcessJUnit {
 		log.debug("testGetBookByAuthor Entered.");
 		ArrayList<Book> booklist;
 		try {
-			booklist = db.getBooksBy("Author", "THISISAUNIQUESTRING");
+			booklist = db.getBooksBy(DBConsts.AUTHOR, "THISISAUNIQUESTRING");
 			assertTrue(!booklist.isEmpty());
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -169,7 +169,7 @@ public class DatabaseProcessJUnit {
 		ArrayList<Book> booklist = new ArrayList<Book>();
 		User u = new User("Test", false, "1234@google.se");
 		try {
-			booklist = db.getBooksBy("Username", u.getUserName());
+			booklist = db.getBooksBy(DBConsts.USERNAME, u.getUserName());
 			assertTrue(!booklist.isEmpty());
 			assertTrue(booklist.size() == 1);
 			
