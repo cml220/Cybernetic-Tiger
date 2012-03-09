@@ -58,7 +58,7 @@ public class DatabaseProcess {
 
     /**
      * Find books by specified query, using specific option
-     * @param	option	Define parameters of search (eg. search by Title, Author, Username or Catalogue)
+     * @param	option	Define parameters of search (eg. search by DBConsts.{AUTHOR,TITLE,USERNAME,CATALOGUE}
      * @param	query	Define what to search for.
      * @return			A list of books that satisfy the search parameters.
      */
