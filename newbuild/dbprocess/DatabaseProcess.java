@@ -24,7 +24,7 @@ public class DatabaseProcess {
     private void initDatabaseConnection() throws SQLException {
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
-            String url="jdbc:mysql://edjo.usask.ca/" + DatabaseProcess.getDBName() + "?user=cmpt371gCT_user&password=TiggerTyger1";
+            String url="jdbc:mysql://edjo.usask.ca/" + dbname + "?user=cmpt371gCT_user&password=TiggerTyger1";
             conn=DriverManager.getConnection(url);
         } catch (Exception e) {
             e.printStackTrace();
@@ -44,10 +44,6 @@ public class DatabaseProcess {
             }
         }
         return instance;
-    }
-    
-    protected static String getDBName() {
-    	return dbname;
     }
 
     /**
