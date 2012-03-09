@@ -7,7 +7,6 @@ package dbprocess;
 
 import java.sql.Connection;
 import java.sql.Date;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -18,47 +17,29 @@ import model.Cart;
 import model.User;
 
 public class InsertionProcess {
-	/* name of the database */
-	private static String dbname = "cmpt371group_CTiger";
-    
-    protected Connection conn;
-
+	protected Connection conn;
     private static InsertionProcess instance;
     
     /**
      * Constructor
      */
-    protected InsertionProcess() throws SQLException {
-        initDatabaseConnection();
+    protected InsertionProcess(Connection conn) throws SQLException {
+        this.conn = conn;
     }
 
     /**
      * Singleton pattern DatabaseProcess init
      * @return	single instance of DatabaseProcess
      */
-    public static synchronized InsertionProcess getInstance() {
+    public static synchronized InsertionProcess getInstance(Connection conn) {
         if (instance == null) {
             try {
-                instance = new InsertionProcess();
+                instance = new InsertionProcess(conn);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
         return instance;
-    }
-
-    /**
-     * Initialize a connection to the database
-     * @postcond	connection to the database initialized
-     */
-    private void initDatabaseConnection() throws SQLException {
-        try {
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            String url="jdbc:mysql://edjo.usask.ca/" + dbname + "?user=cmpt371gCT_user&password=TiggerTyger1";
-            conn=DriverManager.getConnection(url);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
     
 	/**
@@ -70,8 +51,9 @@ public class InsertionProcess {
         Statement stmt=conn.createStatement();
         ResultSet rs=stmt.executeQuery("SELECT * FROM tblBook WHERE ISBN=" + isbn + ";");
         if(rs.first()) {
-        	stmt.execute("INSERT INTO tblBookRental(RentalID, BookISBN) VALUES (\"" + rentalID + "\"," + isbn + ");");
+        	stmt.execute("INSERT INTO tblBookRental(RentalID, BookISBN, Username) VALUES (\"" + rentalID + "\"," + isbn + ",\"" + username + "\");");    	
         }
+        
     }
     
     /**

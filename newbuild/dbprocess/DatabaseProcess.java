@@ -8,11 +8,27 @@ import model.*;
  * @author cml220
  */
 public class DatabaseProcess {
-
+	/* name of the database */
+	private static String dbname = "cmpt371group_CTiger";  
     private static DatabaseProcess instance;
+    private Connection conn;
 
-    private DatabaseProcess() {
-    	// wat
+    private DatabaseProcess() throws SQLException {
+    	initDatabaseConnection();
+    }
+    
+    /**
+     * Initialize a connection to the database
+     * @postcond	connection to the database initialized
+     */
+    private void initDatabaseConnection() throws SQLException {
+        try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            String url="jdbc:mysql://edjo.usask.ca/" + DatabaseProcess.getDBName() + "?user=cmpt371gCT_user&password=TiggerTyger1";
+            conn=DriverManager.getConnection(url);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     
     /**
@@ -29,6 +45,10 @@ public class DatabaseProcess {
         }
         return instance;
     }
+    
+    protected static String getDBName() {
+    	return dbname;
+    }
 
     /**
      * Get the image url associated with a single user
@@ -36,7 +56,7 @@ public class DatabaseProcess {
      * @return	the url (as a string) if found, otherwise null
      */
     public User getUserInfo(String user) throws SQLException {
-    	GetterProcess db = GetterProcess.getInstance();
+    	GetterProcess db = GetterProcess.getInstance(conn);
         return db.getUserInfo(user);
     }
 
@@ -47,7 +67,7 @@ public class DatabaseProcess {
      * @return			A list of books that satisfy the search parameters.
      */
     public ArrayList<Book> getBooksBy(String option, String query) throws SQLException {
-    	GetterProcess db = GetterProcess.getInstance();
+    	GetterProcess db = GetterProcess.getInstance(conn);
     	return db.getBooksBy(option, query);
     }
     
@@ -57,7 +77,7 @@ public class DatabaseProcess {
      * @return	the book with the given ISBN if found; otherwise null
      */
     public Book getBookByIsbn(String isbn) throws SQLException {
-    	GetterProcess db = GetterProcess.getInstance();
+    	GetterProcess db = GetterProcess.getInstance(conn);
         return db.getBookByIsbn(isbn);
     }
     
@@ -66,7 +86,7 @@ public class DatabaseProcess {
      * @param	username	the username of the user
      */
     public String getAdminStatus(String username) throws SQLException {
-    	GetterProcess db = GetterProcess.getInstance();
+    	GetterProcess db = GetterProcess.getInstance(conn);
         return db.getAdminStatus(username);
     }
 
@@ -76,7 +96,7 @@ public class DatabaseProcess {
      * @return	the info as a string
      */
     public String getBookInfo(int id) throws SQLException {
-    	GetterProcess db = GetterProcess.getInstance();
+    	GetterProcess db = GetterProcess.getInstance(conn);
         return db.getBookInfo(id);
     }
 
@@ -86,7 +106,7 @@ public class DatabaseProcess {
      * @param 	b	the book to be rented
      */
     public void addBookToUser(String isbn, String username, int rentalId) throws SQLException {
-    	InsertionProcess db = InsertionProcess.getInstance();
+    	InsertionProcess db = InsertionProcess.getInstance(conn);
         db.addBookToUser(isbn, username, rentalId);
     }
 
@@ -96,7 +116,7 @@ public class DatabaseProcess {
      * @postcond	book has been added to the catalogue if it was not present already
      */
     public void addBookToCatalogue(Book b) throws SQLException {
-    	InsertionProcess db = InsertionProcess.getInstance();
+    	InsertionProcess db = InsertionProcess.getInstance(conn);
         db.addBookToCatalogue(b);
     }
 
@@ -105,7 +125,7 @@ public class DatabaseProcess {
      * @param bookid	the id of the book to be removed
      */
     public void removeBookFromCatalogue(int bookid) throws SQLException {
-    	RemovalProcess db = RemovalProcess.getInstance();
+    	RemovalProcess db = RemovalProcess.getInstance(conn);
         db.removeBookFromCatalogue(bookid);
     }
 
@@ -116,7 +136,7 @@ public class DatabaseProcess {
      * @return 		user ID if successful; or -1 (username in use)
      */
     public int createUser(User u, String passWord) throws SQLException {
-    	InsertionProcess db = InsertionProcess.getInstance();
+    	InsertionProcess db = InsertionProcess.getInstance(conn);
         return db.createUser(u, passWord);
     }
     
@@ -127,7 +147,7 @@ public class DatabaseProcess {
      * @param shopdate	the date in which it was saved
      */
     public void saveShoppingCart(Cart c, String username, Date shopdate) throws SQLException {
-    	InsertionProcess db = InsertionProcess.getInstance();
+    	InsertionProcess db = InsertionProcess.getInstance(conn);
     	db.saveShoppingCart(c, username, shopdate);
     }
 
@@ -139,7 +159,7 @@ public class DatabaseProcess {
      * @return 	true if username and password are registered to a user; false otherwise
      */
     public boolean checkLogin(String username, String password) throws SQLException {
-    	VerificationProcess db = VerificationProcess.getInstance();
+    	VerificationProcess db = VerificationProcess.getInstance(conn);
         return db.checkLogin(username, password);
     }
     
@@ -150,7 +170,7 @@ public class DatabaseProcess {
      * @return 	true if username is available; false otherwise
      */
     public boolean checkNameAvailable(String username) throws SQLException {
-    	VerificationProcess db = VerificationProcess.getInstance();
+    	VerificationProcess db = VerificationProcess.getInstance(conn);
         return db.checkNameAvailable(username);
     }
 
@@ -161,7 +181,7 @@ public class DatabaseProcess {
      * @param	username	the username of the user
      */
     public void editUserProfilePic(String url, String username)	throws SQLException {
-    	ModificationProcess db = ModificationProcess.getInstance();
+    	ModificationProcess db = ModificationProcess.getInstance(conn);
         db.editUserProfilePic(url, username);
     }
 
@@ -171,17 +191,17 @@ public class DatabaseProcess {
      * @param user			the actual user to modify
      */
     public void editUserInfo(String username, User user)	throws SQLException {
-    	ModificationProcess db = ModificationProcess.getInstance();
+    	ModificationProcess db = ModificationProcess.getInstance(conn);
         db.editUserInfo(username, user);
     }
     
     public void removeUser(String userName) throws SQLException {
-    	RemovalProcess db = RemovalProcess.getInstance();
+    	RemovalProcess db = RemovalProcess.getInstance(conn);
     	db.removeUser(userName);
     }
 
 	public boolean checkUser(String userName, String passWord) throws SQLException {
-		VerificationProcess db = VerificationProcess.getInstance();
+		VerificationProcess db = VerificationProcess.getInstance(conn);
 		return db.checkUser(userName, passWord);
 	}
 }

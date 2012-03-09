@@ -2,53 +2,34 @@ package dbprocess;
 
 import org.apache.log4j.Logger;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
 public class RemovalProcess {
-	/* name of the database */
-	private static String dbname = "cmpt371group_CTiger";
 	Logger log = Logger.getLogger(DatabaseProcessJUnit.class);
-
 	protected Connection conn;
-
     private static RemovalProcess instance;
     
     /**
      * Constructor
      */
-    protected RemovalProcess() throws SQLException {
-        initDatabaseConnection();
+    protected RemovalProcess(Connection conn) throws SQLException {
+        this.conn = conn;
     }
 
     /**
      * Singleton pattern DatabaseProcess init
      * @return	single instance of DatabaseProcess
      */
-    public static synchronized RemovalProcess getInstance() {
+    public static synchronized RemovalProcess getInstance(Connection conn) {
         if (instance == null) {
             try {
-                instance = new RemovalProcess();
+                instance = new RemovalProcess(conn);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
         return instance;
-    }
-
-    /**
-     * Initialize a connection to the database
-     * @postcond	connection to the database initialized
-     */
-    private void initDatabaseConnection() throws SQLException {
-        try {
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            String url="jdbc:mysql://edjo.usask.ca/" + dbname + "?user=cmpt371gCT_user&password=TiggerTyger1";
-            conn=DriverManager.getConnection(url);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
     
     /**

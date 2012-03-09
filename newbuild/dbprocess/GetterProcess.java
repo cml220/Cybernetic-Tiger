@@ -7,7 +7,6 @@ package dbprocess;
 
 import java.sql.Connection;
 import org.apache.log4j.Logger;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -17,47 +16,30 @@ import model.Book;
 import model.User;
 
 public class GetterProcess {
-	/* name of the database */
-	private static String dbname = "cmpt371group_CTiger";
 	Logger log = Logger.getLogger(DatabaseProcessJUnit.class);
     protected Connection conn;
-
     private static GetterProcess instance;
     
     /**
      * Constructor
      */
-    protected GetterProcess() throws SQLException {
-        initDatabaseConnection();
+    protected GetterProcess(Connection conn) throws SQLException {
+        this.conn = conn;
     }
 
     /**
      * Singleton pattern DatabaseProcess init
      * @return	single instance of DatabaseProcess
      */
-    public static synchronized GetterProcess getInstance() {
+    public static synchronized GetterProcess getInstance(Connection conn) {
         if (instance == null) {
             try {
-                instance = new GetterProcess();
+                instance = new GetterProcess(conn);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
         return instance;
-    }
-
-    /**
-     * Initialize a connection to the database
-     * @postcond	connection to the database initialized
-     */
-    private void initDatabaseConnection() throws SQLException {
-        try {
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            String url="jdbc:mysql://edjo.usask.ca/" + dbname + "?user=cmpt371gCT_user&password=TiggerTyger1";
-            conn=DriverManager.getConnection(url);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
     
 	/**
@@ -103,8 +85,7 @@ public class GetterProcess {
     		rs = stmt.executeQuery("SELECT * FROM tblBook ORDER BY Title;");
     	}
     	else if(option.equals("Username") && !query.equals("")) {
-    		rs=stmt.executeQuery("SELECT * FROM tblUserRental, tblBookRental WHERE tblUserRental.RentalID = tblBookRental.RentalID and tblUserRental.UserName=\"" 
-    								+ query + "\";");
+    		rs=stmt.executeQuery("SELECT tblBook.* FROM tblBook, tblBookRental WHERE tblBook.ISBN=tblBookRental.BookISBN AND tblBookRental.UserName=\"" + query + "\";");
     	}
     	else {
     		return null;
@@ -117,72 +98,6 @@ public class GetterProcess {
     		return null;
     	return bookList;    		
     }
-    
-    
-    //Possibly depreciated
-     public ArrayList<Book> getBookByTitle(String title) throws SQLException {
-        if(title==null) {
-            return null;
-        }
-        Statement stmt=conn.createStatement();
-        ResultSet rs=stmt.executeQuery("SELECT * FROM tblBook WHERE Title LIKE \"%" + title + "%\" ORDER BY Title;");
-        if (rs.first()) {
-            ArrayList<Book> booklist = new ArrayList<Book>();
-            while (!rs.isAfterLast()) {
-                Book tmp = new Book(rs.getString("Title"), rs.getString("Author"), rs.getDouble("Price"), rs.getString("Url"), 
-                		Integer.parseInt(rs.getString("ISBN")), rs.getString("picURL"), rs.getString("Description"));
-                booklist.add(tmp);
-                rs.next();
-            }
-            return booklist;
-        } else {	//no books found
-            return null;
-        }
-    }
-    
-    
-    //Possibly depreciated
-    public ArrayList<Book> getCatalogue() throws SQLException {
-        Statement stmt=conn.createStatement();
-        ResultSet rs=stmt.executeQuery("SELECT * FROM tblBook ORDER BY Title;");
-        if(rs.first()) {
-            ArrayList<Book> booklist = new ArrayList<Book>();
-            while(!rs.isAfterLast()) {
-                Book tmp = new Book(rs.getString("Title"), rs.getString("Author"), rs.getDouble("Price"), rs.getString("Url"), 
-                		Integer.parseInt(rs.getString("ISBN")), rs.getString("picURL"), rs.getString("Description"));
-                booklist.add(tmp);
-                rs.next();
-            }
-            return booklist;
-        } else {	//no books found
-            return null;
-        }
-    }
- 
-    
-    
-    
-    //Possibly depreciated
-    public ArrayList<Book> getBookByAuthor(String author) throws SQLException {
-        if(author==null) {
-            return null;
-        }
-        Statement stmt=conn.createStatement();
-        ResultSet rs=stmt.executeQuery("SELECT * FROM tblBook WHERE Author LIKE \"%" + author + "%\" ORDER BY Title;");
-        if (rs.first()) {
-            ArrayList<Book> booklist = new ArrayList<Book>();
-            while (!rs.isAfterLast()) {
-                Book tmp = new Book(rs.getString("Title"), rs.getString("Author"), rs.getDouble("Price"), rs.getString("Url"), 
-                		Integer.parseInt(rs.getString("ISBN")), rs.getString("picURL"), rs.getString("Description"));
-                booklist.add(tmp);
-                rs.next();
-            }
-            return booklist;
-        } else {	//no books found
-            return null;
-        }
-    }
-    
     
     /**
      * Find a book by isbn (exact)
@@ -203,29 +118,6 @@ public class GetterProcess {
             return null;
         }
     }
-    
-    //Possibly depreciated
-    /*
-    public ArrayList<Book> getBooksByUser(User u) throws SQLException {
-        if(u==null) {
-            return null;
-        }
-        Statement stmt=conn.createStatement();
-        ResultSet rs=stmt.executeQuery("SELECT * FROM tblUserRental, tblBookRental WHERE tblUserRental.RentalID = tblBookRental.RentalID and tblUserRental.UserName=\"" 
-        				+ u.getUserName() + "\";");
-        if(rs.first()) {
-            ArrayList<Book> booklist = new ArrayList<Book>();
-            while (!rs.isAfterLast()) {
-                Book tmp = getBookById(rs.getInt("BookID"));
-                booklist.add(tmp);
-                rs.next();
-            }
-            return booklist;
-        }
-
-        return null;
-    }
-    */
     
     /**
      * Get the admin status of a user
