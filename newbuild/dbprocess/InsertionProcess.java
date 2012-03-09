@@ -12,6 +12,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import exceptions.NoUsernameOrPasswordException;
+import exceptions.NullUserException;
+import exceptions.UserAlreadyExistsException;
+
 import model.Book;
 import model.Cart;
 import model.User;
@@ -85,17 +89,19 @@ public class InsertionProcess {
      * @postcond	user has been added to the system
      * @return 		user ID if successful; or -1 (username in use)
      */
-    protected boolean createUser(User u, String passWord) throws Exception {
+    protected boolean createUser(User u, String passWord) 
+    						throws SQLException, NoUsernameOrPasswordException,
+    								NullUserException, UserAlreadyExistsException {
         if(u==null) {
-            throw new Exception("Null User passed.");
+            throw new NullUserException("Null User passed.");
         }
         if(stringIsEmpty(u.getUserName()) || stringIsEmpty(passWord)) {
-            throw new Exception("Please supply both a username and password.");
+            throw new NoUsernameOrPasswordException("Please supply both a username and password.");
         }
         Statement stmt=conn.createStatement();
         ResultSet rs=stmt.executeQuery("SELECT * FROM tblUser WHERE UserName=\"" + u.getUserName() + "\";");
         if(rs.next()) {
-            throw new Exception("A user with that name already exists.");   //value in result set; user already exists
+            throw new UserAlreadyExistsException("A user with that name already exists.");   //value in result set; user already exists
         } else {
         	stmt.execute("INSERT INTO tblUser (UserName, PassWord, IsAdmin) VALUES (\"" + u.getUserName() + "\",\"" + passWord + "\",\"" + "N" + "\");");
         	stmt.execute("INSERT INTO tblAccountInfo(UserName, FirstName, LastName, Email) VALUES (\"" + u.getUserName() + "\", \"\", \"\",\"" + u.getEmail() +"\")");

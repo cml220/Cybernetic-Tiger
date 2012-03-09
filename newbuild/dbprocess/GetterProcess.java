@@ -42,10 +42,10 @@ public class GetterProcess {
         return instance;
     }
     
-	/**
-     * Get the image url associated with a single user
-     * @param user	the user whose assoc. img is to be found
-     * @return	the url (as a string) if found, otherwise null
+    /**
+     * Get the the user's data as html in a string
+     * @param user	the user whose assoc. data is to be found
+     * @return	the data (as a string) if found, otherwise null
      */
     protected User getUserInfo(String username) throws SQLException {
         Statement stmt=conn.createStatement();

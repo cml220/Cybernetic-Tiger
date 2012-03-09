@@ -10,6 +10,10 @@ import model.User;
 
 import org.junit.Test;
 
+import exceptions.NoUsernameOrPasswordException;
+import exceptions.NullUserException;
+import exceptions.UserAlreadyExistsException;
+
 public class DatabaseProcessJUnit {
 
 	private DatabaseProcess db = DatabaseProcess.getInstance();
@@ -34,9 +38,14 @@ public class DatabaseProcessJUnit {
 			assertTrue(db.checkUser(u.getUserName(), "1234"));
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} catch (Exception ge) {	// null or blank case
-			System.out.println(ge.getMessage());
-			ge.printStackTrace();
+		} catch (NoUsernameOrPasswordException e2) {	// null or blank case
+			assertTrue(e2.getMessage().equals("Please supply both a username and password."));
+		} catch (NullUserException e3) {
+			assertTrue(e3.getMessage().equals("Null User passed."));
+		} catch (UserAlreadyExistsException e4) {
+			assertTrue(e4.getMessage().equals("A user with that name already exists."));
+		} catch (Exception e5) {
+			e5.printStackTrace();
 		}
 		
 	}
@@ -46,7 +55,7 @@ public class DatabaseProcessJUnit {
 		log.debug("testGetUserInfo Entered.");
 		User u = new User("Test", false, "1234@google.se");
 		try {
-			db.createUser(u, "54321");
+			// db.createUser(u, "54321");
 			User res = db.getUserInfo("Test");
 			assertEquals("User Retrival", u.getUserName(), res.getUserName());
 		} catch (Exception e) {
