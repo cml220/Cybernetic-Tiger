@@ -40,7 +40,11 @@ public class LoginPanel extends JPanel {
          */
         private static final long serialVersionUID = -6307916833027834382L;
 
-        LoginLabel(String caption) {
+        /**
+         * Label style used throughout this panel.
+         * @param caption - the text to show
+         */
+        LoginLabel(final String caption) {
 
             super(caption);
             this.setForeground(Color.WHITE);
@@ -57,23 +61,31 @@ public class LoginPanel extends JPanel {
     class InputWithLabelPanel extends JPanel {
 
         /**
-         * ID
+         * ID.
          */
         private static final long serialVersionUID = 2068050659946866149L;
-        JTextField inputField;
+
+        /**
+         * The text entry field.
+         */
+        private JTextField inputField;
+
+        private final int fieldWidth = 10;
 
         /**
          * Construct a panel with a label and input field.
          * @param labelText the text to put in the label
          * @param isPassword set true to hide characters
          */
-        public InputWithLabelPanel(String labelText, boolean isPassword) {
+        public InputWithLabelPanel(final String labelText,
+                final boolean isPassword) {
 
             super();
             this.setLayout(new FlowLayout());
 
             /*
-             * Set the background to invisible so the pretty background can show through.
+             * Set the background to invisible so the pretty background can
+             * show through.
              */
             this.setOpaque(false);
 
@@ -92,7 +104,7 @@ public class LoginPanel extends JPanel {
 
             }
 
-            inputField.setColumns(10);
+            inputField.setColumns(fieldWidth);
 
             this.add(label);
             this.add(inputField);
@@ -103,7 +115,7 @@ public class LoginPanel extends JPanel {
         /**
          * place the text cursor in the text box in this panel.
          */
-        public void requestFocus(){
+        public void requestFocus() {
 
             this.inputField.requestFocus();
 
@@ -113,7 +125,7 @@ public class LoginPanel extends JPanel {
          * Get the text from the text field in this panel.
          * @return the text from the textField in this panel.
          */
-        public String getText(){
+        public String getText() {
 
             return inputField.getText();
 
@@ -122,7 +134,7 @@ public class LoginPanel extends JPanel {
     }
 
     /**
-     * ID
+     * ID.
      */
     private static final long serialVersionUID = -5100212021194753173L;
 
@@ -144,22 +156,24 @@ public class LoginPanel extends JPanel {
         /*
          * A text area for the username with label.
          */
-        final InputWithLabelPanel usernamePanel = new InputWithLabelPanel("Username", false);
+        final InputWithLabelPanel usernamePanel =
+                new InputWithLabelPanel("Username", false);
         usernamePanel.requestFocus();
 
         /*
          * A text area for the password with label.
          */
-        final InputWithLabelPanel passwordPanel = new InputWithLabelPanel("Password", true);
+        final InputWithLabelPanel passwordPanel =
+                new InputWithLabelPanel("Password", true);
 
         /*
          * Log in button.
          */
         JButton loginButton = new JButton("Log In");
-        loginButton.addActionListener(new ActionListener(){
+        loginButton.addActionListener(new ActionListener() {
 
             @Override
-            public void actionPerformed(ActionEvent arg0) {
+            public void actionPerformed(final ActionEvent arg0) {
 
                 /*
                  * Try login information
@@ -169,7 +183,8 @@ public class LoginPanel extends JPanel {
                     /*
                      * If the login info is correct, open up the program.
                      */
-                    if (Controller.checkLogin(usernamePanel.getText(), passwordPanel.getText())) {
+                    if (Controller.checkLogin(usernamePanel.getText(),
+                            passwordPanel.getText())) {
 
                         /*
                          * Initialize the GUI manager
@@ -195,7 +210,9 @@ public class LoginPanel extends JPanel {
                          * If the login information didn't match anything in
                          * the database, prompt the user.
                          */
-                        JOptionPane.showMessageDialog(null, "Could not validate account.\nCheck your password.", "Login Error", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(null,
+                                "Could not validate account.\nCheck your password.",
+                                "Login Error", JOptionPane.ERROR_MESSAGE);
 
                     }
 
@@ -204,7 +221,9 @@ public class LoginPanel extends JPanel {
                      */
                 } catch (ControllerNotInitializedException e) {
 
-                    JOptionPane.showMessageDialog(null, "Controller not initialized", "Fatal Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null,
+                            "Controller not initialized", "Fatal Error",
+                            JOptionPane.ERROR_MESSAGE);
 
                 }
 
@@ -217,10 +236,10 @@ public class LoginPanel extends JPanel {
          * TODO: Remove this before deployment.
          */
         JButton debugButton = new JButton("SKIP (Debug)");
-        debugButton.addActionListener(new ActionListener(){
+        debugButton.addActionListener(new ActionListener() {
 
             @Override
-            public void actionPerformed(ActionEvent arg0) {
+            public void actionPerformed(final ActionEvent arg0) {
 
                 /*
                  * Initialize the GUI manager
@@ -247,7 +266,7 @@ public class LoginPanel extends JPanel {
         /*
          * Blank space to center the input areas.
          */
-        this.add(Box.createRigidArea(new Dimension(100,200)));
+        this.add(Box.createRigidArea(new Dimension(100, 200)));
 
         /*
          * Input areas.
@@ -268,7 +287,7 @@ public class LoginPanel extends JPanel {
         /*
          * Blank space to center the input areas.
          */
-        this.add(Box.createRigidArea(new Dimension(100,200)));
+        this.add(Box.createRigidArea(new Dimension(100, 200)));
 
     }
 
@@ -277,24 +296,15 @@ public class LoginPanel extends JPanel {
      * Draw background on the panel.
      * @param g the default graphics on the panel
      */
-    public void paintComponent(Graphics g) {
+    public void paintComponent(final Graphics g) {
 
         Image background = null;
 
         /*
          * Load the image for the background
          */
-        try {
+        background = (new ImageIcon(getClass().getResource("bg.jpg"))).getImage();
 
-            background = (new ImageIcon(getClass().getResource("bg.jpg"))).getImage();
-
-        } catch (Exception e) {
-
-            /*
-             * handled in paintComponent()
-             */
-
-        }
 
         super.paintComponent(g);
 
