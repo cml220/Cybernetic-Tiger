@@ -1,5 +1,6 @@
 package dbprocess;
 
+import org.apache.log4j.Logger;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -8,7 +9,8 @@ import java.sql.Statement;
 public class RemovalProcess {
 	/* name of the database */
 	private static String dbname = "cmpt371group_CTiger";
-    
+	Logger log = Logger.getLogger(DatabaseProcessJUnit.class);
+
 	protected Connection conn;
 
     private static RemovalProcess instance;
@@ -57,6 +59,7 @@ public class RemovalProcess {
         if(bookIsbn < 0) {
             return;
         }
+        log.debug("RemoveBookFromCatalogue entered");
         Statement stmt=conn.createStatement();
         Statement stmt2=conn.createStatement();
         stmt.execute("DELETE FROM tblBook WHERE ISBN=" + bookIsbn + ";");
@@ -69,7 +72,8 @@ public class RemovalProcess {
      */
     protected void removeUser(String username) throws SQLException {
     	Statement stmt=conn.createStatement();
-    	stmt.execute("DELETE FROM tblUser WHERE UserName=\"" + username + "\")");
+    	stmt.execute("DELETE FROM tblUser WHERE UserName=\"" + username + "\"");
+    	stmt.execute("DELETE FROM tblAccountInfo WHERE UserName=\"" + username + "\"");
     }
 
 }

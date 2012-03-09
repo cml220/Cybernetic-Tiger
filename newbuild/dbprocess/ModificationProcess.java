@@ -70,6 +70,6 @@ public class ModificationProcess {
     	RemovalProcess db = RemovalProcess.getInstance();
     	InsertionProcess idb = InsertionProcess.getInstance();
     	db.removeUser(oldname);
-    	idb.createUser(newinfo);   	
+    	idb.createUser(newinfo, "");   	
     }
 }

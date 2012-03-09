@@ -59,13 +59,13 @@ public class VerificationProcess {
      * To see if user is registered in system: db.checkUser("username", "password")
      */
     public boolean checkUser(String username, String password) throws SQLException {
-    	if(!username.equals(null) && !password.equals(null)) {
+    	if(!username.equals("") && !password.equals("")) {
     		Statement stmt = conn.createStatement();
     		ResultSet rs = stmt.executeQuery("SELECT * FROM tblUser WHERE Username = \"" + username + "\" AND passWord = \"" + password + "\";");
     		if(rs.next())
     			return true;
     	}
-    	if(!username.equals(null) && password.equals(null)) {
+    	if(!username.equals("") && password.equals("")) {
     		Statement stmt = conn.createStatement();
     		ResultSet rs = stmt.executeQuery("Select Username FROM tblUser WHERE UserName =\"" + username + "\";");
     		if(rs.next())

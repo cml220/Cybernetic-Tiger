@@ -72,7 +72,7 @@ public class GetterProcess {
         ResultSet rs2 = stmt2.executeQuery("SELECT * FROM tblAccountInfo WHERE UserName = " + "\"" + username + "\"");
         if(rs.next()) {
         	rs2.next();
-           	User u = new User(rs.getString("UserName"), rs.getString("PassWord"), false, rs2.getString("email"));
+           	User u = new User(rs.getString("UserName"), false, rs2.getString("email"));
             return u;
         } else {
             return null;
@@ -88,23 +88,26 @@ public class GetterProcess {
      * To get books by title: db.getBookBy("Title", "A Clockwork Orange");
      * To get books by Author: db.getBookBy("Author", "Bob Loblaw");
      * To get a user's book library: db.getBookBy("Username", "colin");
-     * To get entire catalogue: db.getBookBy("Catalogue", null);
+     * To get entire catalogue: db.getBookBy("Catalogue", "");
      */  
     public ArrayList<Book> getBooksBy(String option, String query) throws SQLException {
     	ResultSet rs = null;
     	Statement stmt = conn.createStatement();
-    	if(option.equals("Author") && !query.equals(null)) {
+    	if(option.equals("Author") && !query.equals("")) {
     		rs = stmt.executeQuery("SELECT * FROM tblBook WHERE Author LIKE \"%" + query + "%\" ORDER BY Title;");
     	}
-    	if(option.equals("Title") && !query.equals(null)) {
+    	else if(option.equals("Title") && !query.equals("")) {
     		rs = stmt.executeQuery("SELECT * FROM tblBook WHERE Title LIKE \"%" + query + "%\" ORDER BY Title;");
     	}
-    	if(option.equals("Catalogue") && query.equals(null)) {
+    	else if(option.equals("Catalogue") && query.equals("")) {
     		rs = stmt.executeQuery("SELECT * FROM tblBook ORDER BY Title;");
     	}
-    	if(option.equals("Username")) {
+    	else if(option.equals("Username") && !query.equals("")) {
     		rs=stmt.executeQuery("SELECT * FROM tblUserRental, tblBookRental WHERE tblUserRental.RentalID = tblBookRental.RentalID and tblUserRental.UserName=\"" 
     								+ query + "\";");
+    	}
+    	else {
+    		return null;
     	}
     	ArrayList<Book> bookList = new ArrayList<Book>();
     	while(rs.next()) {
@@ -191,11 +194,12 @@ public class GetterProcess {
             return null;
         }
         Statement stmt=conn.createStatement();
-        ResultSet rs=stmt.executeQuery("SELECT * FROM tblBook WHERE ISBN=\"" + isbn + "\";");
-        if (rs.first()) {
+        ResultSet rs=stmt.executeQuery("SELECT * FROM tblBook WHERE ISBN=" + isbn + ";");
+        if (rs.next()) {
             return new Book(rs.getString("Title"), rs.getString("Author"), rs.getDouble("Price"), rs.getString("Url"), 
             		rs.getInt("ISBN"), rs.getString("picURL"), rs.getString("Description"));
         } else {	//no book found
+        	log.debug("return null");
             return null;
         }
     }

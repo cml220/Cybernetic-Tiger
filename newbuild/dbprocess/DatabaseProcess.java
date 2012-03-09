@@ -115,9 +115,9 @@ public class DatabaseProcess {
      * @postcond	user has been added to the system
      * @return 		user ID if successful; or -1 (username in use)
      */
-    public int createUser(User u) throws SQLException {
+    public int createUser(User u, String passWord) throws SQLException {
     	InsertionProcess db = InsertionProcess.getInstance();
-        return db.createUser(u);
+        return db.createUser(u, passWord);
     }
     
     /**
@@ -174,4 +174,14 @@ public class DatabaseProcess {
     	ModificationProcess db = ModificationProcess.getInstance();
         db.editUserInfo(username, user);
     }
+    
+    public void removeUser(String userName) throws SQLException {
+    	RemovalProcess db = RemovalProcess.getInstance();
+    	db.removeUser(userName);
+    }
+
+	public boolean checkUser(String userName, String passWord) throws SQLException {
+		VerificationProcess db = VerificationProcess.getInstance();
+		return db.checkUser(userName, passWord);
+	}
 }

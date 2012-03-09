@@ -103,11 +103,11 @@ public class InsertionProcess {
      * @postcond	user has been added to the system
      * @return 		user ID if successful; or -1 (username in use)
      */
-    public int createUser(User u) throws SQLException {
+    public int createUser(User u, String passWord) throws SQLException {
         if(u==null) {
             return -1;
         }
-        if(stringIsEmpty(u.getUserName()) || stringIsEmpty(u.getPassword())) {
+        if(stringIsEmpty(u.getUserName()) || stringIsEmpty(passWord)) {
             return -2;
         }
         Statement stmt=conn.createStatement();
@@ -115,7 +115,7 @@ public class InsertionProcess {
         if(rs.next()) {
             return -1;    //value in result set; user already exists
         } else {
-        	stmt.execute("INSERT INTO tblUser (UserName, PassWord, IsAdmin) VALUES (\"" + u.getUserName() + "\",\"" + u.getPassword() + "\",\"" + "N" + "\");");
+        	stmt.execute("INSERT INTO tblUser (UserName, PassWord, IsAdmin) VALUES (\"" + u.getUserName() + "\",\"" + passWord + "\",\"" + "N" + "\");");
         	//DO STUFF HERE
         	stmt.execute("INSERT INTO tblAccountInfo(UserName, FirstName, LastName, Email) VALUES (\"" + u.getUserName() + "\", \"\", \"\",\"" + u.getEmail() +"\")");
         	rs=stmt.executeQuery("SELECT * FROM tblUser WHERE UserName=\"" + u.getUserName() +"\";");
