@@ -106,8 +106,8 @@ public class GetterProcess {
      * @param	ISBN	ISBN to search for
      * @return	the book with the given ISBN if found; otherwise null
      */
-    protected Book getBookByIsbn(String isbn) throws SQLException {
-        if(isbn==null) {
+    protected Book getBookByIsbn(int isbn) throws SQLException {
+        if(isbn<0) {
             return null;
         }
         Statement stmt=conn.createStatement();

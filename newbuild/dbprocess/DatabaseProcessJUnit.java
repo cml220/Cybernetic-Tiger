@@ -153,7 +153,7 @@ public class DatabaseProcessJUnit {
 		Book b = new Book("THISISAUNIQUESTRING","THISISAUNIQUESTRING",(float) 1.10,"THISISAUNIQUESTRING", 2309580,"THISISAUNIQUESTRING","THISISAUNIQUESTRING");
 		Book found;
 		try {
-			found = db.getBookByIsbn("2309580");
+			found = db.getBookByIsbn(2309580);
 			assertTrue(found != null);
             assertTrue(found.equals(b));
 		} catch (SQLException e) {
@@ -184,10 +184,10 @@ public class DatabaseProcessJUnit {
 		log.debug("testRemoveBookFromCatalogue Entered.");
 		Book b;
 		try {
-			b = db.getBookByIsbn("2309580");
+			b = db.getBookByIsbn(2309580);
 			log.debug(b.getBookAuthor());
 			db.removeBookFromCatalogue(b.getBookISBN());
-			b = db.getBookByIsbn("2309580");
+			b = db.getBookByIsbn(2309580);
 			assertTrue(b == null);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

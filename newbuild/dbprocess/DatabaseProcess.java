@@ -72,7 +72,7 @@ public class DatabaseProcess {
      * @param	ISBN	ISBN to search for
      * @return	the book with the given ISBN if found; otherwise null
      */
-    public Book getBookByIsbn(String isbn) throws SQLException {
+    public Book getBookByIsbn(int isbn) throws SQLException {
     	GetterProcess db = GetterProcess.getInstance(conn);
         return db.getBookByIsbn(isbn);
     }
