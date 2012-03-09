@@ -47,14 +47,16 @@ public class GetterProcess {
      * @param user	the user whose assoc. img is to be found
      * @return	the url (as a string) if found, otherwise null
      */
-    public User getUserInfo(String username) throws SQLException {
+    protected User getUserInfo(String username) throws SQLException {
         Statement stmt=conn.createStatement();
         ResultSet rs=stmt.executeQuery("SELECT * FROM tblUser WHERE UserName = " + "\"" + username + "\"");
         Statement stmt2 = conn.createStatement();
         ResultSet rs2 = stmt2.executeQuery("SELECT * FROM tblAccountInfo WHERE UserName = " + "\"" + username + "\"");
         if(rs.next()) {
         	rs2.next();
-           	User u = new User(rs.getString("UserName"), false, rs2.getString("email"));
+        	User u = new User(rs.getString("UserName"), false, rs2.getString("email"));
+        	if(rs.getString("isAdmin").equals("Y")) { u.isAdmin = true; }
+        	else { u.isAdmin = false; }
             return u;
         } else {
             return null;
@@ -72,7 +74,7 @@ public class GetterProcess {
      * To get a user's book library: db.getBookBy("Username", "colin");
      * To get entire catalogue: db.getBookBy("Catalogue", "");
      */  
-    public ArrayList<Book> getBooksBy(String option, String query) throws SQLException {
+	protected ArrayList<Book> getBooksBy(String option, String query) throws SQLException {
     	ResultSet rs = null;
     	Statement stmt = conn.createStatement();
     	if(option.equals("Author") && !query.equals("")) {
@@ -104,7 +106,7 @@ public class GetterProcess {
      * @param	ISBN	ISBN to search for
      * @return	the book with the given ISBN if found; otherwise null
      */
-    public Book getBookByIsbn(String isbn) throws SQLException {
+    protected Book getBookByIsbn(String isbn) throws SQLException {
         if(isbn==null) {
             return null;
         }
@@ -123,7 +125,7 @@ public class GetterProcess {
      * Get the admin status of a user
      * @param	username	the username of the user
      */
-    public String getAdminStatus(String username) throws SQLException {
+    protected String getAdminStatus(String username) throws SQLException {
         if(username==null) {
             return "false";
         }
@@ -142,7 +144,7 @@ public class GetterProcess {
      * @param isbn	of the book to be gotten
      * @return	the info as a string
      */
-    public String getBookInfo(int isbn) throws SQLException {
+    protected String getBookInfo(int isbn) throws SQLException {
         String info;
         if(isbn < 0) {
             return null;

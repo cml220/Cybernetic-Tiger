@@ -39,59 +39,34 @@ public class VerificationProcess {
      * To check if username is avail. db.checkUser("username", null)
      * To see if user is registered in system: db.checkUser("username", "password")
      */
-    public boolean checkUser(String username, String password) throws SQLException {
-    	if(!username.equals("") && !password.equals("")) {
-    		Statement stmt = conn.createStatement();
-    		ResultSet rs = stmt.executeQuery("SELECT * FROM tblUser WHERE Username = \"" + username + "\" AND passWord = \"" + password + "\";");
-    		if(rs.next())
-    			return true;
-    	}
-    	if(!username.equals("") && password.equals("")) {
+    protected boolean checkUser(String username, String password) throws SQLException {
+    	if(!username.equals("") && password == null) {
     		Statement stmt = conn.createStatement();
     		ResultSet rs = stmt.executeQuery("Select Username FROM tblUser WHERE UserName =\"" + username + "\";");
     		if(rs.next())
     			return false;
     		return true;
     	}
+    	if(!username.equals("") && !password.equals("")) {
+    		Statement stmt = conn.createStatement();
+    		ResultSet rs = stmt.executeQuery("SELECT * FROM tblUser WHERE Username = \"" + username + "\" AND passWord = \"" + password + "\";");
+    		if(rs.next())
+    			return true;
+    	}
     	return false;
     }
     
     /**
-     * Check to see if a user is registered in the system
-     * @param	userName	the login name to be searched for
-     * @param	password	the password to be searched for
-     * @return 	true if username and password are registered to a user; false otherwise
+     * Check if a user has a book in their rentals
+     * @param username	the user to check
+     * @param isbn		the book to check for
+     * @return	true 	if the user has the book; false otherwise
      */
-    //deprecated??
-    public boolean checkLogin(String username, String password) throws SQLException {
-        if(username==null || password==null) {
-            return false;
-        }
-        Statement stmt=conn.createStatement();
-        ResultSet rs=stmt.executeQuery("SELECT * FROM tblUser WHERE UserName=\"" + username + "\" AND PassWord=\"" + password + "\";");
-        if(rs.first()) {
-            return true;
-        } else {
-            return false;
-        }
+    protected boolean userHasBook(String username, int isbn) throws SQLException {
+    	Statement stmt = conn.createStatement();
+    	ResultSet rs = stmt.executeQuery("SELECT * FROM tblBookRental WHERE UserName=\"" + username + "\" AND BookISBN=" + isbn);
+    	if(rs.next())
+    		return true;
+    	return false;
     }
-    
-    /**
-     * Check to see if a username is available
-     * @param	username	the username to check
-     */
-    //deprecated??
-    public boolean checkNameAvailable(String username) throws SQLException {
-    	if(username==null) {
-            return false;
-        }
-        Statement stmt=conn.createStatement();
-        ResultSet rs=stmt.executeQuery("SELECT UserName FROM tblUser");
-        if(rs.first()) {
-            return true;	//name available
-        } else {
-            return false;	//name unavailable
-        }
-    }
-
 }

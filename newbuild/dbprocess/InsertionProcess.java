@@ -47,11 +47,11 @@ public class InsertionProcess {
      * @param	u	the user/renter
      * @param 	b	the book to be rented
      */
-    public void addBookToUser(String isbn, String username, int rentalID) throws SQLException {
+    protected void addBookToUser(int isbn, String username) throws SQLException {
         Statement stmt=conn.createStatement();
         ResultSet rs=stmt.executeQuery("SELECT * FROM tblBook WHERE ISBN=" + isbn + ";");
-        if(rs.first()) {
-        	stmt.execute("INSERT INTO tblBookRental(RentalID, BookISBN, Username) VALUES (\"" + rentalID + "\"," + isbn + ",\"" + username + "\");");    	
+        if(rs.next()) {
+        	stmt.execute("INSERT INTO tblBookRental(BookISBN, UserName) VALUES (" + isbn + ",\"" + username + "\");");    	
         }
         
     }
@@ -61,7 +61,7 @@ public class InsertionProcess {
      * @param	b	book to be added to the catalogue
      * @postcond	book has been added to the catalogue if it was not present already
      */
-    public void addBookToCatalogue(Book b) throws SQLException {
+    protected void addBookToCatalogue(Book b) throws SQLException {
         if(b==null) {
             return;
         }
@@ -85,7 +85,7 @@ public class InsertionProcess {
      * @postcond	user has been added to the system
      * @return 		user ID if successful; or -1 (username in use)
      */
-    public int createUser(User u, String passWord) throws SQLException {
+    protected int createUser(User u, String passWord) throws SQLException {
         if(u==null) {
             return -1;
         }
@@ -98,7 +98,6 @@ public class InsertionProcess {
             return -1;    //value in result set; user already exists
         } else {
         	stmt.execute("INSERT INTO tblUser (UserName, PassWord, IsAdmin) VALUES (\"" + u.getUserName() + "\",\"" + passWord + "\",\"" + "N" + "\");");
-        	//DO STUFF HERE
         	stmt.execute("INSERT INTO tblAccountInfo(UserName, FirstName, LastName, Email) VALUES (\"" + u.getUserName() + "\", \"\", \"\",\"" + u.getEmail() +"\")");
         	rs=stmt.executeQuery("SELECT * FROM tblUser WHERE UserName=\"" + u.getUserName() +"\";");
             rs.first();
@@ -107,24 +106,12 @@ public class InsertionProcess {
     }    
     
     /**
-     * Helper method to validate that a string is not empty, null or ""
-     * @param str	the string to check
-     * @return		true if "not empty", otherwise false
-     */
-    private boolean stringIsEmpty(String str) {
-        if (str == null || str.isEmpty() || str.equals("")) {
-            return true;
-        }
-        return false;
-    }
-    
-    /**
      * Save a cart and its contents in the appropriate tables
      * @param c			the cart to be saved
      * @param username	the user for it to be saved to
      * @param shopdate	the date in which it was saved
      */
-    public void saveShoppingCart(Cart c, String username, Date shopdate) throws SQLException {
+    protected void saveShoppingCart(Cart c, String username, Date shopdate) throws SQLException {
     	Statement stmt=conn.createStatement();
     	stmt.execute("INSERT INTO tblShoppingCart (UserName, ShopDate) VALUES (\"" + username + "\"," + shopdate +")");
     	ResultSet rs=stmt.executeQuery("SELECT * FROM tblShoppingCart WHERE UserName=\"" + username +"\"");
@@ -136,5 +123,18 @@ public class InsertionProcess {
     	for(Book b : cartBooks) {
     		stmt.execute("INSERT INTO tblCartContent (CartNumber, BookISBN) VALUES (" + cartNum + ",\"" + b.getBookISBN() + "\"");
     	}
+    }
+    
+    
+    /**
+     * Helper method to validate that a string is not empty, null or ""
+     * @param str	the string to check
+     * @return		true if "not empty", otherwise false
+     */
+    private boolean stringIsEmpty(String str) {
+        if (str == null || str.isEmpty() || str.equals("")) {
+            return true;
+        }
+        return false;
     }
 }

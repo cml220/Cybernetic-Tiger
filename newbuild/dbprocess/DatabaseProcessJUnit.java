@@ -33,7 +33,7 @@ public class DatabaseProcessJUnit {
 			assertTrue(res == 0 || res == -1);	//if test run more than once u1 might exist
 	        assertTrue(res2 == -2);					//the null case
 	        assertTrue(res3 == -2);					//the blank case
-			assertTrue(db.checkLogin(u.getUserName(), "1234"));
+			assertTrue(db.checkUser(u.getUserName(), "1234"));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -89,7 +89,7 @@ public class DatabaseProcessJUnit {
 		log.debug("testAddBookToUser Entered.");
 		Book b = new Book("THISISAUNIQUESTRING","THISISAUNIQUESTRING", 1.10,"THISISAUNIQUESTRING", 2309580,"THISISAUNIQUESTRING","THISISAUNIQUESTRING");
 		try {
-			db.addBookToUser(String.valueOf(b.getBookISBN()), "Test", 7);
+			db.addBookToUser(b.getBookISBN(), "Test");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -210,9 +210,9 @@ public class DatabaseProcessJUnit {
 		log.debug("testCheckNameAvailable Entered.");
 		boolean res;
 		try {
-			res = db.checkUser("Test2", "");
+			res = db.checkUser("Test2", null);
 			assertTrue(res);
-			res = db.checkUser("Test", "");
+			res = db.checkUser("Test", null);
 			assertFalse(res);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -225,18 +225,13 @@ public class DatabaseProcessJUnit {
 		log.debug("testRemoveUser Entered");
 		boolean res;
 		try {
-			res = db.checkUser("Test", "");
+			res = db.checkUser("Test", null);
 			assertFalse(res);
-			db.removeUser("Test");
-			res = db.checkUser("Test", "");
-			assertTrue(res);
+			res = db.removeUser("Test");
+			assertFalse(res);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		
-		
+		}	
 	}
-
-
 }

@@ -21,7 +21,7 @@ public class RemovalProcess {
      * Singleton pattern DatabaseProcess init
      * @return	single instance of DatabaseProcess
      */
-    public static synchronized RemovalProcess getInstance(Connection conn) {
+    protected static synchronized RemovalProcess getInstance(Connection conn) {
         if (instance == null) {
             try {
                 instance = new RemovalProcess(conn);
@@ -36,7 +36,7 @@ public class RemovalProcess {
      * Remove a single book from the catalogue as well as all rentals
      * @param bookIsbn	the isbn of the book to be removed
      */
-    public void removeBookFromCatalogue(int bookIsbn) throws SQLException {
+    protected void removeBookFromCatalogue(int bookIsbn) throws SQLException {
         if(bookIsbn < 0) {
             return;
         }
@@ -50,11 +50,28 @@ public class RemovalProcess {
     /**
      * Remove a user from the db
      * @param username	the user to be removed
+     * @return true		if the user has been removed; false otherwise
      */
-    protected void removeUser(String username) throws SQLException {
+    protected boolean removeUser(String username) throws SQLException {
     	Statement stmt=conn.createStatement();
     	stmt.execute("DELETE FROM tblUser WHERE UserName=\"" + username + "\"");
     	stmt.execute("DELETE FROM tblAccountInfo WHERE UserName=\"" + username + "\"");
+    	
+    	DatabaseProcess db = DatabaseProcess.getInstance();
+    	return !db.checkUser(username, null);	//if the username is NOT in use, then the user was removed
     }
-
+    
+    /**
+     * Remove a book from a user's rentals
+     * @param username	the user
+     * @param isbn		the book to be removed from the user
+     * @return true		if the book has been removed from the user; false otherwise
+     */
+    protected boolean removeBookFromUser(String username, int isbn) throws SQLException {
+    	Statement stmt=conn.createStatement();
+    	stmt.execute("DELETE FROM tblBookRental WHERE UserName=\"" + username + "\" AND BookISBN=" + isbn);
+    
+    	DatabaseProcess db = DatabaseProcess.getInstance();
+    	return !db.userHasBook(username, isbn);
+    }
 }

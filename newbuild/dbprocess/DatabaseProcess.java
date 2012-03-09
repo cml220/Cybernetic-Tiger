@@ -92,12 +92,12 @@ public class DatabaseProcess {
 
     /**
      * Get pertinent book info
-     * @param id	of the book to be gotten
+     * @param isbn	of the book to be gotten
      * @return	the info as a string
      */
-    public String getBookInfo(int id) throws SQLException {
+    public String getBookInfo(int isbn) throws SQLException {
     	GetterProcess db = GetterProcess.getInstance(conn);
-        return db.getBookInfo(id);
+        return db.getBookInfo(isbn);
     }
 
     /**
@@ -105,9 +105,9 @@ public class DatabaseProcess {
      * @param	u	the user/renter
      * @param 	b	the book to be rented
      */
-    public void addBookToUser(String isbn, String username, int rentalId) throws SQLException {
+    public void addBookToUser(int isbn, String username) throws SQLException {
     	InsertionProcess db = InsertionProcess.getInstance(conn);
-        db.addBookToUser(isbn, username, rentalId);
+        db.addBookToUser(isbn, username);
     }
 
     /**
@@ -152,40 +152,6 @@ public class DatabaseProcess {
     }
 
     /**
-     * DEPRECATED (DO NOT USE)
-     * Check to see if a user is registered in the system
-     * @param	userName	the login name to be searched for
-     * @param	password	the password to be searched for
-     * @return 	true if username and password are registered to a user; false otherwise
-     */
-    public boolean checkLogin(String username, String password) throws SQLException {
-    	VerificationProcess db = VerificationProcess.getInstance(conn);
-        return db.checkLogin(username, password);
-    }
-    
-    /**
-     * DEPRECATED (DO NOT USE)
-     * Check to see if a username is in use in the system
-     * @param	userName	the login name to be searched for
-     * @return 	true if username is available; false otherwise
-     */
-    public boolean checkNameAvailable(String username) throws SQLException {
-    	VerificationProcess db = VerificationProcess.getInstance(conn);
-        return db.checkNameAvailable(username);
-    }
-
-    /**
-     * DEPRECATED (DO NOT USE)
-     * Update a user's profile image
-     * @param	url			the url of the profile image
-     * @param	username	the username of the user
-     */
-    public void editUserProfilePic(String url, String username)	throws SQLException {
-    	ModificationProcess db = ModificationProcess.getInstance(conn);
-        db.editUserProfilePic(url, username);
-    }
-
-    /**
      * Update a user
      * @param username		the username of the user
      * @param user			the actual user to modify
@@ -195,13 +161,48 @@ public class DatabaseProcess {
         db.editUserInfo(username, user);
     }
     
-    public void removeUser(String userName) throws SQLException {
+    /**
+     * Remove a user from the db
+     * @param username	the user to be removed
+     * @return true		if the user has been removed; false otherwise
+     */
+    public boolean removeUser(String userName) throws SQLException {
     	RemovalProcess db = RemovalProcess.getInstance(conn);
-    	db.removeUser(userName);
+    	return db.removeUser(userName);
+    }
+    
+    /**
+     * Remove a book from a user's rentals
+     * @param username	the user
+     * @param isbn		the book to be removed from the user
+     * @return true		if the book has been removed from the user; false otherwise
+     */
+    public boolean removeBookFromUser(String username, int isbn) throws SQLException {
+    	RemovalProcess db = RemovalProcess.getInstance(conn);
+    	return db.removeBookFromUser(username, isbn);
     }
 
+    /**
+     * Check to see if username is available, also used to see if user is registered in the system.
+     * @param username  the login name to be searched for. Or the username to check 
+     * @param password	the password to be searched for.
+     * @return true		username is free, or also username and password match
+     * To check if username is avail. db.checkUser("username", null)
+     * To see if user is registered in system: db.checkUser("username", "password")
+     */
 	public boolean checkUser(String userName, String passWord) throws SQLException {
 		VerificationProcess db = VerificationProcess.getInstance(conn);
 		return db.checkUser(userName, passWord);
 	}
+	
+	/**
+     * Check if a user has a book in their rentals
+     * @param username	the user to check
+     * @param isbn		the book to check for
+     * @return	true 	if the user has the book; false otherwise
+     */
+    public boolean userHasBook(String username, int isbn) throws SQLException {
+    	VerificationProcess db = VerificationProcess.getInstance(conn);
+		return db.userHasBook(username, isbn);
+    }
 }
