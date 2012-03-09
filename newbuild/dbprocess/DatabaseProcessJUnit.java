@@ -24,19 +24,19 @@ public class DatabaseProcessJUnit {
 		User u2 = new User(null, false, null);
 		User u3 = new User("", false, "");
 		try {
-			int res = db.createUser(u, "1234");
+			boolean res = db.createUser(u, "1234");
 			log.debug(res);
-			int res2 = db.createUser(u2, "");
+			boolean res2 = db.createUser(u2, "");
 			log.debug(res2);
-			int res3 = db.createUser(u3, "");
+			boolean res3 = db.createUser(u3, "");
 			log.debug(res3);
-			assertTrue(res == 0 || res == -1);	//if test run more than once u1 might exist
-	        assertTrue(res2 == -2);					//the null case
-	        assertTrue(res3 == -2);					//the blank case
+			assertTrue(res);	//if test run more than once u1 might exist
 			assertTrue(db.checkUser(u.getUserName(), "1234"));
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (Exception ge) {	// null or blank case
+			System.out.println(ge.getMessage());
+			ge.printStackTrace();
 		}
 		
 	}
@@ -49,7 +49,7 @@ public class DatabaseProcessJUnit {
 			db.createUser(u, "54321");
 			User res = db.getUserInfo("Test");
 			assertEquals("User Retrival", u.getUserName(), res.getUserName());
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

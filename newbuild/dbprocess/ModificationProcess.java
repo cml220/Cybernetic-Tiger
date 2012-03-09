@@ -32,10 +32,10 @@ public class ModificationProcess {
     }
     
     //TODO: Have to figure out how we handle users and what we want to change before this can be completed!
-    protected void editUserInfo(String oldname, User newInfo) throws SQLException {
+    protected void editUserInfo(String oldname, User newInfo) throws Exception {
     	RemovalProcess db = RemovalProcess.getInstance(conn);
     	InsertionProcess idb = InsertionProcess.getInstance(conn);
     	db.removeUser(oldname);
-    	idb.createUser(newInfo, "");   	
+    	idb.createUser(newInfo, "");
     }
 }

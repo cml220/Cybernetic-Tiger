@@ -16,7 +16,7 @@ public class AccountController {
 	 * @param user The user that will become an administrator
 	 * @throws SQLException if no connection to the database can be obtained
 	 */
-	public void makeAdmin(User user) throws SQLException {
+	public void makeAdmin(User user) throws Exception {
 		user.isAdmin = true;
 		changeUserInfo(user.username, user);
 	}
@@ -39,7 +39,7 @@ public class AccountController {
 	 * @param user The User object containing the information to update with
 	 * @throws SQLException  if no connection to the database can be obtained
 	 */
-	void changeUserInfo(String username, User user) throws SQLException {
+	void changeUserInfo(String username, User user) throws Exception {
 		DatabaseProcess instance = DatabaseProcess.getInstance();
 		instance.editUserInfo(username, user);
 	}
@@ -50,7 +50,7 @@ public class AccountController {
 	 * @param paymentInfo The payment information to be assigned
 	 * @throws SQLException if no connection to the database can be obtained
 	 */
-	void saveUserPaymentInfo(User user, PaymentInfo paymentInfo) throws SQLException {
+	void saveUserPaymentInfo(User user, PaymentInfo paymentInfo) throws Exception {
 		user.paymentInfo = paymentInfo;
 		changeUserInfo(user.username, user);
 	}

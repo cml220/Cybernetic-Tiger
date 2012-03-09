@@ -158,7 +158,7 @@ public final class Controller {
      * @throws SQLException if no connection to the database can be obtained
      */
     public static void changeUserInfo(final User user)
-            throws ControllerNotInitializedException, SQLException {
+            throws ControllerNotInitializedException, SQLException, Exception {
 
         if (!initialized) {
 

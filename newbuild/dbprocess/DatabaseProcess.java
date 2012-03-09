@@ -131,11 +131,12 @@ public class DatabaseProcess {
 
     /**
      * Create a new user for the system
-     * @param	u	user to be added to the system
+     * @param	u		user to be added to the system
+     * @param passWord	password to be given to user
      * @postcond	user has been added to the system
-     * @return 		user ID if successful; or -1 (username in use)
+     * @return 		true if successful, exception thrown if not for any reason
      */
-    public int createUser(User u, String passWord) throws SQLException {
+    public boolean createUser(User u, String passWord) throws Exception {
     	InsertionProcess db = InsertionProcess.getInstance(conn);
         return db.createUser(u, passWord);
     }
@@ -156,7 +157,7 @@ public class DatabaseProcess {
      * @param username		the username of the user
      * @param user			the actual user to modify
      */
-    public void editUserInfo(String username, User user)	throws SQLException {
+    public void editUserInfo(String username, User user) throws Exception {
     	ModificationProcess db = ModificationProcess.getInstance(conn);
         db.editUserInfo(username, user);
     }
@@ -204,5 +205,14 @@ public class DatabaseProcess {
     public boolean userHasBook(String username, int isbn) throws SQLException {
     	VerificationProcess db = VerificationProcess.getInstance(conn);
 		return db.userHasBook(username, isbn);
+    }
+    
+    public static void main(String[] args) {
+    	DatabaseProcess db = DatabaseProcess.getInstance();
+    	try {
+    		User u = new User("pants", false, "are@on.fire");
+    		db.createUser(u, "srsly");
+    	}
+    	catch (Exception e ) { e.printStackTrace(); }
     }
 }
