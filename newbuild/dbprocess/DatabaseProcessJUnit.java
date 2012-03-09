@@ -109,7 +109,7 @@ public class DatabaseProcessJUnit {
 	public void testGetCatalogue() {
 		log.debug("testGetCatalogue Entered.");
 		try {
-			ArrayList<Book> booklist = db.getBooksBy(DBConsts.CATALOGUE, "");
+			ArrayList<Book> booklist = db.getBooksBy(DatabaseProcess.CATALOGUE, "");
 			
 			log.debug("hello" + booklist.size());
 			assertTrue(!booklist.isEmpty());
@@ -124,7 +124,7 @@ public class DatabaseProcessJUnit {
 		log.debug("testGetBookByTitle Entered.");
 		ArrayList<Book> booklist;
 		try {
-			booklist = db.getBooksBy(DBConsts.TITLE, "THISISAUNIQUESTRING");
+			booklist = db.getBooksBy(DatabaseProcess.TITLE, "THISISAUNIQUESTRING");
 			assertTrue(!booklist.isEmpty());
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -139,7 +139,7 @@ public class DatabaseProcessJUnit {
 		log.debug("testGetBookByAuthor Entered.");
 		ArrayList<Book> booklist;
 		try {
-			booklist = db.getBooksBy(DBConsts.AUTHOR, "THISISAUNIQUESTRING");
+			booklist = db.getBooksBy(DatabaseProcess.AUTHOR, "THISISAUNIQUESTRING");
 			assertTrue(!booklist.isEmpty());
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -169,7 +169,7 @@ public class DatabaseProcessJUnit {
 		ArrayList<Book> booklist = new ArrayList<Book>();
 		User u = new User("Test", false, "1234@google.se");
 		try {
-			booklist = db.getBooksBy(DBConsts.USERNAME, u.getUserName());
+			booklist = db.getBooksBy(DatabaseProcess.USERNAME, u.getUserName());
 			assertTrue(!booklist.isEmpty());
 			assertTrue(booklist.size() == 1);
 			

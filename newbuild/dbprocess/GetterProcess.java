@@ -66,27 +66,27 @@ public class GetterProcess {
   
     /**
      * Find books by specified query, using specific option
-     * @param	option	Define parameters of search (eg. search by DBConsts.{AUTHOR,TITLE,USERNAME,CATALOGUE}
+     * @param	option	Define parameters of search (eg. search by DatabaseProcess.{AUTHOR,TITLE,USERNAME,CATALOGUE}
      * @param	query	Define what to search for.
      * @return			A list of books that satisfy the search parameters.
-     * To get books by title: db.getBookBy(DBConsts.TITLE, "A Clockwork Orange");
-     * To get books by Author: db.getBookBy(DBConsts.AUTHOR, "Bob Loblaw");
-     * To get a user's book library: db.getBookBy(DBConsts.USERNAME, "colin");
-     * To get entire catalogue: db.getBookBy(DBConsts.CATALOGUE, "");
+     * To get books by title: db.getBookBy(DatabaseProcess.TITLE, "A Clockwork Orange");
+     * To get books by Author: db.getBookBy(DatabaseProcess.AUTHOR, "Bob Loblaw");
+     * To get a user's book library: db.getBookBy(DatabaseProcess.USERNAME, "colin");
+     * To get entire catalogue: db.getBookBy(DatabaseProcess.CATALOGUE, "");
      */  
 	protected ArrayList<Book> getBooksBy(int option, String query) throws SQLException {
     	ResultSet rs = null;
     	Statement stmt = conn.createStatement();
-    	if(option==DBConsts.AUTHOR && !query.equals("")) {
+    	if(option==DatabaseProcess.AUTHOR && !query.equals("")) {
     		rs = stmt.executeQuery("SELECT * FROM tblBook WHERE Author LIKE \"%" + query + "%\" ORDER BY Title;");
     	}
-    	else if(option==DBConsts.TITLE && !query.equals("")) {
+    	else if(option==DatabaseProcess.TITLE && !query.equals("")) {
     		rs = stmt.executeQuery("SELECT * FROM tblBook WHERE Title LIKE \"%" + query + "%\" ORDER BY Title;");
     	}
-    	else if(option==DBConsts.USERNAME && !query.equals("")) {
+    	else if(option==DatabaseProcess.USERNAME && !query.equals("")) {
     		rs=stmt.executeQuery("SELECT tblBook.* FROM tblBook, tblBookRental WHERE tblBook.ISBN=tblBookRental.BookISBN AND tblBookRental.UserName=\"" + query + "\";");
     	}
-    	else if(option==DBConsts.CATALOGUE && query.equals("")) {
+    	else if(option==DatabaseProcess.CATALOGUE && query.equals("")) {
     		rs = stmt.executeQuery("SELECT * FROM tblBook ORDER BY Title;");
     	}
     	else {
