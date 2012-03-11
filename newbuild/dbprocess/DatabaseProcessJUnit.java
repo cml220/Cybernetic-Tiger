@@ -71,8 +71,8 @@ public class DatabaseProcessJUnit {
 		log.debug("testGetAdminStatus Entered.");
 		User u = new User("Test", false, "1234@google.se");
 		try {
-			User res = db.getUserInfo("Test");
-			assertEquals("isAdmin Status", u.isAdmin, res.isAdmin);
+			boolean res = db.getAdminStatus("Test");
+			assertEquals("isAdmin Status", u.isAdmin, res);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -102,6 +102,21 @@ public class DatabaseProcessJUnit {
 			db.addBookToUser(b.getBookISBN(), "Test");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void testsaveShoppingCart() {
+		// TODO When cart requirements are further identified.
+	}
+	
+	@Test
+	public void testUserHasBook() {
+		try {
+			boolean res = db.userHasBook("Test", 2309580);
+			assertTrue(res);
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
@@ -178,7 +193,19 @@ public class DatabaseProcessJUnit {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}	
+	}
+	
+	@Test
+	public void testRemoveBookFromUser() {
+		try {
+			boolean res = db.removeBookFromUser("Test", 2309580);
+			assertTrue(res);
+			res = db.userHasBook("Test", 2309580);
+			assertFalse(res);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 
 	@Test
 	public void testRemoveBookFromCatalogue() {
@@ -216,13 +243,13 @@ public class DatabaseProcessJUnit {
 	}
 
 	@Test
-	public void testCheckNameAvailable() {
+	public void testIsNameAvailable() {
 		log.debug("testCheckNameAvailable Entered.");
 		boolean res;
 		try {
-			res = db.checkUser("Test2", null);
+			res = db.isNameAvailable("Test2");
 			assertTrue(res);
-			res = db.checkUser("Test", null);
+			res = db.isNameAvailable("Test");
 			assertFalse(res);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -231,14 +258,21 @@ public class DatabaseProcessJUnit {
 	}
 	
 	@Test
+	public void testEditUserInfo() {
+		
+	}
+	
+	@Test
 	public void testRemoveUser() {
 		log.debug("testRemoveUser Entered");
 		boolean res;
 		try {
-			res = db.checkUser("Test", null);
+			res = db.isNameAvailable("Test");
 			assertFalse(res);
 			res = db.removeUser("Test");
-			assertFalse(res);
+			assertTrue(res);
+			res = db.isNameAvailable("Test");
+			assertTrue(res);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

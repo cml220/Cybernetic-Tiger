@@ -85,7 +85,6 @@ public class DatabaseProcess {
     /**
      * Get the admin status of a user
      * @param	username	the username of the user
-     * @return	true if the user is an admin; false otherwise
      */
     public boolean getAdminStatus(String username) throws SQLException {
     	GetterProcess db = GetterProcess.getInstance(conn);
@@ -159,9 +158,9 @@ public class DatabaseProcess {
      * @param username		the username of the user
      * @param user			the actual user to modify
      */
-    public void editUserInfo(String username, User user) throws Exception {
+    public void editUserInfo(String username, User user, String passWord) throws Exception {
     	ModificationProcess db = ModificationProcess.getInstance(conn);
-        db.editUserInfo(username, user);
+        db.editUserInfo(username, user, passWord);
     }
     
     /**
@@ -215,5 +214,14 @@ public class DatabaseProcess {
     public boolean userHasBook(String username, int isbn) throws SQLException {
     	VerificationProcess db = VerificationProcess.getInstance(conn);
 		return db.userHasBook(username, isbn);
+    }
+    
+    public static void main(String[] args) {
+    	DatabaseProcess db = DatabaseProcess.getInstance();
+    	try {
+    		User u = new User("pants", false, "are@on.fire");
+    		db.createUser(u, "srsly");
+    	}
+    	catch (Exception e ) { e.printStackTrace(); }
     }
 }

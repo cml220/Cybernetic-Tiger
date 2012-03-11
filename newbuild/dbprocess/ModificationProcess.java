@@ -1,6 +1,7 @@
 package dbprocess;
 
 import java.sql.Connection;
+import org.apache.log4j.Logger;
 import java.sql.SQLException;
 
 import model.User;
@@ -8,6 +9,8 @@ import model.User;
 public class ModificationProcess {
 	protected Connection conn;
     private static ModificationProcess instance;
+	Logger log = Logger.getLogger(DatabaseProcessJUnit.class);
+
     
     /**
      * Constructor
@@ -32,10 +35,15 @@ public class ModificationProcess {
     }
     
     //TODO: Have to figure out how we handle users and what we want to change before this can be completed!
-    protected void editUserInfo(String oldname, User newInfo) throws Exception {
+    protected void editUserInfo(String oldname, User newInfo, String passWord) throws Exception {
     	RemovalProcess db = RemovalProcess.getInstance(conn);
     	InsertionProcess idb = InsertionProcess.getInstance(conn);
-    	db.removeUser(oldname);
-    	idb.createUser(newInfo, "");
+    	VerificationProcess vdb = VerificationProcess.getInstance(conn);
+    	if(vdb.checkUser(oldname, passWord)) {
+    		db.removeUser(oldname);
+    		idb.createUser(newInfo, passWord);
+    	} else {
+    		log.debug("Invalid username/password.");
+    	}
     }
 }

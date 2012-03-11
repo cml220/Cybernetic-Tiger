@@ -120,8 +120,8 @@ public class InsertionProcess {
     protected void saveShoppingCart(Cart c, String username, Date shopdate) throws SQLException {
     	Statement stmt=conn.createStatement();
     	stmt.execute("INSERT INTO tblShoppingCart (UserName, ShopDate) VALUES (\"" + username + "\"," + shopdate +")");
-    	ResultSet rs=stmt.executeQuery("SELECT * FROM tblShoppingCart WHERE UserName=\"" + username +"\"");
-    	rs.first();
+    	ResultSet rs=stmt.executeQuery("SELECT * FROM tblShoppingCart WHERE UserName=\"" + username +"\" AND ShopDate=\"" + shopdate + "\"");
+    	rs.next();
     	int cartNum = rs.getInt("CartNumber");
     	
     	ArrayList<Book> cartBooks = c.getCart();
