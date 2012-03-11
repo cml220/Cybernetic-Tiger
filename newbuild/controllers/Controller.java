@@ -154,11 +154,10 @@ public final class Controller {
     /**
      * Changes a users information using the data inside of a User object.
      * @param user - the object containing the user data.
-     * @throws ControllerNotInitializedException if the controller isn't loaded
-     * @throws SQLException if no connection to the database can be obtained
+     * @throws Exception 
      */
     public static void changeUserInfo(final User user)
-            throws ControllerNotInitializedException, SQLException, Exception {
+            throws Exception {
 
         if (!initialized) {
 
@@ -213,8 +212,9 @@ public final class Controller {
      * rentals have been updated correctly.  If not, refund the purchase and
      * inform the user.
      * @throws IntermediateException if the transaction failed.
+     * @throws SQLException 
      */
-    public static void processPurchase() throws IntermediateException {
+    public static void processPurchase() throws IntermediateException, SQLException {
 
         /*
          * Initialize the log4J logger.
@@ -225,9 +225,9 @@ public final class Controller {
          * Initialize reference lists of books so that the transaction can be
          * confirmed.
          */
-        LinkedList<Book> userBooksBeforePurchase = rentalsController.getBooks();
+        ArrayList<Book> userBooksBeforePurchase = rentalsController.getBooks();
         ArrayList<Book> cartBooksBeforePurchase = cartController.getBooks();
-        LinkedList<Book> userBooksAfterPurchase = new LinkedList<Book>();
+        ArrayList<Book> userBooksAfterPurchase = new ArrayList<Book>();
 
         /*
          * Log the books in the user's rental account before the purchase.
@@ -405,9 +405,10 @@ public final class Controller {
      * Fetch a list of books that a user has rented on their account.
      * @return a list of books linked to the user
      * @throws ControllerNotInitializedException if the controller isn't loaded
+     * @throws SQLException 
      */
-    public static LinkedList<Book> getUserBooks()
-            throws ControllerNotInitializedException {
+    public static ArrayList<Book> getUserBooks()
+            throws ControllerNotInitializedException, SQLException {
 
         if (!initialized) {
 
@@ -470,7 +471,7 @@ public final class Controller {
     }
 
     public static boolean checkLogin(String username, String password)
-            throws ControllerNotInitializedException {
+            throws ControllerNotInitializedException, SQLException {
 
         if (!initialized) {
 

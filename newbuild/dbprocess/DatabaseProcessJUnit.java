@@ -20,9 +20,10 @@ public class DatabaseProcessJUnit {
 	Logger log = Logger.getLogger(DatabaseProcessJUnit.class);
 	/**
 	 * Test cases for User based database operations.
+	 * @throws SQLException 
 	 */
 	@Test
-	public void testCreateUser() {
+	public void testCreateUser() throws SQLException {
 		log.debug("testCreateUser Entered.");
 		User u = new User("Test", false, "1234@google.se");
 		User u2 = new User(null, false, null);
@@ -51,7 +52,7 @@ public class DatabaseProcessJUnit {
 	}
 	
 	@Test
-	public void testGetUserInfo() {
+	public void testGetUserInfo() throws SQLException {
 		log.debug("testGetUserInfo Entered.");
 		User u = new User("Test", false, "1234@google.se");
 		try {
@@ -66,7 +67,7 @@ public class DatabaseProcessJUnit {
 	}
 
 	@Test
-	public void testGetAdminStatus() {
+	public void testGetAdminStatus() throws SQLException {
 		log.debug("testGetAdminStatus Entered.");
 		User u = new User("Test", false, "1234@google.se");
 		try {
@@ -164,7 +165,7 @@ public class DatabaseProcessJUnit {
 
 
 	@Test
-	public void testGetBooksByUser() {
+	public void testGetBooksByUser() throws SQLException {
 		log.debug("testGetBooksByUser Entered.");
 		ArrayList<Book> booklist = new ArrayList<Book>();
 		User u = new User("Test", false, "1234@google.se");

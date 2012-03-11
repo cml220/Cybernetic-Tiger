@@ -1,5 +1,6 @@
 package controllers;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import model.Book;
@@ -24,8 +25,9 @@ public class PaymentController {
 
     /**
      * Adds the books in the current cart to the current user's rentals.
+     * @throws SQLException 
      */
-    public void addCurrentCart() {
+    public void addCurrentCart() throws SQLException {
         ArrayList<Book> cart = Controller.getCurrentUser().cart.getCart();
         RentalsController rc = new RentalsController();
         for (Book b : cart) {

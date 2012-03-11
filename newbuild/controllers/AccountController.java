@@ -14,7 +14,7 @@ public class AccountController {
 	/**
 	 *  Makes a given user into an administrator.
 	 * @param user The user that will become an administrator
-	 * @throws SQLException if no connection to the database can be obtained
+	 * @throws Exception 
 	 */
 	public void makeAdmin(User user) throws Exception {
 		user.isAdmin = true;
@@ -37,7 +37,7 @@ public class AccountController {
 	 * Searches the database for a given user, then updates that user's information based on a User object.
 	 * @param username The name of the user to search for
 	 * @param user The User object containing the information to update with
-	 * @throws SQLException  if no connection to the database can be obtained
+	 * @throws Exception 
 	 */
 	void changeUserInfo(String username, User user) throws Exception {
 		DatabaseProcess instance = DatabaseProcess.getInstance();
@@ -48,7 +48,7 @@ public class AccountController {
 	 * Adds payment information to a given user.
 	 * @param user The user to update
 	 * @param paymentInfo The payment information to be assigned
-	 * @throws SQLException if no connection to the database can be obtained
+	 * @throws Exception 
 	 */
 	void saveUserPaymentInfo(User user, PaymentInfo paymentInfo) throws Exception {
 		user.paymentInfo = paymentInfo;

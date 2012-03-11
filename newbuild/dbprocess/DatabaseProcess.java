@@ -19,7 +19,7 @@ public class DatabaseProcess {
     private static DatabaseProcess instance;
     private Connection conn;
 
-    private DatabaseProcess() throws SQLException {
+    public DatabaseProcess() throws SQLException {
     	initDatabaseConnection();
     }
     
