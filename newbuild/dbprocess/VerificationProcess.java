@@ -32,28 +32,31 @@ public class VerificationProcess {
     }
     
     /**
-     * Check to see if username is available, also used to see if user is registered in the system.
-     * @param username  the login name to be searched for. Or the username to check 
-     * @param password	the password to be searched for.
-     * @return true		username is free, or also username and password match
-     * To check if username is avail. db.checkUser("username", null)
-     * To see if user is registered in system: db.checkUser("username", "password")
+     * Check if a user with the given login info is registered
+     * @param username  the login name to be searched for
+     * @param password	the password to be searched for
+     * @return	true if a user with that info is registered; false otherwise
      */
     protected boolean checkUser(String username, String password) throws SQLException {
-    	if(!username.equals("") && password == null) {
-    		Statement stmt = conn.createStatement();
-    		ResultSet rs = stmt.executeQuery("Select Username FROM tblUser WHERE UserName =\"" + username + "\";");
-    		if(rs.next())
-    			return false;
+    	Statement stmt = conn.createStatement();
+    	ResultSet rs = stmt.executeQuery("SELECT * FROM tblUser WHERE Username = \"" + username + "\" AND passWord = \"" + password + "\";");
+    	if(rs.next())
     		return true;
-    	}
-    	if(!username.equals("") && !password.equals("")) {
-    		Statement stmt = conn.createStatement();
-    		ResultSet rs = stmt.executeQuery("SELECT * FROM tblUser WHERE Username = \"" + username + "\" AND passWord = \"" + password + "\";");
-    		if(rs.next())
-    			return true;
-    	}
     	return false;
+    }
+    
+    /**
+     * is the provided username available?
+     * @param username	the username to search for
+     * @return	true if the username is available; false otherwise
+     */
+    protected boolean isNameAvailable(String username) throws SQLException {
+    	if(username == null) return false;
+    	Statement stmt = conn.createStatement();
+		ResultSet rs = stmt.executeQuery("Select Username FROM tblUser WHERE UserName =\"" + username + "\";");
+		if(rs.next())
+			return false;
+		return true;
     }
     
     /**

@@ -13,7 +13,6 @@ public class DatabaseProcess {
 	public static int USERNAME = 2;
 	public static int CATALOGUE = 3;
 	
-	
 	/* name of the database */
 	private static String dbname = "cmpt371group_CTiger";  
     private static DatabaseProcess instance;
@@ -134,13 +133,13 @@ public class DatabaseProcess {
     /**
      * Create a new user for the system
      * @param	u		user to be added to the system
-     * @param passWord	password to be given to user
+     * @param password	password to be given to user
      * @postcond	user has been added to the system
      * @return 		true if successful, exception thrown if not for any reason
      */
-    public boolean createUser(User u, String passWord) throws Exception {
+    public boolean createUser(User u, String password) throws Exception {
     	InsertionProcess db = InsertionProcess.getInstance(conn);
-        return db.createUser(u, passWord);
+        return db.createUser(u, password);
     }
     
     /**
@@ -169,9 +168,9 @@ public class DatabaseProcess {
      * @param username	the user to be removed
      * @return true		if the user has been removed; false otherwise
      */
-    public boolean removeUser(String userName) throws SQLException {
+    public boolean removeUser(String username) throws SQLException {
     	RemovalProcess db = RemovalProcess.getInstance(conn);
-    	return db.removeUser(userName);
+    	return db.removeUser(username);
     }
     
     /**
@@ -186,17 +185,25 @@ public class DatabaseProcess {
     }
 
     /**
-     * Check to see if username is available, also used to see if user is registered in the system.
-     * @param username  the login name to be searched for. Or the username to check 
-     * @param password	the password to be searched for.
-     * @return true		username is free, or also username and password match
-     * To check if username is avail. db.checkUser("username", null)
-     * To see if user is registered in system: db.checkUser("username", "password")
+     * Check if a user with the given login info is registered
+     * @param username  the login name to be searched for
+     * @param password	the password to be searched for
+     * @return	true if a user with that info is registered; false otherwise
      */
-	public boolean checkUser(String userName, String passWord) throws SQLException {
+	public boolean checkUser(String username, String password) throws SQLException {
 		VerificationProcess db = VerificationProcess.getInstance(conn);
-		return db.checkUser(userName, passWord);
+		return db.checkUser(username, password);
 	}
+	
+	/**
+     * is the provided username available?
+     * @param username	the username to search for
+     * @return	true if the username is available; false otherwise
+     */
+    public boolean isNameAvailable(String username) throws SQLException {
+    	VerificationProcess db = VerificationProcess.getInstance(conn);
+		return db.isNameAvailable(username);
+    }
 	
 	/**
      * Check if a user has a book in their rentals
