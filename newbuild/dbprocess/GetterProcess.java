@@ -124,19 +124,21 @@ public class GetterProcess {
     /**
      * Get the admin status of a user
      * @param	username	the username of the user
+     * @return	true if the user is an admin; false otherwise
      */
-    protected String getAdminStatus(String username) throws SQLException {
+    protected boolean getAdminStatus(String username) throws SQLException {
         if(username==null) {
-            return "false";
+            return false;
         }
         Statement stmt=conn.createStatement();
         ResultSet rs = stmt.executeQuery("SELECT IsAdmin FROM tblUser WHERE UserName=\"" + username + "\";");
         if(rs.first()) {
         	log.debug(rs.getString("IsAdmin"));
-            return rs.getString("IsAdmin");
+        	if(rs.getString("IsAdmin").equals("Y")) return true;
         } else {
-            return "false";
+            return false;
         }
+        return false;
     }
     
     /**

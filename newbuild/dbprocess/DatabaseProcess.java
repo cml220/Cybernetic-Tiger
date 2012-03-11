@@ -85,8 +85,9 @@ public class DatabaseProcess {
     /**
      * Get the admin status of a user
      * @param	username	the username of the user
+     * @return	true if the user is an admin; false otherwise
      */
-    public String getAdminStatus(String username) throws SQLException {
+    public boolean getAdminStatus(String username) throws SQLException {
     	GetterProcess db = GetterProcess.getInstance(conn);
         return db.getAdminStatus(username);
     }
@@ -214,14 +215,5 @@ public class DatabaseProcess {
     public boolean userHasBook(String username, int isbn) throws SQLException {
     	VerificationProcess db = VerificationProcess.getInstance(conn);
 		return db.userHasBook(username, isbn);
-    }
-    
-    public static void main(String[] args) {
-    	DatabaseProcess db = DatabaseProcess.getInstance();
-    	try {
-    		User u = new User("pants", false, "are@on.fire");
-    		db.createUser(u, "srsly");
-    	}
-    	catch (Exception e ) { e.printStackTrace(); }
     }
 }
