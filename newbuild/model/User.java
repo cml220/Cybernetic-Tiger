@@ -3,8 +3,6 @@ package model;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import dbprocess.DatabaseProcess;
-
 public class User {
 	public PaymentInfo paymentInfo;
 	public String username;

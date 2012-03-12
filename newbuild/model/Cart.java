@@ -1,10 +1,9 @@
 package model;
 
 import java.util.ArrayList;
-import exceptions.CartException;
 
 public class Cart extends ArrayList<Book>{
-
+	private static final long serialVersionUID = -5188451462474667464L;
 
 	public Cart() {
 		super();

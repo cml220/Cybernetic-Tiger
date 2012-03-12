@@ -8,13 +8,9 @@ package dbprocess;
 import org.apache.log4j.Logger;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-
-import org.apache.log4j.Logger;
 
 import exceptions.NoUsernameOrPasswordException;
 import exceptions.NullUserException;
@@ -22,7 +18,6 @@ import exceptions.UserAlreadyExistsException;
 
 import model.Book;
 import model.Cart;
-import model.User;
 
 public class InsertionProcess {
 	Logger log = Logger.getLogger(DatabaseProcessJUnit.class);
