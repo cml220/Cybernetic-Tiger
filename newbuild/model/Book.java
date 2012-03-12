@@ -5,11 +5,11 @@ public class Book {
     public String author;
     public Double price;
     public String pdfURL;
-    public int ISBN;
+    public long ISBN;
     public String img;
     public String description;
     
-    public Book(String title, String author, double price, String pdfURL, int ISBN, String picURL, String description) {
+    public Book(String title, String author, double price, String pdfURL, long ISBN, String picURL, String description) {
         this.title=title;
         this.author=author;
         this.price=price;
@@ -36,7 +36,7 @@ public class Book {
 		return pdfURL;
 	}
 
-	public int getBookISBN() {
+	public long getBookISBN() {
 		return ISBN;
 	}
 

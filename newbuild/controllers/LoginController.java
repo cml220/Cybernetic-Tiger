@@ -22,6 +22,6 @@ public class LoginController {
 	
 	public void createUser(User user, String password) throws Exception {
 		DatabaseProcess db = new DatabaseProcess();
-		db.createUser(user, password);
+		db.createUser(user.getUserName(), user.getEmail(), password);
 	}
 }

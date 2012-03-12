@@ -7,12 +7,16 @@ package dbprocess;
 
 import java.sql.Connection;
 import org.apache.log4j.Logger;
+
+import exceptions.CartException;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
 import model.Book;
+import model.Cart;
 import model.User;
 
 public class GetterProcess {
@@ -63,6 +67,26 @@ public class GetterProcess {
         }
     }
     
+    protected Cart getUserCart(String userName) throws SQLException, CartException {
+    	Cart c = new Cart();
+    	DatabaseProcess db = DatabaseProcess.getInstance();
+    	Statement stmt = conn.createStatement();
+    	ResultSet rs = stmt.executeQuery("SELECT CartNumber FROM tblShoppingCart WHERE UserName = \"" + userName + "\"");
+    	if(rs.next()) {
+    		ResultSet rs2 = stmt.executeQuery("SELECT BookISBN FROM tblCartContent WHERE CartNumber = " + rs.getInt("CartNumber"));
+    		if(rs2.next()) {
+    			Book b = db.getBookByIsbn(rs2.getLong("BookISBN"));
+    			c.add(b);
+    			while(rs2.next()) {
+    				c.add((db.getBookByIsbn(rs2.getLong("BookISBN"))));
+    			}
+    		}
+       	}
+    	else {
+    		return null;
+    	}
+    	return c;
+    }
   
     /**
      * Find books by specified query, using specific option
@@ -106,7 +130,7 @@ public class GetterProcess {
      * @param	ISBN	ISBN to search for
      * @return	the book with the given ISBN if found; otherwise null
      */
-    protected Book getBookByIsbn(int isbn) throws SQLException {
+    protected Book getBookByIsbn(long isbn) throws SQLException {
         if(isbn<0) {
             return null;
         }
@@ -116,7 +140,6 @@ public class GetterProcess {
             return new Book(rs.getString("Title"), rs.getString("Author"), rs.getDouble("Price"), rs.getString("Url"), 
             		rs.getInt("ISBN"), rs.getString("picURL"), rs.getString("Description"));
         } else {	//no book found
-        	log.debug("return null");
             return null;
         }
     }
@@ -143,7 +166,7 @@ public class GetterProcess {
      * @param isbn	of the book to be gotten
      * @return	the info as a string
      */
-    protected String getBookInfo(int isbn) throws SQLException {
+    protected String getBookInfo(long isbn) throws SQLException {
         String info;
         if(isbn < 0) {
             return null;

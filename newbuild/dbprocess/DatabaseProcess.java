@@ -2,6 +2,8 @@ package dbprocess;
 import java.util.ArrayList;
 import java.sql.*;
 
+import exceptions.CartException;
+
 import model.*;
 
 /**
@@ -60,6 +62,16 @@ public class DatabaseProcess {
     	GetterProcess db = GetterProcess.getInstance(conn);
         return db.getUserInfo(user);
     }
+    
+    /**
+     * get an existing user's cart
+     * @param userName			the user whose cart is to be gotten
+     * @return					the user's cart
+     */
+    public Cart getUserCart(String userName) throws SQLException, CartException {
+    	GetterProcess db = GetterProcess.getInstance(conn);
+    	return db.getUserCart(userName);
+    }
 
     /**
      * Find books by specified query, using specific option
@@ -77,7 +89,7 @@ public class DatabaseProcess {
      * @param	ISBN	ISBN to search for
      * @return	the book with the given ISBN if found; otherwise null
      */
-    public Book getBookByIsbn(int isbn) throws SQLException {
+    public Book getBookByIsbn(long isbn) throws SQLException {
     	GetterProcess db = GetterProcess.getInstance(conn);
         return db.getBookByIsbn(isbn);
     }
@@ -96,7 +108,7 @@ public class DatabaseProcess {
      * @param isbn	of the book to be gotten
      * @return	the info as a string
      */
-    public String getBookInfo(int isbn) throws SQLException {
+    public String getBookInfo(long isbn) throws SQLException {
     	GetterProcess db = GetterProcess.getInstance(conn);
         return db.getBookInfo(isbn);
     }
@@ -106,7 +118,7 @@ public class DatabaseProcess {
      * @param	u	the user/renter
      * @param 	b	the book to be rented
      */
-    public void addBookToUser(int isbn, String username) throws SQLException {
+    public void addBookToUser(long isbn, String username) throws SQLException {
     	InsertionProcess db = InsertionProcess.getInstance(conn);
         db.addBookToUser(isbn, username);
     }
@@ -125,9 +137,9 @@ public class DatabaseProcess {
      * Remove a single book from the catalogue as well as all rentals
      * @param bookid	the id of the book to be removed
      */
-    public void removeBookFromCatalogue(int bookid) throws SQLException {
+    public void removeBookFromCatalogue(long isbn) throws SQLException {
     	RemovalProcess db = RemovalProcess.getInstance(conn);
-        db.removeBookFromCatalogue(bookid);
+        db.removeBookFromCatalogue(isbn);
     }
 
     /**
@@ -137,9 +149,9 @@ public class DatabaseProcess {
      * @postcond	user has been added to the system
      * @return 		true if successful, exception thrown if not for any reason
      */
-    public boolean createUser(User u, String password) throws Exception {
+    public boolean createUser(String userName, String email, String password) throws Exception {
     	InsertionProcess db = InsertionProcess.getInstance(conn);
-        return db.createUser(u, password);
+        return db.createUser(userName, email, password);
     }
     
     /**
@@ -148,19 +160,20 @@ public class DatabaseProcess {
      * @param username	the user for it to be saved to
      * @param shopdate	the date in which it was saved
      */
-    public void saveShoppingCart(Cart c, String username, Date shopdate) throws SQLException {
+    public void saveShoppingCart(Cart c, String username, String shopdate) throws SQLException {
     	InsertionProcess db = InsertionProcess.getInstance(conn);
     	db.saveShoppingCart(c, username, shopdate);
     }
 
     /**
-     * Update a user
-     * @param username		the username of the user
-     * @param user			the actual user to modify
+     * Edit an existing user's information incl. password, email, admin status
+     * @param newInfo		user obj containing new info incl. email, admin status
+     * @param passWord		original password for verification
+     * @param newPassWord	new password; pass original password to keep this unchanged
      */
-    public void editUserInfo(String username, User user, String passWord) throws Exception {
+    public void editUserInfo(User user, String passWord, String newPassWord) throws Exception {
     	ModificationProcess db = ModificationProcess.getInstance(conn);
-        db.editUserInfo(username, user, passWord);
+        db.editUserInfo(user, passWord, newPassWord);
     }
     
     /**
@@ -179,11 +192,21 @@ public class DatabaseProcess {
      * @param isbn		the book to be removed from the user
      * @return true		if the book has been removed from the user; false otherwise
      */
-    public boolean removeBookFromUser(String username, int isbn) throws SQLException {
+    public boolean removeBookFromUser(String username, long isbn) throws SQLException {
     	RemovalProcess db = RemovalProcess.getInstance(conn);
     	return db.removeBookFromUser(username, isbn);
     }
 
+    /**
+     * remove an existing user's shopping cart
+     * @param userName		user whose cart is to be removed
+     * @return				true if removed; false otherwise
+     */
+    public boolean removeShoppingCart(String userName) throws SQLException {
+    	RemovalProcess db = RemovalProcess.getInstance(conn);
+    	return db.removeShoppingCart(userName);
+    }
+    
     /**
      * Check if a user with the given login info is registered
      * @param username  the login name to be searched for
@@ -211,17 +234,8 @@ public class DatabaseProcess {
      * @param isbn		the book to check for
      * @return	true 	if the user has the book; false otherwise
      */
-    public boolean userHasBook(String username, int isbn) throws SQLException {
+    public boolean userHasBook(String username, long isbn) throws SQLException {
     	VerificationProcess db = VerificationProcess.getInstance(conn);
 		return db.userHasBook(username, isbn);
-    }
-    
-    public static void main(String[] args) {
-    	DatabaseProcess db = DatabaseProcess.getInstance();
-    	try {
-    		User u = new User("pants", false, "are@on.fire");
-    		db.createUser(u, "srsly");
-    	}
-    	catch (Exception e ) { e.printStackTrace(); }
     }
 }

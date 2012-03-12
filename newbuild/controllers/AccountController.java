@@ -41,9 +41,9 @@ public class AccountController {
 	 * @param user The User object containing the information to update with
 	 * @throws Exception 
 	 */
-	void changeUserInfo(String username, User user, String password) throws Exception {
+	void changeUserInfo(User user, String password, String newPassWord) throws Exception {
 		DatabaseProcess instance = DatabaseProcess.getInstance();
-		instance.editUserInfo(username, user, password);
+		instance.editUserInfo(user, password, newPassWord);
 	}
 
 	/**

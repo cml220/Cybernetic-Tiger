@@ -5,12 +5,16 @@
 
 package dbprocess;
 
+import org.apache.log4j.Logger;
+
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+
+import org.apache.log4j.Logger;
 
 import exceptions.NoUsernameOrPasswordException;
 import exceptions.NullUserException;
@@ -21,6 +25,7 @@ import model.Cart;
 import model.User;
 
 public class InsertionProcess {
+	Logger log = Logger.getLogger(DatabaseProcessJUnit.class);
 	protected Connection conn;
     private static InsertionProcess instance;
     
@@ -51,7 +56,7 @@ public class InsertionProcess {
      * @param	u	the user/renter
      * @param 	b	the book to be rented
      */
-    protected void addBookToUser(int isbn, String username) throws SQLException {
+    protected void addBookToUser(long isbn, String username) throws SQLException {
         Statement stmt=conn.createStatement();
         ResultSet rs=stmt.executeQuery("SELECT * FROM tblBook WHERE ISBN=" + isbn + ";");
         if(rs.next()) {
@@ -89,23 +94,20 @@ public class InsertionProcess {
      * @postcond	user has been added to the system
      * @return 		user ID if successful; or -1 (username in use)
      */
-    protected boolean createUser(User u, String passWord) 
+    protected boolean createUser(String userName, String email, String passWord) 
     						throws SQLException, NoUsernameOrPasswordException,
     								NullUserException, UserAlreadyExistsException {
-        if(u==null) {
-            throw new NullUserException("Null User passed.");
-        }
-        if(stringIsEmpty(u.getUserName()) || stringIsEmpty(passWord)) {
+        if(stringIsEmpty(userName) || stringIsEmpty(passWord)) {
             throw new NoUsernameOrPasswordException("Please supply both a username and password.");
         }
         Statement stmt=conn.createStatement();
-        ResultSet rs=stmt.executeQuery("SELECT * FROM tblUser WHERE UserName=\"" + u.getUserName() + "\";");
+        ResultSet rs=stmt.executeQuery("SELECT * FROM tblUser WHERE UserName=\"" + userName + "\";");
         if(rs.next()) {
             throw new UserAlreadyExistsException("A user with that name already exists.");   //value in result set; user already exists
         } else {
-        	stmt.execute("INSERT INTO tblUser (UserName, PassWord, IsAdmin) VALUES (\"" + u.getUserName() + "\",\"" + passWord + "\",\"" + "N" + "\");");
-        	stmt.execute("INSERT INTO tblAccountInfo(UserName, FirstName, LastName, Email) VALUES (\"" + u.getUserName() + "\", \"\", \"\",\"" + u.getEmail() +"\")");
-        	rs=stmt.executeQuery("SELECT * FROM tblUser WHERE UserName=\"" + u.getUserName() +"\";");
+        	stmt.execute("INSERT INTO tblUser (UserName, PassWord, IsAdmin) VALUES (\"" + userName + "\",\"" + passWord + "\",\"" + "N" + "\");");
+        	stmt.execute("INSERT INTO tblAccountInfo(UserName, FirstName, LastName, Email) VALUES (\"" + userName + "\", \"\", \"\",\"" + email +"\")");
+        	rs=stmt.executeQuery("SELECT * FROM tblUser WHERE UserName=\"" + userName +"\";");
             rs.first();
             return true;
         }
@@ -117,18 +119,18 @@ public class InsertionProcess {
      * @param username	the user for it to be saved to
      * @param shopdate	the date in which it was saved
      */
-    protected void saveShoppingCart(Cart c, String username, Date shopdate) throws SQLException {
+    protected void saveShoppingCart(Cart c, String username, String shopdate) throws SQLException {
+    	DatabaseProcess db = DatabaseProcess.getInstance();
+    	db.removeShoppingCart(username);
     	Statement stmt=conn.createStatement();
-    	stmt.execute("INSERT INTO tblShoppingCart (UserName, ShopDate) VALUES (\"" + username + "\"," + shopdate +")");
+    	stmt.execute("INSERT INTO tblShoppingCart (UserName, ShopDate) VALUES (\"" + username + "\",\"" + shopdate + "\")");
     	ResultSet rs=stmt.executeQuery("SELECT * FROM tblShoppingCart WHERE UserName=\"" + username +"\" AND ShopDate=\"" + shopdate + "\"");
     	rs.next();
-    	int cartNum = rs.getInt("CartNumber");
-    	
-    	ArrayList<Book> cartBooks = c.getCart();
-    	
-    	for(Book b : cartBooks) {
-    		stmt.execute("INSERT INTO tblCartContent (CartNumber, BookISBN) VALUES (" + cartNum + ",\"" + b.getBookISBN() + "\"");
+    	int cartNum = rs.getInt("CartNumber");    	
+    	for(int i = 0; i < c.size(); i++) {
+    		stmt.execute("INSERT INTO tblCartContent (CartNumber, BookISBN) VALUES (" + cartNum + "," + c.get(i).getBookISBN() + ")");
     	}
+    	
     }
     
     

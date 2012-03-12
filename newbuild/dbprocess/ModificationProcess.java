@@ -34,14 +34,19 @@ public class ModificationProcess {
         return instance;
     }
     
-    //TODO: Have to figure out how we handle users and what we want to change before this can be completed!
-    protected void editUserInfo(String oldname, User newInfo, String passWord) throws Exception {
+    /**
+     * Edit an existing user's information incl. password, email, admin status
+     * @param newInfo		user obj containing new info incl. email, admin status
+     * @param passWord		original password for verification
+     * @param newPassWord	new password; pass original password to keep this unchanged
+     */
+    protected void editUserInfo(User newInfo, String passWord, String newPassWord) throws Exception {
     	RemovalProcess db = RemovalProcess.getInstance(conn);
     	InsertionProcess idb = InsertionProcess.getInstance(conn);
     	VerificationProcess vdb = VerificationProcess.getInstance(conn);
-    	if(vdb.checkUser(oldname, passWord)) {
-    		db.removeUser(oldname);
-    		idb.createUser(newInfo, passWord);
+    	if(vdb.checkUser(newInfo.getUserName(), passWord)) {
+    		db.removeUser(newInfo.getUserName());
+    		idb.createUser(newInfo.getUserName(), newInfo.getEmail(), newPassWord);
     	} else {
     		log.debug("Invalid username/password.");
     	}

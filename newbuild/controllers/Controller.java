@@ -158,7 +158,7 @@ public final class Controller {
      * @param password	the string containing the user's password
      * @throws Exception 
      */
-    public static void changeUserInfo(String username, final User user, String password)
+    public static void changeUserInfo(String username, final User user, String password, String newPassWord)
             throws Exception {
 
         if (!initialized) {
@@ -168,7 +168,7 @@ public final class Controller {
         }
 
         //TODO: Confirm need for (or remove) username parameter
-        accountController.changeUserInfo(user.username, user, password);
+        accountController.changeUserInfo(user, password, newPassWord);
 
     }
 

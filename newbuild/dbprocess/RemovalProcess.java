@@ -2,6 +2,7 @@ package dbprocess;
 
 import org.apache.log4j.Logger;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -36,11 +37,10 @@ public class RemovalProcess {
      * Remove a single book from the catalogue as well as all rentals
      * @param bookIsbn	the isbn of the book to be removed
      */
-    protected void removeBookFromCatalogue(int bookIsbn) throws SQLException {
+    protected void removeBookFromCatalogue(long bookIsbn) throws SQLException {
         if(bookIsbn < 0) {
             return;
         }
-        log.debug("RemoveBookFromCatalogue entered");
         Statement stmt=conn.createStatement();
         Statement stmt2=conn.createStatement();
         stmt.execute("DELETE FROM tblBook WHERE ISBN=" + bookIsbn + ";");
@@ -61,13 +61,25 @@ public class RemovalProcess {
     	return !db.checkUser(username, null);	//if the username is NOT in use, then the user was removed
     }
     
+    protected boolean removeShoppingCart(String userName) throws SQLException {
+    	Statement stmt = conn.createStatement();
+    	ResultSet rs = stmt.executeQuery("SELECT * FROM tblShoppingCart WHERE UserName = \"" + userName + "\"");
+    	Statement stmt2 = conn.createStatement();
+    	if(rs.next()) {
+    		stmt2.execute("DELETE FROM tblCartContent WHERE CartNumber = " + rs.getInt("CartNumber"));
+    		stmt2.execute("DELETE FROM tblShoppingCart WHERE CartNumber = " + rs.getInt("CartNumber"));
+    		return true;
+    	}
+    	return false;
+    }
+    
     /**
      * Remove a book from a user's rentals
      * @param username	the user
      * @param isbn		the book to be removed from the user
      * @return true		if the book has been removed from the user; false otherwise
      */
-    protected boolean removeBookFromUser(String username, int isbn) throws SQLException {
+    protected boolean removeBookFromUser(String username, long isbn) throws SQLException {
     	Statement stmt=conn.createStatement();
     	stmt.execute("DELETE FROM tblBookRental WHERE UserName=\"" + username + "\" AND BookISBN=" + isbn);
     

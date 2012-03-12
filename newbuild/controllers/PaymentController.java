@@ -27,7 +27,7 @@ public class PaymentController {
      * @throws SQLException 
      */
     public void addCurrentCart() throws SQLException {
-        ArrayList<Book> cart = Controller.getCurrentUser().cart.getCart();
+        ArrayList<Book> cart = Controller.getCurrentUser().cart;
         RentalsController rc = new RentalsController();
         for (Book b : cart) {
             rc.addBookToCurrentUser(b);

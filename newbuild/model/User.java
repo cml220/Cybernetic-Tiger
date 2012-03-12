@@ -19,9 +19,9 @@ public class User {
 	{
 		this.username = username;
 		//TODO DBINTERFACE
-		User userInfo = (new DatabaseProcess()).getUserInfo(username); 
-		this.paymentInfo = userInfo.paymentInfo;
-		rentals = (new DatabaseProcess()).getBooksBy(DatabaseProcess.USERNAME, username);
+		//User userInfo = (new DatabaseProcess()).getUserInfo(username); 
+		//this.paymentInfo = userInfo.paymentInfo;
+		//rentals = (new DatabaseProcess()).getBooksBy(DatabaseProcess.USERNAME, username);
 		this.isAdmin = isAdmin;
 		this.email = email;
 		cart = new Cart();

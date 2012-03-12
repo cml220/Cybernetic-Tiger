@@ -65,7 +65,7 @@ public class VerificationProcess {
      * @param isbn		the book to check for
      * @return	true 	if the user has the book; false otherwise
      */
-    protected boolean userHasBook(String username, int isbn) throws SQLException {
+    protected boolean userHasBook(String username, long isbn) throws SQLException {
     	Statement stmt = conn.createStatement();
     	ResultSet rs = stmt.executeQuery("SELECT * FROM tblBookRental WHERE UserName=\"" + username + "\" AND BookISBN=" + isbn);
     	if(rs.next())

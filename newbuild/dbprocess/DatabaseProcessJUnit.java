@@ -4,12 +4,16 @@ import static org.junit.Assert.*;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
+
 import org.apache.log4j.Logger;
 import model.Book;
+import model.Cart;
 import model.User;
 
 import org.junit.Test;
 
+import exceptions.CartException;
 import exceptions.NoUsernameOrPasswordException;
 import exceptions.NullUserException;
 import exceptions.UserAlreadyExistsException;
@@ -25,28 +29,29 @@ public class DatabaseProcessJUnit {
 	@Test
 	public void testCreateUser() throws SQLException {
 		log.debug("testCreateUser Entered.");
-		User u = new User("Test", false, "1234@google.se");
-		User u2 = new User(null, false, null);
-		User u3 = new User("", false, "");
+		
 		try {
-			boolean res = db.createUser(u, "1234");
-			log.debug(res);
-			boolean res2 = db.createUser(u2, "");
-			log.debug(res2);
-			boolean res3 = db.createUser(u3, "");
-			log.debug(res3);
+			boolean res = db.createUser("Test", "1234@google.se", "1234");
+		//	boolean res2 = db.createUser(null, null, "");
+		//	boolean res3 = db.createUser("", "", "");
 			assertTrue(res);	//if test run more than once u1 might exist
-			assertTrue(db.checkUser(u.getUserName(), "1234"));
+			assertTrue(db.checkUser("Test", "1234"));
+			log.debug("testCreateUser Passed.");
 		} catch (SQLException e) {
 			e.printStackTrace();
+			log.debug("Stupid exception1.");
 		} catch (NoUsernameOrPasswordException e2) {	// null or blank case
 			assertTrue(e2.getMessage().equals("Please supply both a username and password."));
+			log.debug("Stupid exception2.");
 		} catch (NullUserException e3) {
 			assertTrue(e3.getMessage().equals("Null User passed."));
+			log.debug("Stupid exception3.");
 		} catch (UserAlreadyExistsException e4) {
 			assertTrue(e4.getMessage().equals("A user with that name already exists."));
+			log.debug("Stupid exception4.");
 		} catch (Exception e5) {
 			e5.printStackTrace();
+			log.debug("Stupid exception5.");
 		}
 		
 	}
@@ -54,11 +59,11 @@ public class DatabaseProcessJUnit {
 	@Test
 	public void testGetUserInfo() throws SQLException {
 		log.debug("testGetUserInfo Entered.");
-		User u = new User("Test", false, "1234@google.se");
 		try {
 			// db.createUser(u, "54321");
 			User res = db.getUserInfo("Test");
-			assertEquals("User Retrival", u.getUserName(), res.getUserName());
+			assertEquals("User Retrival", "Test", res.getUserName());
+			log.debug("testGetUserInfo Passed.");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -73,6 +78,7 @@ public class DatabaseProcessJUnit {
 		try {
 			boolean res = db.getAdminStatus("Test");
 			assertEquals("isAdmin Status", u.isAdmin, res);
+			log.debug("testGetAdminStatus Passed.");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -88,6 +94,7 @@ public class DatabaseProcessJUnit {
 		Book b = new Book("THISISAUNIQUESTRING","THISISAUNIQUESTRING", 1.10,"THISISAUNIQUESTRING", 2309580,"THISISAUNIQUESTRING","THISISAUNIQUESTRING");
 		try {
 			db.addBookToCatalogue(b);
+			log.debug("testAddBookToCatalogue Passed.");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -100,6 +107,7 @@ public class DatabaseProcessJUnit {
 		Book b = new Book("THISISAUNIQUESTRING","THISISAUNIQUESTRING", 1.10,"THISISAUNIQUESTRING", 2309580,"THISISAUNIQUESTRING","THISISAUNIQUESTRING");
 		try {
 			db.addBookToUser(b.getBookISBN(), "Test");
+			log.debug("testAddBookToUser Passed.");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -107,15 +115,27 @@ public class DatabaseProcessJUnit {
 	}
 	
 	@Test
-	public void testsaveShoppingCart() {
-		// TODO When cart requirements are further identified.
+	public void testShoppingCart() throws SQLException, CartException {
+		log.debug("testShoppingCart Entered.");
+		User res = db.getUserInfo("Test");
+		res.cart.add(db.getBookByIsbn(2309580));
+		db.saveShoppingCart(res.cart, res.getUserName(),  "2012-02-27");
+		Cart c = db.getUserCart("Test");
+		assertTrue(c.get(0).getBookISBN() == 2309580);
+		db.removeShoppingCart("Test");
+		c = db.getUserCart("Test");
+		assertTrue(c == null);
+		log.debug("testShoppingCart Passed.");
+
 	}
 	
 	@Test
 	public void testUserHasBook() {
 		try {
+			log.debug("testUserHasBook Entered.");
 			boolean res = db.userHasBook("Test", 2309580);
 			assertTrue(res);
+			log.debug("testUserHasBook Passed.");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -125,10 +145,10 @@ public class DatabaseProcessJUnit {
 	public void testGetCatalogue() {
 		log.debug("testGetCatalogue Entered.");
 		try {
-			ArrayList<Book> booklist = db.getBooksBy(DatabaseProcess.CATALOGUE, "");
-			
-			log.debug("hello" + booklist.size());
+			ArrayList<Book> booklist = db.getBooksBy(DatabaseProcess.CATALOGUE, "");;
 			assertTrue(!booklist.isEmpty());
+			log.debug("testGetCatalogue Passed.");
+
 		} catch (SQLException e) {
 			log.error("MYSQL Error");
 			e.printStackTrace();
@@ -142,6 +162,7 @@ public class DatabaseProcessJUnit {
 		try {
 			booklist = db.getBooksBy(DatabaseProcess.TITLE, "THISISAUNIQUESTRING");
 			assertTrue(!booklist.isEmpty());
+			log.debug("testGetBookByTitle Entered.");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -157,6 +178,8 @@ public class DatabaseProcessJUnit {
 		try {
 			booklist = db.getBooksBy(DatabaseProcess.AUTHOR, "THISISAUNIQUESTRING");
 			assertTrue(!booklist.isEmpty());
+			log.debug("testGetBookByAuthor Passed.");
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -172,6 +195,7 @@ public class DatabaseProcessJUnit {
 			found = db.getBookByIsbn(2309580);
 			assertTrue(found != null);
             assertTrue(found.equals(b));
+    		log.debug("testGetBookByIsbn Passed.");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -188,7 +212,8 @@ public class DatabaseProcessJUnit {
 			booklist = db.getBooksBy(DatabaseProcess.USERNAME, u.getUserName());
 			assertTrue(!booklist.isEmpty());
 			assertTrue(booklist.size() == 1);
-			
+			log.debug("testGetBooksByUser Passed.");
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -198,10 +223,13 @@ public class DatabaseProcessJUnit {
 	@Test
 	public void testRemoveBookFromUser() {
 		try {
+			log.debug("testRemoveBookFromUser Entered.");
+
 			boolean res = db.removeBookFromUser("Test", 2309580);
 			assertTrue(res);
 			res = db.userHasBook("Test", 2309580);
 			assertFalse(res);
+			log.debug("testRemoveBookFromUser Passed.");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -213,10 +241,10 @@ public class DatabaseProcessJUnit {
 		Book b;
 		try {
 			b = db.getBookByIsbn(2309580);
-			log.debug(b.getBookAuthor());
 			db.removeBookFromCatalogue(b.getBookISBN());
 			b = db.getBookByIsbn(2309580);
 			assertTrue(b == null);
+			log.debug("testRemoveBookFromCatalogue Passed.");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -232,10 +260,11 @@ public class DatabaseProcessJUnit {
 		boolean res;
 		try {
 			res = db.checkUser("Test", "1234");
-			log.debug(res);
 			assertTrue(res);
 			res = db.checkUser("Test2", "wrong");
 			assertFalse(res);
+			log.debug("testCheckLogin Passed.");
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -251,6 +280,7 @@ public class DatabaseProcessJUnit {
 			assertTrue(res);
 			res = db.isNameAvailable("Test");
 			assertFalse(res);
+			log.debug("testCheckNameAvailable Entered.");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -258,8 +288,14 @@ public class DatabaseProcessJUnit {
 	}
 	
 	@Test
-	public void testEditUserInfo() {
-		
+	public void testEditUserInfo() throws SQLException, Exception {
+		log.debug("testEditUserInfo Entered.");
+		User u = db.getUserInfo("Test");
+		u.email = "newEmail@microsuck.biz";
+		db.editUserInfo(u, "1234", "4321");
+		assertTrue(db.getUserInfo("Test").email.equals("newEmail@microsuck.biz") );
+		log.debug("testEditUserInfo Passed.");
+
 	}
 	
 	@Test
@@ -273,6 +309,8 @@ public class DatabaseProcessJUnit {
 			assertTrue(res);
 			res = db.isNameAvailable("Test");
 			assertTrue(res);
+			log.debug("testRemoveUser Entered");
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
