@@ -67,6 +67,20 @@ public class GetterProcess {
         }
     }
     
+    /**
+     * Admin only. Return password of a given user.
+     * @param userName		User whose password is needed
+     * @return				User password
+     */
+    protected String getUserPassWord(String userName) throws SQLException {
+    	Statement stmt = conn.createStatement();
+    	ResultSet rs = stmt.executeQuery("SELECT PassWord FROM tblUser WHERE UserName = \"" + userName + "\"");
+    	if(rs.next()) {
+    		return rs.getString("PassWord");
+    	}
+    	return null;
+    }
+    
     protected Cart getUserCart(String userName) throws SQLException, CartException {
     	Cart c = new Cart();
     	DatabaseProcess db = DatabaseProcess.getInstance();

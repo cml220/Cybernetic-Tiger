@@ -70,6 +70,20 @@ public class DatabaseProcessJUnit {
 		}
 		
 	}
+	
+	@Test
+	public void testGetUserPassWord() {
+		try {
+			log.debug("testGetUserPassWord entered.");
+			String password = db.getUserPassWord("Test");
+			assertTrue(password.equals("1234"));
+			log.debug("testGetUserPassWord Passed.");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
 
 	@Test
 	public void testGetAdminStatus() throws SQLException {

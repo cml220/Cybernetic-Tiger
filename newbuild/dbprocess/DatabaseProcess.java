@@ -64,6 +64,16 @@ public class DatabaseProcess {
     }
     
     /**
+     * Admin only. Return password of a given user.
+     * @param userName		User whose password is needed
+     * @return				User password
+     */
+    public String getUserPassWord(String userName) throws SQLException {
+    	GetterProcess db = GetterProcess.getInstance(conn);
+    	return db.getUserPassWord(userName);
+    }
+    
+    /**
      * get an existing user's cart
      * @param userName			the user whose cart is to be gotten
      * @return					the user's cart
