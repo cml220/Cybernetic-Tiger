@@ -17,8 +17,7 @@ public class LoginController {
 	
 	public boolean checkNameAvailible(String username) throws SQLException {
 		DatabaseProcess db = new DatabaseProcess();
-		//return db.(username);		
-		return false;
+		return db.isNameAvailable(username);	
 	}
 	
 	public void createUser(User user, String password) throws Exception {

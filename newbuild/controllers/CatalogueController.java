@@ -1,10 +1,8 @@
 package controllers;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 import model.Book;
-import model.Catalogue;
 import exceptions.CatalogueException;
 import dbprocess.DatabaseProcess;
 

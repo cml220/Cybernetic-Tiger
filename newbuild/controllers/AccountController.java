@@ -18,7 +18,9 @@ public class AccountController {
 	 */
 	public void makeAdmin(User user) throws Exception {
 		user.isAdmin = true;
-		changeUserInfo(user.username, user);
+		throw new Exception ("AccountController.makeAdmin(User user) is a broken method - Jason");
+		//changeUserInfo(user.username, user);
+		//TODO this method does function properly -Jason
 	}
 
 	/**
@@ -39,9 +41,9 @@ public class AccountController {
 	 * @param user The User object containing the information to update with
 	 * @throws Exception 
 	 */
-	void changeUserInfo(String username, User user) throws Exception {
+	void changeUserInfo(String username, User user, String password) throws Exception {
 		DatabaseProcess instance = DatabaseProcess.getInstance();
-		instance.editUserInfo(username, user);
+		instance.editUserInfo(username, user, password);
 	}
 
 	/**
@@ -52,6 +54,7 @@ public class AccountController {
 	 */
 	void saveUserPaymentInfo(User user, PaymentInfo paymentInfo) throws Exception {
 		user.paymentInfo = paymentInfo;
-		changeUserInfo(user.username, user);
+		//changeUserInfo(user.username, user, null);
+		throw new Exception("AccountController.saveUserPaymentInfo(user, paymentInfo) is a broken method -Jason");
 	}
 }

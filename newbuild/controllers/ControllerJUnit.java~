@@ -3,6 +3,7 @@ package controllers;
 import model.Book;
 import java.net.MalformedURLException;
 
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import org.junit.Test;
@@ -28,7 +29,7 @@ public class ControllerJUnit {
 			//we caught an exception so all is good
 		}
 		//make sure our open, save, and print values are set to false
-		//assertTrue(c.getProperties());
+		assertTrue(c.getProperties());
 	}
 
 }

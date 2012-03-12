@@ -4,9 +4,11 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
+import java.awt.HeadlessException;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -183,38 +185,50 @@ public class LoginPanel extends JPanel {
                     /*
                      * If the login info is correct, open up the program.
                      */
-                    if (Controller.checkLogin(usernamePanel.getText(),
-                            passwordPanel.getText())) {
+                    try {
+						if (Controller.checkLogin(usernamePanel.getText(),
+						        passwordPanel.getText())) {
 
-                        /*
-                         * Initialize the GUI manager
-                         */
-                        PanelsManager.initialise();
+						    /*
+						     * Initialize the GUI manager
+						     */
+						    PanelsManager.initialise();
 
-                        /*
-                         * Construct the GUI
-                         */
-                        MainFrame mainFrame = new MainFrame();
-                        mainFrame.setVisible(true);
+						    /*
+						     * Construct the GUI
+						     */
+						    MainFrame mainFrame = new MainFrame();
+						    mainFrame.setVisible(true);
 
-                        /*
-                         * Open the GUI to the default tab
-                         */
-                        PanelsManager.goToDefaultPanel();
+						    /*
+						     * Open the GUI to the default tab
+						     */
+						    PanelsManager.goToDefaultPanel();
 
-                        getTopLevelAncestor().setVisible(false);
+						    getTopLevelAncestor().setVisible(false);
 
-                    } else {
+						} else {
 
-                        /*
-                         * If the login information didn't match anything in
-                         * the database, prompt the user.
-                         */
-                        JOptionPane.showMessageDialog(null,
-                                "Could not validate account.\nCheck your password.",
-                                "Login Error", JOptionPane.ERROR_MESSAGE);
+						    /*
+						     * If the login information didn't match anything in
+						     * the database, prompt the user.
+						     */
+						    JOptionPane.showMessageDialog(null,
+						            "Could not validate account.\nCheck your password.",
+						            "Login Error", JOptionPane.ERROR_MESSAGE);
 
-                    }
+						}
+					} catch (HeadlessException e) {
+					    JOptionPane.showMessageDialog(null,
+					            "Error Logging In (Headless Exception from checkLogin)",
+					            "Login Error", JOptionPane.ERROR_MESSAGE);
+						e.printStackTrace();
+					} catch (SQLException e) {
+					    JOptionPane.showMessageDialog(null,
+					            "Error Logging In (SQLException from checkLogin)",
+					            "Login Error", JOptionPane.ERROR_MESSAGE);
+						e.printStackTrace();
+					}
 
                     /*
                      * If the controller failed to initialize, prompt the user.

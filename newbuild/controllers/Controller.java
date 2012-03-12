@@ -153,10 +153,12 @@ public final class Controller {
 
     /**
      * Changes a users information using the data inside of a User object.
-     * @param user - the object containing the user data.
+     * @param username	the (old) name of the user who you are editing
+     * @param user - the object containing the new user data.
+     * @param password	the string containing the user's password
      * @throws Exception 
      */
-    public static void changeUserInfo(final User user)
+    public static void changeUserInfo(String username, final User user, String password)
             throws Exception {
 
         if (!initialized) {
@@ -166,7 +168,7 @@ public final class Controller {
         }
 
         //TODO: Confirm need for (or remove) username parameter
-        accountController.changeUserInfo(user.username, user);
+        accountController.changeUserInfo(user.username, user, password);
 
     }
 
