@@ -30,7 +30,7 @@ public class InsertionProcess {
         this.conn = conn;
     }
 
-    /** Singleton pattern DatabaseProcess init.
+    /** Singleton pattern InsertionProcess init.
      * @param conn db connection
      * @return    single instance of DatabaseProcess
      */

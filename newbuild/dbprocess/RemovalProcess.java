@@ -1,28 +1,34 @@
 package dbprocess;
 
-import org.apache.log4j.Logger;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+/** Removal database processes.
+ * @author Colin
+ */
 public class RemovalProcess {
-	Logger log = Logger.getLogger(DatabaseProcessJUnit.class);
-	protected Connection conn;
+    /** db connection. */
+    private Connection conn;
+    /** instance of class. */
     private static RemovalProcess instance;
-    
-    /**
-     * Constructor
+
+    /** Constructor.
+     * @param conn db connection
+     * @throws SQLException sql method fail
      */
-    protected RemovalProcess(Connection conn) throws SQLException {
+    protected RemovalProcess(
+            final Connection conn) throws SQLException {
         this.conn = conn;
     }
 
-    /**
-     * Singleton pattern DatabaseProcess init
-     * @return	single instance of DatabaseProcess
+    /** Singleton pattern RemovalProcess init.
+     * @param conn db connection
+     * @return    single instance of DatabaseProcess
      */
-    protected static synchronized RemovalProcess getInstance(Connection conn) {
+    protected static synchronized RemovalProcess getInstance(
+            final Connection conn) {
         if (instance == null) {
             try {
                 instance = new RemovalProcess(conn);
@@ -32,58 +38,80 @@ public class RemovalProcess {
         }
         return instance;
     }
-    
-    /**
-     * Remove a single book from the catalogue as well as all rentals
-     * @param bookIsbn	the isbn of the book to be removed
+
+    /** Remove a single book from the catalogue as well as all rentals.
+     * @param bookIsbn         isbn of the book to be removed
+     * @throws SQLException        failed sql methods
      */
-    protected void removeBookFromCatalogue(long bookIsbn) throws SQLException {
-        if(bookIsbn < 0) {
+    protected final void removeBookFromCatalogue(
+            final long bookIsbn) throws SQLException {
+        if (bookIsbn < 0) {
             return;
         }
-        Statement stmt=conn.createStatement();
-        Statement stmt2=conn.createStatement();
+        Statement stmt = conn.createStatement();
+        Statement stmt2 = conn.createStatement();
         stmt.execute("DELETE FROM tblBook WHERE ISBN=" + bookIsbn + ";");
-        stmt2.execute("DELETE FROM tblBookRental WHERE BookISBN=" + bookIsbn + ";");
+        stmt2.execute("DELETE FROM tblBookRental WHERE BookISBN="
+                + bookIsbn + ";");
     }
-    
-    /**
-     * Remove a user from the db
-     * @param username	the user to be removed
-     * @return true		if the user has been removed; false otherwise
+
+    /** Remove a user from the db.
+     * @param username    the user to be removed
+     * @return true        if the user has been removed; false otherwise
+     * @throws SQLException        failed sql methods
      */
-    protected boolean removeUser(String username) throws SQLException {
-    	Statement stmt=conn.createStatement();
-    	stmt.execute("DELETE FROM tblUser WHERE UserName=\"" + username + "\"");
-    	stmt.execute("DELETE FROM tblAccountInfo WHERE UserName=\"" + username + "\"");
-    	
-    	DatabaseProcess db = DatabaseProcess.getInstance();
-    	return !db.checkUser(username, null);	//if the username is NOT in use, then the user was removed
+    protected final boolean removeUser(
+            final String username) throws SQLException {
+        Statement stmt = conn.createStatement();
+        stmt.execute("DELETE FROM "
+                + "tblUser WHERE UserName=\""
+                + username + "\"");
+        stmt.execute("DELETE FROM "
+                + "tblAccountInfo WHERE UserName=\""
+                + username + "\"");
+
+        DatabaseProcess db = DatabaseProcess.getInstance();
+        //if the username is NOT in use, then the user was removed
+        return !db.checkUser(username, null);
     }
-    
-    protected boolean removeShoppingCart(String userName) throws SQLException {
-    	Statement stmt = conn.createStatement();
-    	ResultSet rs = stmt.executeQuery("SELECT * FROM tblShoppingCart WHERE UserName = \"" + userName + "\"");
-    	Statement stmt2 = conn.createStatement();
-    	if(rs.next()) {
-    		stmt2.execute("DELETE FROM tblCartContent WHERE CartNumber = " + rs.getInt("CartNumber"));
-    		stmt2.execute("DELETE FROM tblShoppingCart WHERE CartNumber = " + rs.getInt("CartNumber"));
-    		return true;
-    	}
-    	return false;
-    }
-    
-    /**
-     * Remove a book from a user's rentals
-     * @param username	the user
-     * @param isbn		the book to be removed from the user
-     * @return true		if the book has been removed from the user; false otherwise
+
+    /** remove an existing user's shopping cart.
+     * @param userName        user whose cart is to be removed
+     * @return                true if removed; false otherwise
+     * @throws SQLException        failed sql methods
      */
-    protected boolean removeBookFromUser(String username, long isbn) throws SQLException {
-    	Statement stmt=conn.createStatement();
-    	stmt.execute("DELETE FROM tblBookRental WHERE UserName=\"" + username + "\" AND BookISBN=" + isbn);
-    
-    	DatabaseProcess db = DatabaseProcess.getInstance();
-    	return !db.userHasBook(username, isbn);
+    protected final boolean removeShoppingCart(
+            final String userName) throws SQLException {
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT * FROM "
+                + "tblShoppingCart WHERE UserName = \""
+                + userName + "\"");
+        Statement stmt2 = conn.createStatement();
+        if (rs.next()) {
+            stmt2.execute("DELETE FROM tblCartContent "
+                    + "WHERE CartNumber = " + rs.getInt("CartNumber"));
+            stmt2.execute("DELETE FROM tblShoppingCart "
+                    + "WHERE CartNumber = " + rs.getInt("CartNumber"));
+            return true;
+        }
+        return false;
+    }
+
+    /** Remove a book from a user's rentals.
+     * @param username    the user
+     * @param isbn        the book to be removed from the user
+     * @return true       if the book has been removed from the user
+     *                    ; false otherwise
+     * @throws SQLException        failed sql methods
+     */
+    protected final boolean removeBookFromUser(
+            final String username, final long isbn) throws SQLException {
+        Statement stmt = conn.createStatement();
+        stmt.execute("DELETE FROM tblBookRental "
+                + "WHERE UserName=\"" + username
+                + "\" AND BookISBN=" + isbn);
+
+        DatabaseProcess db = DatabaseProcess.getInstance();
+        return !db.userHasBook(username, isbn);
     }
 }

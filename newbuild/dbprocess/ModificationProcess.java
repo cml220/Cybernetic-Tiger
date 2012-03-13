@@ -6,24 +6,32 @@ import java.sql.SQLException;
 
 import model.User;
 
+/** Modification database processes.
+ * @author Colin
+ */
 public class ModificationProcess {
-	protected Connection conn;
+    /** db connection. */
+    private Connection conn;
+    /** instance of class. */
     private static ModificationProcess instance;
-	Logger log = Logger.getLogger(DatabaseProcessJUnit.class);
+    /** log4j logger. */
+    private Logger log = Logger.getLogger(DatabaseProcessJUnit.class);
 
-    
-    /**
-     * Constructor
+    /** Constructor.
+     * @param conn db connection
+     * @throws SQLException sql method fail
      */
-    protected ModificationProcess(Connection conn) throws SQLException {
+    protected ModificationProcess(
+            final Connection conn) throws SQLException {
         this.conn = conn;
     }
 
-    /**
-     * Singleton pattern DatabaseProcess init
-     * @return	single instance of DatabaseProcess
+    /** Singleton pattern DatabaseProcess init.
+     * @param conn  db connection
+     * @return  single instance of DatabaseProcess
      */
-    public static synchronized ModificationProcess getInstance(Connection conn) {
+    public static synchronized ModificationProcess getInstance(
+            final Connection conn) {
         if (instance == null) {
             try {
                 instance = new ModificationProcess(conn);
@@ -33,22 +41,27 @@ public class ModificationProcess {
         }
         return instance;
     }
-    
-    /**
-     * Edit an existing user's information incl. password, email, admin status
-     * @param newInfo		user obj containing new info incl. email, admin status
-     * @param passWord		original password for verification
-     * @param newPassWord	new password; pass original password to keep this unchanged
+
+    /** Edit an existing user's information incl. password, email, admin status.
+     * @param newInfo            user obj containing new info
+     *                        incl. email, admin status
+     * @param passWord        original password for verification
+     * @param newPassWord     new password;
+     *                        pass original password to keep this unchanged
+     * @throws Exception      failed sql methods
      */
-    protected void editUserInfo(User newInfo, String passWord, String newPassWord) throws Exception {
-    	RemovalProcess db = RemovalProcess.getInstance(conn);
-    	InsertionProcess idb = InsertionProcess.getInstance(conn);
-    	VerificationProcess vdb = VerificationProcess.getInstance(conn);
-    	if(vdb.checkUser(newInfo.getUserName(), passWord)) {
-    		db.removeUser(newInfo.getUserName());
-    		idb.createUser(newInfo.getUserName(), newInfo.getEmail(), newPassWord);
-    	} else {
-    		log.debug("Invalid username/password.");
-    	}
+    protected final void editUserInfo(
+            final User newInfo, final String passWord,
+            final String newPassWord) throws Exception {
+        RemovalProcess db = RemovalProcess.getInstance(conn);
+        InsertionProcess idb = InsertionProcess.getInstance(conn);
+        VerificationProcess vdb = VerificationProcess.getInstance(conn);
+        if (vdb.checkUser(newInfo.getUserName(), passWord)) {
+            db.removeUser(newInfo.getUserName());
+            idb.createUser(newInfo.getUserName(),
+                    newInfo.getEmail(), newPassWord);
+        } else {
+            log.debug("Invalid username/password.");
+        }
     }
 }
