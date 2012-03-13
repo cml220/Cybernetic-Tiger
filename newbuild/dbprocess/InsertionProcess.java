@@ -1,11 +1,4 @@
-/*
- * @author Colin Larson
- * TO BE COMPLETED
- */
-
 package dbprocess;
-
-import org.apache.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -19,23 +12,30 @@ import exceptions.UserAlreadyExistsException;
 import model.Book;
 import model.Cart;
 
+/** Insertion database processes.
+ * @author Colin
+ */
 public class InsertionProcess {
-	Logger log = Logger.getLogger(DatabaseProcessJUnit.class);
-	protected Connection conn;
+    /** db connection. */
+    private Connection conn;
+    /** instance of class. */
     private static InsertionProcess instance;
-    
-    /**
-     * Constructor
+
+    /** Constructor.
+     * @param conn db connection
+     * @throws SQLException sql method fail
      */
-    protected InsertionProcess(Connection conn) throws SQLException {
+    protected InsertionProcess(
+            final Connection conn) throws SQLException {
         this.conn = conn;
     }
 
-    /**
-     * Singleton pattern DatabaseProcess init
-     * @return	single instance of DatabaseProcess
+    /** Singleton pattern DatabaseProcess init.
+     * @param conn db connection
+     * @return    single instance of DatabaseProcess
      */
-    public static synchronized InsertionProcess getInstance(Connection conn) {
+    public static synchronized InsertionProcess getInstance(
+            final Connection conn) {
         if (instance == null) {
             try {
                 instance = new InsertionProcess(conn);
@@ -45,96 +45,141 @@ public class InsertionProcess {
         }
         return instance;
     }
-    
-	/**
-     * Add a book to a user's rentals
-     * @param	u	the user/renter
-     * @param 	b	the book to be rented
+
+    /** Add a book to a user's rentals.
+     * @param isbn        isbn of book to be added
+     * @param username    the user for it to be added to
+     * @throws SQLException failed sql methods
      */
-    protected void addBookToUser(long isbn, String username) throws SQLException {
-        Statement stmt=conn.createStatement();
-        ResultSet rs=stmt.executeQuery("SELECT * FROM tblBook WHERE ISBN=" + isbn + ";");
-        if(rs.next()) {
-        	stmt.execute("INSERT INTO tblBookRental(BookISBN, UserName) VALUES (" + isbn + ",\"" + username + "\");");    	
+    protected final void addBookToUser(
+            final long isbn, final String username) throws SQLException {
+        Statement stmt = conn.createStatement();
+        ResultSet rs;
+        rs = stmt.executeQuery("SELECT * FROM "
+                + "tblBook WHERE ISBN=" + isbn + ";");
+        if (rs.next()) {
+            stmt.execute("INSERT INTO tblBookRental(BookISBN, UserName)"
+                    + " VALUES (" + isbn + ",\"" + username + "\");");
         }
-        
     }
-    
-    /**
-     * Add a book to the catalogue
-     * @param	b	book to be added to the catalogue
-     * @postcond	book has been added to the catalogue if it was not present already
+
+    /** Add a book to the catalogue.
+     * @param    b    book to be added to the catalogue
+     * @throws SQLException        failed sql methods
      */
-    protected void addBookToCatalogue(Book b) throws SQLException {
-        if(b==null) {
+    protected final void addBookToCatalogue(final Book b) throws SQLException {
+        if (b == null) {
             return;
         }
-        Statement stmt=conn.createStatement();
-        ResultSet rs=stmt.executeQuery("SELECT * FROM tblBook WHERE ISBN=\"" + b.getBookISBN() + "\";");
-        if(rs.first()) {
+        Statement stmt = conn.createStatement();
+        ResultSet rs;
+        rs = stmt.executeQuery("SELECT * FROM"
+                + " tblBook WHERE ISBN=\""
+                + b.getBookISBN() + "\";");
+        if (rs.first()) {
             return;    //book with this isbn already exists
         } else {
-        	stmt.execute("INSERT INTO tblBook (Title,Author,Price,Url,ISBN,picURL,Description) VALUES (\"" 
-        			+ b.getBookTitle() + 		"\",\"" + b.getBookAuthor() + "\"," + b.getBookPrice() 
-        			+ ",\"" + b.getBookPdfURL() + "\",\"" + b.getBookISBN() + "\",\"" + b.getBookImg() 
-        			+ "\",\"" + b.getBookDescription() + "\");");
-        	rs=stmt.executeQuery("SELECT * FROM tblBook WHERE ISBN=\"" + b.getBookISBN() +"\";");
+            stmt.execute("INSERT INTO tblBook"
+                    + " (Title,Author,Price,Url,ISBN,picURL,Description) "
+                    + "VALUES (\"" + b.getBookTitle()
+                    + "\",\"" + b.getBookAuthor()
+                    + "\"," + b.getBookPrice()
+                    + ",\"" + b.getBookPdfURL() + "\",\""
+                    + b.getBookISBN() + "\",\"" + b.getBookImg()
+                    + "\",\"" + b.getBookDescription() + "\");");
+            rs = stmt.executeQuery("SELECT * FROM "
+                    + "tblBook WHERE ISBN=\"" + b.getBookISBN() + "\";");
             rs.first();
         }
     }
-    
-    /**
-     * Create a new user for the system
-     * @param	u	user to be added to the system
-     * @postcond	user has been added to the system
-     * @return 		user ID if successful; or -1 (username in use)
+
+    /** Create a new user for the system.
+     * @param userName    user to be added to the system
+     * @param passWord    password to be given to user
+     * @param email        email to be given to user
+     * @postcond    user has been added to the system
+     * @return      true if successful; exception thrown otherwise
+     * @throws SQLException sql method fail
+     * @throws NoUsernameOrPasswordException self-expl
+     * @throws NullUserException self-expl
+     * @throws UserAlreadyExistsException self-expl
      */
-    protected boolean createUser(String userName, String email, String passWord) 
-    						throws SQLException, NoUsernameOrPasswordException,
-    								NullUserException, UserAlreadyExistsException {
-        if(stringIsEmpty(userName) || stringIsEmpty(passWord)) {
-            throw new NoUsernameOrPasswordException("Please supply both a username and password.");
+    protected final boolean createUser(
+            final String userName, final String email, final String passWord)
+                            throws SQLException,
+                                    NoUsernameOrPasswordException,
+                                    NullUserException,
+                                    UserAlreadyExistsException {
+        if (stringIsEmpty(userName) || stringIsEmpty(passWord)) {
+            throw new
+                NoUsernameOrPasswordException(
+                "Please supply both a username and password.");
         }
-        Statement stmt=conn.createStatement();
-        ResultSet rs=stmt.executeQuery("SELECT * FROM tblUser WHERE UserName=\"" + userName + "\";");
-        if(rs.next()) {
-            throw new UserAlreadyExistsException("A user with that name already exists.");   //value in result set; user already exists
+        Statement stmt = conn.createStatement();
+        ResultSet rs;
+        rs = stmt.executeQuery("SELECT * FROM "
+                + "tblUser WHERE UserName=\"" + userName + "\";");
+        if (rs.next()) {
+            //value in result set; user already exists
+            throw new
+                UserAlreadyExistsException(
+                "A user with that name already exists.");
         } else {
-        	stmt.execute("INSERT INTO tblUser (UserName, PassWord, IsAdmin) VALUES (\"" + userName + "\",\"" + passWord + "\",\"" + "N" + "\");");
-        	stmt.execute("INSERT INTO tblAccountInfo(UserName, FirstName, LastName, Email) VALUES (\"" + userName + "\", \"\", \"\",\"" + email +"\")");
-        	rs=stmt.executeQuery("SELECT * FROM tblUser WHERE UserName=\"" + userName +"\";");
+            stmt.execute("INSERT INTO tblUser "
+                    + "(UserName, PassWord, IsAdmin) "
+                    + "VALUES (\"" + userName
+                    + "\",\"" + passWord + "\",\""
+                    + "N" + "\");");
+            stmt.execute("INSERT INTO tblAccountInfo "
+                    + "(UserName, FirstName, LastName, Email) "
+                    + "VALUES (\"" + userName
+                    + "\", \"\", \"\",\""
+                    + email + "\")");
+            rs = stmt.executeQuery("SELECT * FROM "
+                    + "tblUser WHERE UserName=\""
+                    + userName + "\";");
             rs.first();
             return true;
         }
-    }    
-    
-    /**
-     * Save a cart and its contents in the appropriate tables
-     * @param c			the cart to be saved
-     * @param username	the user for it to be saved to
-     * @param shopdate	the date in which it was saved
-     */
-    protected void saveShoppingCart(Cart c, String username, String shopdate) throws SQLException {
-    	DatabaseProcess db = DatabaseProcess.getInstance();
-    	db.removeShoppingCart(username);
-    	Statement stmt=conn.createStatement();
-    	stmt.execute("INSERT INTO tblShoppingCart (UserName, ShopDate) VALUES (\"" + username + "\",\"" + shopdate + "\")");
-    	ResultSet rs=stmt.executeQuery("SELECT * FROM tblShoppingCart WHERE UserName=\"" + username +"\" AND ShopDate=\"" + shopdate + "\"");
-    	rs.next();
-    	int cartNum = rs.getInt("CartNumber");    	
-    	for(int i = 0; i < c.size(); i++) {
-    		stmt.execute("INSERT INTO tblCartContent (CartNumber, BookISBN) VALUES (" + cartNum + "," + c.get(i).getBookISBN() + ")");
-    	}
-    	
     }
-    
-    
-    /**
-     * Helper method to validate that a string is not empty, null or ""
-     * @param str	the string to check
-     * @return		true if "not empty", otherwise false
+
+    /** Save a cart and its contents in the appropriate tables.
+     * @param c            the cart to be saved
+     * @param username    the user for it to be saved to
+     * @param shopdate    the date in which it was saved
+     * @throws SQLException        failed sql methods
      */
-    private boolean stringIsEmpty(String str) {
+    protected final void saveShoppingCart(
+            final Cart c, final String username,
+            final String shopdate) throws SQLException {
+        DatabaseProcess db = DatabaseProcess.getInstance();
+        db.removeShoppingCart(username);
+        Statement stmt = conn.createStatement();
+        stmt.execute("INSERT INTO tblShoppingCart "
+                + "(UserName, ShopDate) VALUES (\""
+                + username + "\",\""
+                + shopdate + "\")");
+        ResultSet rs;
+        rs = stmt.executeQuery("SELECT * FROM "
+                + "tblShoppingCart WHERE UserName=\""
+                + username + "\" AND ShopDate=\""
+                + shopdate + "\"");
+        rs.next();
+        int cartNum = rs.getInt("CartNumber");
+        for (int i = 0; i < c.size(); i++) {
+            stmt.execute("INSERT INTO tblCartContent "
+                    + "(CartNumber, BookISBN) VALUES ("
+                    + cartNum + ","
+                    + c.get(i).getBookISBN() + ")");
+        }
+    }
+
+    /** Helper method to validate that
+     *  a string is not empty, null or "".
+     * @param str    the string to check
+     * @return        true if "not empty", otherwise false
+     */
+    private boolean stringIsEmpty(final String str) {
         if (str == null || str.isEmpty() || str.equals("")) {
             return true;
         }
