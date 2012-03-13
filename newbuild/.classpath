@@ -6,5 +6,6 @@
 	<classpathentry kind="lib" path="src/junit-4.10.jar"/>
 	<classpathentry kind="lib" path="src/icepdf-viewer.jar"/>
 	<classpathentry kind="lib" path="src/mysql-connector-java-5.1.18-bin.jar"/>
+	<classpathentry kind="lib" path="src/icepdf-core.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

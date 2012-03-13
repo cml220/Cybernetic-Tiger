@@ -152,6 +152,8 @@ public class SearchBarPanel extends JPanel {
             public void actionPerformed(ActionEvent arg0) {
 
                 MainPanel.changeDisplayPanel(PanelsManager.ADVSEARCH);
+                SearchBarPanel.setPreSearchText(PanelsManager.ADVSEARCH);
+                SearchBarPanel.showPreSearchText();
 
             }
 
