@@ -1,7 +1,3 @@
-/*
- * @author Colin Larson
- */
-
 package dbprocess;
 
 import java.sql.Connection;

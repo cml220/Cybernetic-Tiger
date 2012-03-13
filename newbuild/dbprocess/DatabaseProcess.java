@@ -189,9 +189,10 @@ public class DatabaseProcess {
      * @throws NullUserException self-expl
      * @throws UserAlreadyExistsException self-expl
      */
-    public final boolean createUser(final String userName, final String email, final String passWord) 
-                            throws SQLException, NoUsernameOrPasswordException,
-                                    NullUserException, UserAlreadyExistsException {
+    public final boolean createUser(
+            final String userName, final String email, final String passWord)
+            throws SQLException, NoUsernameOrPasswordException,
+                   NullUserException, UserAlreadyExistsException {
         InsertionProcess db = InsertionProcess.getInstance(conn);
         return db.createUser(userName, email, passWord);
     }
