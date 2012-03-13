@@ -13,6 +13,8 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
+import controllers.Controller;
+
 public class CheckoutActionsPanel extends JPanel {
 
 	
@@ -59,7 +61,23 @@ public class CheckoutActionsPanel extends JPanel {
 		space3 = new JLabel("");
 		this.add(space3);
 		
-		// Now add the proceed button
+		// Now add the back button
+				backButton = new JButton("Back");
+				backButton.addActionListener(new ActionListener(){
+
+		            @Override
+		            public void actionPerformed(ActionEvent arg0) {
+		                
+		                CheckoutPanel.previousPaymentStep();
+		                
+		            }
+				    
+				    
+				    
+				});
+			this.add(backButton);
+		
+		// and finally add the proceed button
 		proceedButton = new JButton("Proceed");
 		proceedButton.addActionListener(new ActionListener(){
 
@@ -74,25 +92,7 @@ public class CheckoutActionsPanel extends JPanel {
 		    
 		});
 		
-		this.add(proceedButton);
-		
-		
-		// and finally the back button
-		backButton = new JButton("Back");
-		backButton.addActionListener(new ActionListener(){
-
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                
-                CheckoutPanel.previousPaymentStep();
-                
-            }
-		    
-		    
-		    
-		});
-		this.add(backButton);
-		
+		this.add(proceedButton);		
 		
 		CheckoutActionsPanel.loadCartActions();
 	}
@@ -104,7 +104,9 @@ public class CheckoutActionsPanel extends JPanel {
 		// set to visible
 		totalPriceText.setVisible(true);
 		
-		//set to visible
+		// update price
+		updatePrice();
+		// set to visible
 		totalPriceValue.setVisible(true);
 		
 		// set spaces to visible
@@ -151,7 +153,9 @@ public class CheckoutActionsPanel extends JPanel {
 		
 		// set to visible
 		totalPriceText.setVisible(true);
-				
+		
+		// update price
+		updatePrice();
 		//set to visible
 		totalPriceValue.setVisible(true);
 				
@@ -190,15 +194,16 @@ public class CheckoutActionsPanel extends JPanel {
 				
 		// set back button to hidden
 		backButton.setVisible(false);
-	}	
+	}
 	
-	public static void setTotalPrice(float inPrice)
+	private static void updatePrice()
 	{
-		if (inPrice < 0)
-		{
-			throw new IllegalArgumentException("Price cannot be negative.");
+		Controller.initialize();
+		try {
+			totalPriceValue.setText("$" + Controller.getCartTotal());
 		}
-		// TODO Rounding to 2.dp??
-		totalPriceValue.setText("$ " + inPrice);
+		catch (Exception e) {
+			totalPriceValue.setText("error");
+		}
 	}
 }

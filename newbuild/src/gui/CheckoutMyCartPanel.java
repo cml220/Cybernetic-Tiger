@@ -10,7 +10,13 @@
 package gui;
 
 import java.awt.GridLayout;
+import java.util.ArrayList;
+import java.util.ListIterator;
+
 import javax.swing.JPanel;
+
+import model.Book;
+import controllers.Controller;
 
 
 public class CheckoutMyCartPanel extends JPanel 
@@ -32,24 +38,40 @@ public class CheckoutMyCartPanel extends JPanel
 		/*
 		 * Load the book panels
 		 */
-		this.loadCart();		
-		
-	}
+		  /*
+         * Initialize the main controller.
+         */
+        Controller.initialize();
+        ArrayList<Book> books = null;
+        
+        // Throws exception - ControllerNOTInitalised, SQLException
+        try {
+        	 books = Controller.getCartContents();
+        }
+        catch(Exception e){
+        	// something has gone wrong, make sure books is set to null
+        	books = null;
+        }
+        
+        ListIterator<Book> bookIterator;
+        
+        // try catch block to stop the application from crashing if user has no books
+        try {
+        	 bookIterator = (ListIterator<Book>) books.iterator();
+        }
+        catch(Exception e) {
+        	bookIterator = null;
+        }
+        
+        Book currentBookToAdd;        
+        // Display all the books
+        while (bookIterator != null && bookIterator.hasNext()) {
+
+            currentBookToAdd = bookIterator.next();
+            this.add(new CheckoutMyCartBookPanel(currentBookToAdd));
+
+        }
 	
-	private void loadCart()
-	{		
-		/*
-		 * 
-		 * Skeleton implementation
-		 * In the future will load the items currently in the cart into view
-		 */
-		this.add(new CheckoutMyCartBookPanel("Oxford English Dictionary", "Words and stuff.","some guy", "http://somewhere", 100, 22.50));
-		this.add(new CheckoutMyCartBookPanel("Collins Pocket French Dictionary", "French words and stuff.", "un garcon", "http://lesomewherre", 20, 11.50));
-		this.add(new CheckoutMyCartBookPanel("College Physics", "PHYSICS", "Physics person", "httphysics", 3, 300.0));
-		this.add(new CheckoutMyCartBookPanel("A Clockwork Orange", "No time for the old in-out in-out love.","Anthony Burgess", "http://droogs", 42, 200.0));
-
-
-
 		
 	}
 	

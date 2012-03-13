@@ -55,9 +55,9 @@ public class TabsPanel extends JPanel {
         activeTabs = 0;
         nextTab = 0;
 
-        // 1st Tab, Book search tab
+        // 1st Tab, Catalogue tab and search tab
         // On click opens up search results
-        setTab("Book Search", PanelsManager.SEARCHRESULTS);
+        setTab("Book Catalogue", PanelsManager.CATALOGUE);
 
         // 2nd Tab, "My Books" tab
         // On click opens up customer's book inventory

@@ -16,6 +16,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
+import controllers.Controller;
+
+import model.Book;
+
     /**
      * The class that other book panels are based upon.
      * Contains an image, a button, and information about the book.
@@ -111,10 +115,10 @@ import javax.swing.border.LineBorder;
      * @param imageLocation the image address (either local or remote) of the
      * book
      */
-    public BookPanel(final String title, final String desc, final String author,
-            final String imageLocation) {
-
+    public BookPanel(final Book book) {
         super();
+        
+        Controller.initialize();
 
         this.setLayout(new BorderLayout());
         this.setBorder(new LineBorder(PanelsManager.BACKGROUNDBLUE, 1));
@@ -126,17 +130,30 @@ import javax.swing.border.LineBorder;
         this.setPreferredSize(new Dimension(this.getWidth(), bookHeight));
 
         /*
-         * This will be the book cover
-         */
-        JButton bookIcon = new JButton("Book Image Placeholder");
-        bookIcon.setPreferredSize(new Dimension(bookHeight, bookWidth));
+         * This will be the book icon cover         * 
+         * Far left i.e. WEST
+         */       
+    	JLabel bookIcon;
+    	JButton bookIconError;
+        try {
+        	bookIcon = Controller.loadCover(book);            
+        	bookIcon.setPreferredSize(new Dimension(bookHeight, bookWidth));
+            this.add(bookIcon, BorderLayout.WEST);
+        }
+        catch(Exception e) {
+        	bookIcon = null;        	
+        	// the book icon didn't load, destroy it and start adding the replacement one
+        	bookIconError = new JButton("");            
+        	bookIconError.setPreferredSize(new Dimension(bookHeight, bookWidth));
+            this.add(bookIconError, BorderLayout.WEST);           
+        }
 
         /*
          * Book title
          */
         JPanel titlePanel = new JPanel();
         titlePanel.setLayout(new GridLayout(0, 1));
-        BookLabel titleLabel = new BookLabel(title, true);
+        BookLabel titleLabel = new BookLabel(book.title, true);
         titlePanel.add(titleLabel);
 
         /*
@@ -144,8 +161,8 @@ import javax.swing.border.LineBorder;
          */
         JPanel infoPanel = new JPanel();
         infoPanel.setLayout(new GridLayout(0, 1));
-        BookLabel descLabel = new BookLabel(desc, false);
-        BookLabel authorLabel = new BookLabel(author, false);
+        BookLabel descLabel = new BookLabel(book.description, false);
+        BookLabel authorLabel = new BookLabel(book.author, false);
         infoPanel.add(descLabel);
         infoPanel.add(authorLabel);
 
@@ -181,12 +198,10 @@ import javax.swing.border.LineBorder;
         rightSidePanel.add(rentalInfoPanel, BorderLayout.SOUTH);
 
         /*
-         * Add the three main sections:
-         * Book icon
+         * Add the other two main sections:
          * Middle panel - title, details
          * Right Panel - buttons, rental info
          */
-        this.add(bookIcon, BorderLayout.WEST);
         this.add(middlePanel, BorderLayout.CENTER);
         this.add(rightSidePanel, BorderLayout.EAST);
 

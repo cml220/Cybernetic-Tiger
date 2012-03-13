@@ -7,7 +7,15 @@
 package gui;
 
 import java.awt.GridLayout;
+
+import java.util.ArrayList;
+import java.util.ListIterator;
+
 import javax.swing.JPanel;
+
+import model.Book;
+
+import controllers.Controller;
 
 /**
  * A panel containing a stack of bookpanels, constructed using details from
@@ -34,36 +42,38 @@ public class MyBooksPanel extends JPanel {
         this.setLayout(new GridLayout(0, 1));
 
         /*
-         * Load the book panels
+         * Initialize the main controller.
          */
-        this.loadBooks();
+        Controller.initialize();
+        ArrayList<Book> books = null;
+        
+        // Throws exception - ControllerNOTInitalised, SQLException
+        try {
+        	 books = Controller.getUserBooks();
+        }
+        catch(Exception e){
+        	// something has gone wrong, make sure books is set to null
+        	books = null;
+        }
+        
+        ListIterator<Book> bookIterator;
+        
+        // try catch block to stop the application from crashing if user has no books
+        try {
+        	 bookIterator = (ListIterator<Book>) books.iterator();
+        }
+        catch(Exception e) {
+        	bookIterator = null;
+        }
+        
+        Book currentBookToAdd;        
+        // Display all the books
+        while (bookIterator != null && bookIterator.hasNext()) {
+
+            currentBookToAdd = bookIterator.next();
+            this.add(new RentedBookPanel(currentBookToAdd));
+
+        }
 
     }
-
-    /**
-     * Load premade books into the panel.
-     * THIS IS A PLACEHOLDER
-     */
-    private void loadBooks() {
-
-        /*
-         * Skeleton implementation
-         * In future, this will create book panels from the database/cache
-         */
-        this.add(new RentedBookPanel("Oxford English Dictionary",
-                "Words and stuff.", "some guy", "http://somewhere", 100));
-        this.add(new RentedBookPanel("Collins Pocket French Dictionary",
-                "French words and stuff.", "un garcon", "http://lesomewherre",
-                20));
-        this.add(new RentedBookPanel("College Physics", "PHYSICS",
-                "Physics person", "httphysics", 3));
-        this.add(new RentedBookPanel("A Clockwork Orange",
-                "No time for the old in-out in-out love.", "Anthony Burgess",
-                "http://droogs", 42));
-
-
-
-
-    }
-
 }

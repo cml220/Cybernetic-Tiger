@@ -30,6 +30,8 @@ public class CheckoutPaymentFieldsPanel extends JPanel {
 	 */
 	public CheckoutPaymentFieldsPanel() {
 		this.renderPanel();
+		
+		// TODO: show the data stored remotely as a helpful hint, are we removing this??
 	}
 	
 	/**
@@ -54,6 +56,8 @@ public class CheckoutPaymentFieldsPanel extends JPanel {
 		zip.setEnabled(false);
 		phone.setEnabled(false);
 		}
+		
+		// TODO: can the controller store this for me?? show the data stored locally
 	}
 	
 	private void renderPanel()

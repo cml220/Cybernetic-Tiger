@@ -35,8 +35,6 @@ public class SearchResultsPanel extends JPanel {
 
         this.setLayout(new GridLayout(0, 1));
 
-        this.loadBooks();
-
         //TODO: Search results
 
     }
@@ -56,46 +54,9 @@ public class SearchResultsPanel extends JPanel {
         while (bookIterator.hasNext()) {
 
             currentBookToAdd = bookIterator.next();
-
-            this.add(new SearchBookPanel(currentBookToAdd.title,
-                    currentBookToAdd.description, currentBookToAdd.author,
-                    currentBookToAdd.pdfURL, currentBookToAdd.price));
+            this.add(new CatalogueBookPanel(currentBookToAdd));
 
         }
-
-    }
-
-    /**
-     * Only in place while controllers incomplete.
-     */
-    private void loadBooks() {
-
-        /*
-         * Skeleton implementation
-         * In future, this will create book panels from the database/cache
-         */
-        this.add(new SearchBookPanel("Oxford English Dictionary",
-                "Words and stuff.", "some guy", "http://somewhere", 22.50));
-
-        this.add(new SearchBookPanel("Collins Pocket French Dictionary",
-                "French words and stuff.", "un garcon", "http://lesomewherre",
-                19.75));
-
-        this.add(new SearchBookPanel("College Physics", "PHYSICS",
-                "Physics person", "httphysics", 99.99));
-
-        this.add(new SearchBookPanel("A Clockwork Orange",
-                "No time for the old in-out in-out love.", "Anthony Burgess",
-                "http://droogs", 12.63));
-
-        this.add(new SearchBookPanel("Another Clockwork Orange", "",
-                "Anthony Burgess", "http://droogs", 12.63));
-
-        this.add(new SearchBookPanel("An Additional Clockwork Orange", "",
-                "Anthony Burgess", "http://droogs", 12.63));
-
-        this.add(new SearchBookPanel("Not A Clockwork Orange", "",
-                "Anthony Burgess", "http://droogs", 12.63));
 
     }
 
