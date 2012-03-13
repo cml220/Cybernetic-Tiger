@@ -89,8 +89,7 @@ public class CheckoutPanel extends DisplayPanel {
         if(curPanelNum < totalPanelsNum){
         	// hack so that thankyou page button goes to home page aka My Books
         	if (curPanelNum == totalPanelsNum-1) { // i.e. its the last step
-        		// then go to the home page somehow
-        		// TODO: make it go to the homepage
+        		MainPanel.changeDisplayPanel(PanelsManager.MYBOOKS);
         	}
         	
         	
