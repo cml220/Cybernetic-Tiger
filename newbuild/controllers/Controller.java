@@ -168,7 +168,7 @@ public final class Controller {
         }
 
         //TODO: Confirm need for (or remove) username parameter
-        accountController.changeUserInfo(user, password, newPassWord);
+        accountController.changeUserInfo(password, user, newPassWord);
 
     }
 

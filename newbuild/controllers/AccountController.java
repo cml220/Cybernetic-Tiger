@@ -13,14 +13,19 @@ public class AccountController {
 
 	/**
 	 *  Makes a given user into an administrator.
-	 * @param user The user that will become an administrator
+	 * @param username The name of the user that will become an administrator
 	 * @throws Exception 
 	 */
-	public void makeAdmin(User user) throws Exception {
+	public void makeAdmin(String username) throws Exception {
+		if (!Controller.getCurrentUser().isAdmin)
+		{
+			throw new Exception("Only administrators can make other users admins");
+		}
+		DatabaseProcess instance = DatabaseProcess.getInstance();
+		User user = instance.getUserInfo(username);
 		user.isAdmin = true;
-		throw new Exception ("AccountController.makeAdmin(User user) is a broken method - Jason");
-		//changeUserInfo(user.username, user);
-		//TODO this method does function properly -Jason
+		String passWord = instance.getUserPassWord(username);
+		instance.editUserInfo(user, username, passWord);
 	}
 
 	/**
@@ -39,11 +44,12 @@ public class AccountController {
 	 * Searches the database for a given user, then updates that user's information based on a User object.
 	 * @param username The name of the user to search for
 	 * @param user The User object containing the information to update with
+	 * @param password The password of the user, used to ensure that an update is permissible
 	 * @throws Exception 
 	 */
-	void changeUserInfo(User user, String password, String newPassWord) throws Exception {
+	void changeUserInfo(String username, User user, String password) throws Exception {
 		DatabaseProcess instance = DatabaseProcess.getInstance();
-		instance.editUserInfo(user, password, newPassWord);
+		instance.editUserInfo(user, username, password);
 	}
 
 	/**
@@ -51,10 +57,10 @@ public class AccountController {
 	 * @param user The user to update
 	 * @param paymentInfo The payment information to be assigned
 	 * @throws Exception 
-	 */
+	 *** DEPRECATED to improve security (users must manually enter payment info each time) ***
 	void saveUserPaymentInfo(User user, PaymentInfo paymentInfo) throws Exception {
 		user.paymentInfo = paymentInfo;
 		//changeUserInfo(user.username, user, null);
 		throw new Exception("AccountController.saveUserPaymentInfo(user, paymentInfo) is a broken method -Jason");
-	}
+	}*/
 }
