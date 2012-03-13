@@ -29,18 +29,11 @@ public class AdvSearchPanel extends DisplayPanel {
     private static final long serialVersionUID = 8285086013085907050L;
 
     /**
-     * Constants for specifying location of search.
-     */
-    private final int STORE = 0;
-    private final int MYBOOKS = 1;
-    private final int MYCART = 2;
-
-    /**
      * Titles for the locations of searches.
      */
-    private final String[] locTitles = {"Available Rentals",   //STORE
-            "In My Rentals",                                    //MYBOOKS
-    "In My Shopping Cart"};                                     //MYCART
+    private final String[] locTitles = {"Available Rentals",
+            "In My Rentals",
+    "In My Shopping Cart"};
 
 
     /**
