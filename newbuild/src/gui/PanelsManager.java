@@ -6,12 +6,7 @@
 
 package gui;
 
-import java.awt.Color;
-import java.sql.SQLException;
-
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-import javax.swing.border.LineBorder;
+import java.awt.Color;import java.sql.SQLException;import javax.swing.JComponent;import javax.swing.border.LineBorder;
 
 /**
  * Singleton to store the panels used by this program as well as fonts and
@@ -21,9 +16,9 @@ import javax.swing.border.LineBorder;
  */
 public final class PanelsManager {
 
-   /**
-    * Hidden constructor.
-    */
+    /**
+     * Hidden constructor.
+     */
     private PanelsManager() {
 
         //hiding the constructor
@@ -65,7 +60,7 @@ public final class PanelsManager {
      * Borders used throughout the program.
      */
     public static final LineBorder DEFAULTBORDER =
-            new LineBorder(PanelsManager.SELECTEDBLUE, 5);
+        new LineBorder(PanelsManager.SELECTEDBLUE, 5);
 
     /**
      * Fonts used throughout the program.
@@ -117,13 +112,13 @@ public final class PanelsManager {
      * space.
      */
     private static JComponent[] panelsArray;
-    
+
     /**
      * An array holding custom 'pre search' strings that will go in the search
      * bar if it is empty and not selected
      */
     private static String[] preSearchStringsArray;
-    
+
     /**
      * The default 'pre search' string for panels who don't have a custom
      * string assigned to them
@@ -152,28 +147,28 @@ public final class PanelsManager {
          * Define each of the display panels that will be used in the GUI
          */
         panelsArray[MYBOOKS]
-                = new DisplayScrollPane(new MyBooksPanel());
+                    = new DisplayScrollPane(new MyBooksPanel());
         preSearchStringsArray[MYBOOKS] = " Search My Books";
 
         panelsArray[ADVSEARCH]
-                = new JPanel(); //new AdvancedSearchPanel();
+                    = new AdvSearchPanel();
 
         panelsArray[SEARCHRESULTS]
-                = new DisplayScrollPane(new SearchResultsPanel());
-/* TODO: Creating a test User object can potentially throw an SQLException.
- * Once the MyAccountPanel is updated to use the current user instead of the test User,
- * this try-catch block can be eliminated
- * */ 
+                    = new DisplayScrollPane(new SearchResultsPanel());
+        /* TODO: Creating a test User object can potentially throw an SQLException.
+         * Once the MyAccountPanel is updated to use the current user instead of the test User,
+         * this try-catch block can be eliminated
+         * */
         try {
-			panelsArray[MYACCOUNT]
-			        = new MyAccountPanel();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} //new MyAccountPanel();
+            panelsArray[MYACCOUNT]
+                        = new MyAccountPanel();
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } //new MyAccountPanel();
 
         panelsArray[MYCART] =
-                new CheckoutPanel(); //new MyCheckoutPanel();
+            new CheckoutPanel(); //new MyCheckoutPanel();
         preSearchStringsArray[MYCART] = " Search My Cart";
 
         initialised = true;
@@ -236,23 +231,23 @@ public final class PanelsManager {
         return NUMPANELS;
 
     }
-    
+
     /**
      * @return the 'pre search string' that goes in the searchbox before any
      * text is entered.
      */
     public static String getPreSearchString(int panelNum){
-        
+
         if(preSearchStringsArray[panelNum] == null){
-            
+
             return defaultPreSearchString;
-            
+
         }
-        
+
         return preSearchStringsArray[panelNum];
-        
+
     }
-        
+
     /**
      * Sets the default panel that the app will open on startup.
      * @param defaultPanelTab - the tab which, when pressed, opens the

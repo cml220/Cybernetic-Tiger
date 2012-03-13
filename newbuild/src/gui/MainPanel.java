@@ -8,6 +8,7 @@ package gui;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+
 import javax.swing.JPanel;
 
 /**
@@ -72,6 +73,7 @@ public class MainPanel extends JPanel {
 
         CardLayout cl = (CardLayout) displayPanel.getLayout();
         cl.show(displayPanel, Integer.toString(choice));
+        PanelsManager.getPanel(choice).requestFocus();
 
     }
 

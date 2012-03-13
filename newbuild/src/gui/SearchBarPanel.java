@@ -11,8 +11,11 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -143,6 +146,16 @@ public class SearchBarPanel extends JPanel {
                 advancedSearchButton.getBackground(), buttonBorderWidth, true));
         advancedSearchButton.setPreferredSize(new Dimension(buttonWidth,
                 buttonHeight));
+        advancedSearchButton.addActionListener(new ActionListener(){
+
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+
+                MainPanel.changeDisplayPanel(PanelsManager.ADVSEARCH);
+
+            }
+
+        });
 
         /*
          * Panel for keeping the Buttons together
