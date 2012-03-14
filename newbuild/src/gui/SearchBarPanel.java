@@ -151,7 +151,20 @@ public class SearchBarPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent arg0) {
 
+                /*
+                 * Change the main panel to show the advanced search panel
+                 */
                 MainPanel.changeDisplayPanel(PanelsManager.ADVSEARCH);
+
+                /*
+                 * Deselect any selected tabs on the mode pane
+                 */
+                TabsPanel.deselectAllTabs();
+
+                /*
+                 * Change the gray text to an appropriate message
+                 * Set in PanelsManager.java
+                 */
                 SearchBarPanel.setPreSearchText(PanelsManager.ADVSEARCH);
                 SearchBarPanel.showPreSearchText();
 
