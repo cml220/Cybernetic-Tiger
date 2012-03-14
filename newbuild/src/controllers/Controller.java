@@ -168,8 +168,22 @@ public final class Controller {
         }
 
         //TODO: Confirm need for (or remove) username parameter
-        accountController.changeUserInfo(password, user, newPassWord);
+        accountController.changeUserInfo(username, user, password);
 
+    
+    }
+
+    /**
+     * Makes a given user an administrator.
+     * @param username The name of the user to make an admin
+     * @throws Exception If the Controller class has not been initialized
+     */
+    public static void makeAdmin(String username) throws Exception {
+    	if (!initialized) {
+
+            throw new ControllerNotInitializedException();
+        }
+    	accountController.makeAdmin(username);
     }
 
     /**
