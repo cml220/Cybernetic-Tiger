@@ -5,7 +5,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import org.icepdf.ri.common.ComponentKeyBinding;
