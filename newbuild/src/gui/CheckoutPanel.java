@@ -87,10 +87,11 @@ public class CheckoutPanel extends DisplayPanel {
     public static void nextPaymentStep(){
 
         if(curPanelNum < totalPanelsNum){
-        	// hack so that thankyou page button goes to home page aka My Books
+        	// if its the last step, then we want to go to home
         	if (curPanelNum == totalPanelsNum-1) { // i.e. its the last step
-        		MainPanel.changeDisplayPanel(PanelsManager.MYBOOKS);
-        	}
+        		// goto the default panel :D
+        		PanelsManager.goToDefaultPanel();
+        	} else {
         	
         	
             curPanelNum++;
@@ -98,7 +99,7 @@ public class CheckoutPanel extends DisplayPanel {
             cl.show(cartMainPanel, Integer.toString(curPanelNum));
 
             updateStage(curPanelNum);
-
+        	}
         }
     }
 

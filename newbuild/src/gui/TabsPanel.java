@@ -85,8 +85,8 @@ public class TabsPanel extends JPanel {
 
         //TODO: JUNIT test, make sure only 12 panels have been added       
 
-        // Setting the default tab, My Books (tab array 1)
-        PanelsManager.setDefaultPanel(tabArray[1]);
+        // Setting the default tab, Catalogue (tab array 0)
+        PanelsManager.setDefaultPanel(tabArray[0]);
 
     }
 

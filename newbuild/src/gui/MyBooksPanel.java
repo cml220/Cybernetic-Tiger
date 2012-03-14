@@ -41,6 +41,13 @@ public class MyBooksPanel extends JPanel {
          */
         this.setLayout(new GridLayout(0, 1));
 
+     // TODO: remove the examples below once system goes live
+        this.add(new RentedBookPanel(new Book("Test book", "Test author", 11.75, "http://dl.dropbox.com/u/47583545/test.pdf", 123456, "http://imgloc", "This is a test book for the next books system.")));
+        this.add(new RentedBookPanel(new Book("Test book", "Test author", 11.75, "http://dl.dropbox.com/u/47583545/test.pdf", 1234567, "http://imgloc", "This is a test book for the next books system.")));
+        this.add(new RentedBookPanel(new Book("Test book", "Test author", 11.75, "http://dl.dropbox.com/u/47583545/test.pdf", 1234568, "http://imgloc", "This is a test book for the next books system.")));
+        this.add(new RentedBookPanel(new Book("Test book", "Test author", 11.75, "http://dl.dropbox.com/u/47583545/test.pdf", 1234569, "http://imgloc", "This is a test book for the next books system.")));
+
+        
         /*
          * Initialize the main controller.
          */

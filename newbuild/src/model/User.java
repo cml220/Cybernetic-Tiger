@@ -19,8 +19,12 @@ public class User {
 	{
 		this.username = username;
 		//TODO DBINTERFACE
-		User userInfo = (new DatabaseProcess()).getUserInfo(username); 
-		this.paymentInfo = userInfo.paymentInfo;
+		User userInfo = (new DatabaseProcess()).getUserInfo(username);
+			// hack so login still works below (if null etc)
+			if (userInfo != null) {
+				this.paymentInfo = userInfo.paymentInfo;
+			}
+			// end hack
 		rentals = (new DatabaseProcess()).getBooksBy(DatabaseProcess.USERNAME, username);
 		this.isAdmin = isAdmin;
 		this.email = email;

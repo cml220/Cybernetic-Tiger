@@ -17,7 +17,7 @@ public class ReaderController {
 
 	public ReaderController()
 	{
-		
+		// do nothing
 	}
 	
 	public JPanel openBook(Book book) throws MalformedURLException
@@ -45,16 +45,15 @@ public class ReaderController {
                 new org.icepdf.ri.common.MyAnnotationCallback(
                         controller.getDocumentViewController()));
 
-        JFrame applicationFrame = new JFrame();
-        applicationFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        applicationFrame.getContentPane().add(viewerComponentPanel);
+        
+        // deleted JRAME code, this code is not required -- Jake Bolam
+        // The frame actually would host the panel (creating a new window), which is not what we are after
 
         // Now that the GUI is all in place, we can open the PDF
         controller.openDocument(url);
 
         // show the component
-        applicationFrame.pack();
-        applicationFrame.setVisible(true);
+       
         return viewerComponentPanel;
 	}
 }

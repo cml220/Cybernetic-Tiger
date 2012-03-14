@@ -203,6 +203,7 @@ public class CheckoutActionsPanel extends JPanel {
 			totalPriceValue.setText("$" + Controller.getCartTotal());
 		}
 		catch (Exception e) {
+			// failed to get cart total, display error, not zero
 			totalPriceValue.setText("error");
 		}
 	}
