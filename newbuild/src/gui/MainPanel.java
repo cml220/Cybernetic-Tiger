@@ -32,6 +32,9 @@ public class MainPanel extends JPanel {
      * The panel containing the search bar.
      */
     private static JPanel searchBarPanel;
+    
+    // the panel count for the application to be able to add panels on the fly
+    private static int panelCount;
 
     /**
      * Constructs the main panel, which contains all of the sub-panels of the
@@ -48,9 +51,9 @@ public class MainPanel extends JPanel {
         displayPanel = new JPanel();
         displayPanel.setLayout(new CardLayout());
 
-        for (int i = 0; i < PanelsManager.getNumPanels(); i++) {
+        for (panelCount = 0; panelCount < PanelsManager.getNumPanels(); panelCount++) {
 
-            displayPanel.add(PanelsManager.getPanel(i), Integer.toString(i));
+            displayPanel.add(PanelsManager.getPanel(panelCount), Integer.toString(panelCount));
 
         }
 
@@ -74,6 +77,25 @@ public class MainPanel extends JPanel {
         CardLayout cl = (CardLayout) displayPanel.getLayout();
         cl.show(displayPanel, Integer.toString(choice));
         PanelsManager.getPanel(choice).requestFocus();
+
+    }
+    
+    /**
+     * Changes to the panel that has been passed in.
+     * @param choice the index of the panel which will be swapped i
+     * (See: PanelsManager)
+     */
+    public static void changeDisplayPanel(final JPanel panel) {
+    	// could possibly see memory problems with this, should we delete afterwards?
+    	// increase the panelCount
+    	panelCount++;
+    	
+    	// add the panel that has been passed in
+        displayPanel.add(panel, Integer.toString(panelCount));
+        
+        // show the panel
+        CardLayout cl = (CardLayout) displayPanel.getLayout();
+        cl.show(displayPanel, Integer.toString(panelCount));
 
     }
 

@@ -36,18 +36,14 @@ public class RentedBookPanel extends BookPanel {
                 // initialize controller
             	Controller.initialize();
             	try {
-            		// add the book to the cart
-            		Controller.openReader(book);
-            		// TODO: remove the button to read it
-            		// TODO: display the panel somewhere, can we just launch a new panel?
-            		
+            		// put the book into the main panel ;) 
+            		MainPanel.changeDisplayPanel(Controller.openReader(book));            		
             	}
             	catch (Exception e2){
-            		// TODO: possibly remove this once everything is working
-            		JOptionPane.showMessageDialog(null,
-				            "Failed to display book to read.",
-				            "NextBooks error", JOptionPane.ERROR_MESSAGE);
             		// failed to display
+            		JOptionPane.showMessageDialog(null,
+				            "Failed to display book to read. Please contact technical support.",
+				            "NextBooks error", JOptionPane.ERROR_MESSAGE);            		
             	}
             }
 		    
