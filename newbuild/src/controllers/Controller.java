@@ -3,8 +3,8 @@ package controllers;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.net.MalformedURLException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -139,7 +139,7 @@ public final class Controller {
      * @throws SQLException if no connection to the database can be obtained
      */
     public static User getUserInfo(final String username)
-            throws ControllerNotInitializedException, SQLException {
+    throws ControllerNotInitializedException, SQLException {
 
         if (!initialized) {
 
@@ -156,10 +156,10 @@ public final class Controller {
      * @param username	the (old) name of the user who you are editing
      * @param user - the object containing the new user data.
      * @param password	the string containing the user's password
-     * @throws Exception 
+     * @throws Exception
      */
     public static void changeUserInfo(String username, final User user, String password, String newPassWord)
-            throws Exception {
+    throws Exception {
 
         if (!initialized) {
 
@@ -179,7 +179,7 @@ public final class Controller {
      * @throws ControllerNotInitializedException if the controller isn't loaded
      */
     public static PaymentInfo getPaymentInfo()
-            throws ControllerNotInitializedException {
+    throws ControllerNotInitializedException {
 
         if (!initialized) {
 
@@ -197,7 +197,7 @@ public final class Controller {
      * @throws ControllerNotInitializedException if the controller isn't loaded
      */
     public static void setPaymentInfo(PaymentInfo piNew)
-            throws ControllerNotInitializedException {
+    throws ControllerNotInitializedException {
 
         if (!initialized) {
 
@@ -214,7 +214,7 @@ public final class Controller {
      * rentals have been updated correctly.  If not, refund the purchase and
      * inform the user.
      * @throws IntermediateException if the transaction failed.
-     * @throws SQLException 
+     * @throws SQLException
      */
     public static void processPurchase() throws IntermediateException, SQLException {
 
@@ -234,7 +234,7 @@ public final class Controller {
         /*
          * Log the books in the user's rental account before the purchase.
          */
-        
+
         log.debug("Books in account before purchase:");
         for (Book b : userBooksBeforePurchase) {
 
@@ -245,7 +245,7 @@ public final class Controller {
         /*
          * Log the books in the user's cart before the purchase.
          */
-        
+
         log.debug("Books in cart before purchase:");
         for (Book b : cartBooksBeforePurchase) {
 
@@ -257,21 +257,21 @@ public final class Controller {
          * confirm that the payment went through, then add the cart books to
          * the user's account.
          */
-        
+
         if (paymentController.confirmPayment()) {
 
             paymentController.addCurrentCart();
             userBooksAfterPurchase = rentalsController.getBooks();
 
         }
-         
+
 
         try {
             /*
              * Log the books in the user's rental account after the purchase
              * and confirm that they are correct.
              */
-            
+
             log.debug("Checking transaction results:");
 
             //check that the books that were in the rental account before the
@@ -286,7 +286,7 @@ public final class Controller {
                 } else {
 
                     log.debug("Exception thrown:  Item expected in rentals but"
-                    + "not found.");
+                            + "not found.");
                     throw new PurchaseFailedException();
 
                 }
@@ -332,7 +332,7 @@ public final class Controller {
      * @throws ControllerNotInitializedException if the controller isn't loaded
      */
     public static void addToCart(final Book book)
-            throws CartException, ControllerNotInitializedException {
+    throws CartException, ControllerNotInitializedException {
 
         if (!initialized) {
 
@@ -351,7 +351,7 @@ public final class Controller {
      * @throws ControllerNotInitializedException if the controller isn't loaded
      */
     public static void removeFromCart(final Book book)
-            throws CartException, ControllerNotInitializedException {
+    throws CartException, ControllerNotInitializedException {
 
         if (!initialized) {
 
@@ -371,7 +371,7 @@ public final class Controller {
      * @throws ControllerNotInitializedException if the controller isn't loaded
      */
     public static ArrayList<Book> getCartContents()
-            throws CartException, ControllerNotInitializedException {
+    throws CartException, ControllerNotInitializedException {
 
         if (!initialized) {
 
@@ -391,7 +391,7 @@ public final class Controller {
      * @throws ControllerNotInitializedException
      */
     public static float getCartTotal()
-            throws CartException, ControllerNotInitializedException {
+    throws CartException, ControllerNotInitializedException {
 
         if (!initialized) {
 
@@ -407,10 +407,10 @@ public final class Controller {
      * Fetch a list of books that a user has rented on their account.
      * @return a list of books linked to the user
      * @throws ControllerNotInitializedException if the controller isn't loaded
-     * @throws SQLException 
+     * @throws SQLException
      */
     public static ArrayList<Book> getUserBooks()
-            throws ControllerNotInitializedException, SQLException {
+    throws ControllerNotInitializedException, SQLException {
 
         if (!initialized) {
 
@@ -430,8 +430,8 @@ public final class Controller {
      * @throws ControllerNotInitializedException if the controller isn't loaded
      */
     public static JLabel loadCover(final Book book)
-            throws ImageLoadFailedException,
-            ControllerNotInitializedException {
+    throws ImageLoadFailedException,
+    ControllerNotInitializedException {
 
         if (!initialized) {
 
@@ -473,7 +473,7 @@ public final class Controller {
     }
 
     public static boolean checkLogin(String username, String password)
-            throws ControllerNotInitializedException, SQLException {
+    throws ControllerNotInitializedException, SQLException {
 
         if (!initialized) {
 
@@ -481,7 +481,16 @@ public final class Controller {
 
         }
 
-        return loginController.checkLogin(username, password);
+        boolean success = loginController.checkLogin(username, password);
+
+        if(success){
+
+            currentUser = accountController.getUserInfo(username);
+
+        }
+
+        return success;
+
 
     }
 
@@ -495,10 +504,10 @@ public final class Controller {
      * @return a newly constructed JPanel containing the ICEPDF reader with
      * 'book' loaded in it.
      * @throws ControllerNotInitializedException if the controller isn't loaded
-     * @throws MalformedURLException 
+     * @throws MalformedURLException
      */
     public static JPanel openReader(final Book book)
-            throws ControllerNotInitializedException, MalformedURLException {
+    throws ControllerNotInitializedException, MalformedURLException {
 
         if (!initialized) {
 
