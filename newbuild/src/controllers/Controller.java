@@ -19,6 +19,7 @@ import model.User;
 
 import org.apache.log4j.Logger;
 
+import exceptions.BookOpenFailed;
 import exceptions.CartException;
 import exceptions.ControllerNotInitializedException;
 import exceptions.ImageLoadFailedException;
@@ -518,18 +519,24 @@ public final class Controller {
      * @return a newly constructed JPanel containing the ICEPDF reader with
      * 'book' loaded in it.
      * @throws ControllerNotInitializedException if the controller isn't loaded
-     * @throws MalformedURLException
+     * @throws MalformedURLException 
+     * @throws BookOpenFailed 
      */
     public static JPanel openReader(final Book book)
-    throws ControllerNotInitializedException, MalformedURLException {
-
+            throws ControllerNotInitializedException, MalformedURLException, BookOpenFailed {
+    	JPanel opened;
         if (!initialized) {
 
             throw new ControllerNotInitializedException();
 
         }
+        try{
+        	opened = readerController.openBook(book);
+        }catch(MalformedURLException e){
+        	throw new BookOpenFailed();
+        }
 
-        return readerController.openBook(book);
+        return opened;
 
     }
     public static void openRentals() {
