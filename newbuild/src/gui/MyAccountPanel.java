@@ -1,36 +1,27 @@
 /*
- * Framework written by Brad Johnson
- * NextBooks
+ * Framework written by Brad Johnson * Contents written by Jeremy Guebert
+ * NextBooks
  * 2011-2012
  */
 
 package gui;
-
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import java.sql.SQLException;
-
-import java.util.ArrayList;
-
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-
-import controllers.Controller;
-import dbprocess.DatabaseProcess;
-
-import model.Book;
-import model.User;
-
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import javax.swing.JLabel;
+import controllers.Controller;
+import dbprocess.DatabaseProcess;
+import model.Book;
+import model.User;
+
 /**
  * Panel for editing and viewing a users own account information.
  * @author Brad
  *
  */
-public class MyAccountPanel extends DisplayPanel {
+public class MyAccountPanel extends StyledPanel {
 
 	/**
 	 * The user to be performing an update on.
@@ -118,10 +109,9 @@ public class MyAccountPanel extends DisplayPanel {
      */
     public MyAccountPanel() throws SQLException { 
         
-        this.setLayout(new GridLayout(0, 1));
+        this.setLayout(new GridLayout(0, 1));        this.setOpaque(false);
 
-        JLabel headerLabel = new JLabel("Account Details");
-
+        JLabel headerLabel = new JLabel("Account Details");        headerLabel.setForeground(PanelsManager.UNSELECTEDBLUE);
         // TODO: Make update buttons work
         // TODO: Make it pretty...
         // TODO: Replace next line with userToShow = Controller.getCurrentUser()
@@ -130,29 +120,9 @@ public class MyAccountPanel extends DisplayPanel {
         // TODO: Remove the following two lines entirely - adding books to the test user to test the display of rentals
         userToShow.rentals.add(new Book("testBook1", "author1", 3.14, "address1", 314, null, "testing book1"));
         userToShow.rentals.add(new Book("testBook2", "author2", 13.37, "address1", 1337, null, "testing book2"));
-        // Handle the username
-        JPanel usernamePanel = new JPanel();
-        JLabel usernameLabel = new JLabel("Username:        ");
-        JTextField usernameTextField = new JTextField(userToShow.username, 32);
-        JButton usernameButton = new JButton("Update");
-        usernameButton.addActionListener(new UpdateListener(UpdateListener.USERNAME_FIELD, usernameTextField.getText()));
-        usernamePanel.add(usernameLabel);
-        usernamePanel.add(usernameTextField);
-        usernamePanel.add(usernameButton);
-
-        // Handle the email
-        JPanel emailPanel = new JPanel();
-        JLabel emailLabel = new JLabel("Email:           ");
-        JTextField emailTextField = new JTextField(userToShow.email, 32);
-        JButton emailButton = new JButton("Update");
-        emailButton.addActionListener(new UpdateListener(UpdateListener.EMAIL_FIELD, emailTextField.getText()));
-        emailPanel.add(emailLabel);
-        emailPanel.add(emailTextField);
-        emailPanel.add(emailButton);
-
+        // Handle the username        // Handle the username        LabeledInputField usernamePanel = new LabeledInputField("Username:", "Update");        usernamePanel.setText(userToShow.username);        usernamePanel.addActionListener(new UpdateListener(UpdateListener.USERNAME_FIELD, usernamePanel.getText()));                // Handle the email        LabeledInputField emailPanel = new LabeledInputField("Password:", "Update");        emailPanel.setText(userToShow.email);        emailPanel.addActionListener(new UpdateListener(UpdateListener.EMAIL_FIELD, emailPanel.getText()));
         // Handle the isAdmin flag
-        JLabel isAdminLabel = new JLabel("Administrator:   " + userToShow.isAdmin);
-
+        JLabel isAdminLabel = new JLabel("Administrator:   " + userToShow.isAdmin);        isAdminLabel.setForeground(PanelsManager.UNSELECTEDBLUE);
         // Handle the list of book rentals
         String bookList = "";
         if (userToShow.rentals != null)
@@ -162,14 +132,12 @@ public class MyAccountPanel extends DisplayPanel {
 	        	bookList += b.title + "\n";
 	        }
         }
-        JLabel rentalsLabel = new JLabel("Rentals:\n" + bookList);
-
+        JLabel rentalsLabel = new JLabel("Rentals:\n" + bookList);        rentalsLabel.setForeground(PanelsManager.UNSELECTEDBLUE);
         // Add all of the components to the overall panel
         this.add(headerLabel);
         this.add(usernamePanel);
         this.add(emailPanel);
         this.add(isAdminLabel);
         this.add(rentalsLabel);
-    }
-
+    }    
 }

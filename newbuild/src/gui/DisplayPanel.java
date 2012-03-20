@@ -24,6 +24,7 @@ public class DisplayPanel extends JPanel {
      */
     public DisplayPanel() {
 
+    	super();
         this.setBorder(PanelsManager.DEFAULTBORDER);
 
     }
