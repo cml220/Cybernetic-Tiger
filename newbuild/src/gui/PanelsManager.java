@@ -61,7 +61,7 @@ public final class PanelsManager {
      */
     public static final LineBorder DEFAULTBORDER =
         new LineBorder(PanelsManager.SELECTEDBLUE, 5);
-
+    /**     * Blue border for forms     */    public static final LineBorder FORMBORDER =        new LineBorder(PanelsManager.SELECTEDBLUE, 3, true);
     /**
      * Fonts used throughout the program.
      */

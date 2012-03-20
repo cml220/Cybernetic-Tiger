@@ -5,7 +5,6 @@ import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Image;
 
-
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
@@ -22,27 +21,27 @@ public class StyledPanel extends DisplayPanel {
      */
     private static final long serialVersionUID = 8285086013085907050L;
 
-   
+
     /**
-     * A styled panel for organizing objects within this panel
+     * A styled panel for organizing objects within this panel.
      * @author Brad Johnson baj231 11044123
      *
      */
     class InnerPanel extends JPanel {
-    	
-    	/**
-		 * ID.
-		 */
-		private static final long serialVersionUID = -4518288020085720362L;
 
-		public InnerPanel() {
-    		
+        /**
+         * ID.
+         */
+        private static final long serialVersionUID = -4518288020085720362L;
+
+        public InnerPanel() {
+
             this.setLayout(new FlowLayout(FlowLayout.RIGHT));
             this.setBackground(Color.WHITE);
             this.setOpaque(false);
-    		
-    	}
-    	
+
+        }
+
     }
 
     @Override

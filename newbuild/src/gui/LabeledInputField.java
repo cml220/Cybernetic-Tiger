@@ -28,7 +28,7 @@ class LabeledInputField extends JPanel {
      * The text entry field of the pair.
      */
     private final JTextField field;
-    
+
     /**
      * The button?.
      */
@@ -39,19 +39,19 @@ class LabeledInputField extends JPanel {
      * @param caption - the label to put beside the text entry box.
      */
     public LabeledInputField(final String caption) {
-    	
-    	/*
-    	 * No button
-    	 */
-    	button = null;
-    	
+
+        /*
+         * No button
+         */
+        button = null;
+
         /*
          * Align things to the right
          */
         this.setLayout(new FlowLayout(FlowLayout.RIGHT));
         this.setBackground(Color.WHITE);
         this.setOpaque(false);
-        
+
         /*
          * Create the label first
          */
@@ -76,26 +76,26 @@ class LabeledInputField extends JPanel {
         this.add(Box.createRigidArea(new Dimension(200, 50)));
 
     }
-    
+
     /**
      * Constructor with button
      * @param caption - the label to put beside the text entry box.
      * @param buttonCap - the label for the button
      */
     public LabeledInputField(final String caption, final String buttonCap) {
-    	
-    	/*
-    	 * Button
-    	 */
-    	button = new JButton(buttonCap);
-    	
+
+        /*
+         * Button
+         */
+        button = new JButton(buttonCap);
+
         /*
          * Align things to the right
          */
         this.setLayout(new FlowLayout(FlowLayout.RIGHT));
         this.setBackground(Color.WHITE);
         this.setOpaque(false);
-        
+
         /*
          * Create the label first
          */
@@ -114,7 +114,7 @@ class LabeledInputField extends JPanel {
         this.add(label);
         this.add(field);
         this.add(button);
-        
+
         /*
          * Add a uniform amount of space on the right side (minus enough space for the button)
          */
@@ -157,15 +157,15 @@ class LabeledInputField extends JPanel {
         this.field.getActionMap().put(actionDesc, action);
 
     }
-    
+
     /**
      * Add an action listener to the button from a public scope.
      * @param l - the actionlistener
      */
     public void addActionListener(ActionListener l){
-    	
-    	this.button.addActionListener(l);
-    	
+
+        this.button.addActionListener(l);
+
     }
 
     /**
@@ -177,15 +177,15 @@ class LabeledInputField extends JPanel {
         return field.getText();
 
     }
-    
+
     /**
      * Set the value in the text field.
      * @param value - the string to set in the text field
      */
     public void setText(String value) {
-    	
-    	this.field.setText(value);
-    	
+
+        this.field.setText(value);
+
     }
-    
+
 }
