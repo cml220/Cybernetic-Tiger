@@ -132,6 +132,16 @@ public class LoginPanel extends JPanel {
             return inputField.getText();
 
         }
+        
+        /**
+         * Add an action listener to the text field.
+         * @param e - the event to listen for
+         */
+        public void addActionListener(ActionListener e){
+        	
+        	inputField.addActionListener(e);
+        	
+        }
 
     }
 
@@ -140,6 +150,73 @@ public class LoginPanel extends JPanel {
      */
     private static final long serialVersionUID = -5100212021194753173L;
 
+    private void tryLogin(final InputWithLabelPanel usernamePanel,
+			final InputWithLabelPanel passwordPanel) {
+		/*
+         * Try login information
+         */
+        try {
+
+            /*
+             * If the login info is correct, open up the program.
+             */
+            try {
+				if (Controller.checkLogin(usernamePanel.getText(),
+				        passwordPanel.getText())) {
+
+				    /*
+				     * Initialize the GUI manager
+				     */
+				    PanelsManager.initialise();
+
+				    /*
+				     * Construct the GUI
+				     */
+				    MainFrame mainFrame = new MainFrame();
+				    mainFrame.setVisible(true);
+
+				    /*
+				     * Open the GUI to the default tab
+				     */
+				    PanelsManager.goToDefaultPanel();
+
+				    getTopLevelAncestor().setVisible(false);
+
+				} else {
+
+				    /*
+				     * If the login information didn't match anything in
+				     * the database, prompt the user.
+				     */
+				    JOptionPane.showMessageDialog(null,
+				            "Could not validate account.\nCheck your password.",
+				            "Login Error", JOptionPane.ERROR_MESSAGE);
+
+				}
+			} catch (HeadlessException e) {
+			    JOptionPane.showMessageDialog(null,
+			            "Error Logging In (Headless Exception from checkLogin)",
+			            "Login Error", JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			} catch (SQLException e) {
+			    JOptionPane.showMessageDialog(null,
+			            "Error Logging In (SQLException from checkLogin)",
+			            "Login Error", JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}
+
+            /*
+             * If the controller failed to initialize, prompt the user.
+             */
+        } catch (ControllerNotInitializedException e) {
+
+            JOptionPane.showMessageDialog(null,
+                    "Controller not initialized", "Fatal Error",
+                    JOptionPane.ERROR_MESSAGE);
+
+        }
+	}
+    
     /**
      * Panel for entering login information.
      */
@@ -167,7 +244,19 @@ public class LoginPanel extends JPanel {
          */
         final InputWithLabelPanel passwordPanel =
                 new InputWithLabelPanel("Password", true);
+        passwordPanel.addActionListener(new ActionListener(){
 
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				
+				tryLogin(usernamePanel, passwordPanel);
+				
+			}
+        	
+        	
+        });
+        
+        
         /*
          * Log in button.
          */
@@ -177,69 +266,7 @@ public class LoginPanel extends JPanel {
             @Override
             public void actionPerformed(final ActionEvent arg0) {
 
-                /*
-                 * Try login information
-                 */
-                try {
-
-                    /*
-                     * If the login info is correct, open up the program.
-                     */
-                    try {
-						if (Controller.checkLogin(usernamePanel.getText(),
-						        passwordPanel.getText())) {
-
-						    /*
-						     * Initialize the GUI manager
-						     */
-						    PanelsManager.initialise();
-
-						    /*
-						     * Construct the GUI
-						     */
-						    MainFrame mainFrame = new MainFrame();
-						    mainFrame.setVisible(true);
-
-						    /*
-						     * Open the GUI to the default tab
-						     */
-						    PanelsManager.goToDefaultPanel();
-
-						    getTopLevelAncestor().setVisible(false);
-
-						} else {
-
-						    /*
-						     * If the login information didn't match anything in
-						     * the database, prompt the user.
-						     */
-						    JOptionPane.showMessageDialog(null,
-						            "Could not validate account.\nCheck your password.",
-						            "Login Error", JOptionPane.ERROR_MESSAGE);
-
-						}
-					} catch (HeadlessException e) {
-					    JOptionPane.showMessageDialog(null,
-					            "Error Logging In (Headless Exception from checkLogin)",
-					            "Login Error", JOptionPane.ERROR_MESSAGE);
-						e.printStackTrace();
-					} catch (SQLException e) {
-					    JOptionPane.showMessageDialog(null,
-					            "Error Logging In (SQLException from checkLogin)",
-					            "Login Error", JOptionPane.ERROR_MESSAGE);
-						e.printStackTrace();
-					}
-
-                    /*
-                     * If the controller failed to initialize, prompt the user.
-                     */
-                } catch (ControllerNotInitializedException e) {
-
-                    JOptionPane.showMessageDialog(null,
-                            "Controller not initialized", "Fatal Error",
-                            JOptionPane.ERROR_MESSAGE);
-
-                }
+                tryLogin(usernamePanel, passwordPanel);
 
             }
 
