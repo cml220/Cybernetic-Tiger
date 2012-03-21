@@ -34,6 +34,9 @@ public class Book {
 
     }
 
+    public void setBookPrice(Double newPrice) {
+    	this.price = newPrice;
+    }
 
     public String getBookTitle() {
         return title;
@@ -63,10 +66,10 @@ public class Book {
         return description;
     }
 
-    //TODO
+    
     public boolean equals(Book other)
     {
-        return ISBN == other.ISBN;
+        return this.getBookISBN() == other.getBookISBN();
 
     }
 }

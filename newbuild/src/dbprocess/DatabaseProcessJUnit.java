@@ -89,10 +89,9 @@ public class DatabaseProcessJUnit {
     @Test
     public void testGetAdminStatus() throws SQLException {
         log.debug("testGetAdminStatus Entered.");
-        User u = new User("Test", false, "1234@google.se");
         try {
             boolean res = db.getAdminStatus("Test");
-            assertEquals("isAdmin Status", u.isAdmin, res);
+            assertEquals("isAdmin Status", false, res);
             log.debug("testGetAdminStatus Passed.");
         } catch (SQLException e) {
             // TODO Auto-generated catch block

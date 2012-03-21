@@ -6,11 +6,26 @@ import exceptions.CartException;
 
 public class Cart extends ArrayList<Book>{
 	private static final long serialVersionUID = -5188451462474667464L;
-
+	
+	String shopDate;
+	
 	public Cart() {
 		super();
+		this.shopDate = null;
 	}
 	
+	public Cart(String date) {
+		super();
+		this.setShopDate(date);
+	}
+	
+	public void setShopDate(String date) {
+		this.shopDate = date;
+	}
+	
+	public String getShopDate() {
+		return this.shopDate;
+	}
 	/*
 	 * TODO Fill out this comment This should probably throw a BookAlready
 	 */
