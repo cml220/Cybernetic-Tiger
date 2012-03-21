@@ -142,21 +142,21 @@ public final class PanelsManager {
             preSearchStringsArray = new String[NUMPANELS];
             /*
              * Define each of the display panels that will be used in the GUI
-             */
+             */            tick("Loading your books");
             panelsArray[MYBOOKS]
-                        = new DisplayScrollPane(new MyBooksPanel());            tick("Loading you books");
-            preSearchStringsArray[MYBOOKS] = " Search My Books";
+                        = new DisplayScrollPane(new MyBooksPanel());
+            preSearchStringsArray[MYBOOKS] = " Search My Books";            tick("Loading advanced search");
             panelsArray[ADVSEARCH]
-                        = new AdvSearchPanel();            tick("Loading advanced search");            preSearchStringsArray[ADVSEARCH] = " You are in the advanced search pane";
+                        = new AdvSearchPanel();            preSearchStringsArray[ADVSEARCH] = " You are in the advanced search pane";            tick("Initializing search engine display");
             panelsArray[SEARCHRESULTS]
-                        = new DisplayScrollPane(new SearchResultsPanel());            tick("Initializing search engine display");
+                        = new DisplayScrollPane(new SearchResultsPanel());            tick("Loading your account details");
             /* TODO: Creating a test User object can potentially throw an SQLException.
              * Once the MyAccountPanel is updated to use the current user instead of the test User,
              * this try-catch block can be eliminated
              * */
             try {
                 panelsArray[MYACCOUNT]
-                            = new MyAccountPanel();                tick("Loading your account details");
+                            = new MyAccountPanel();
             } catch (SQLException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();

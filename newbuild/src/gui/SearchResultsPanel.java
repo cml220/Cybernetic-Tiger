@@ -28,13 +28,11 @@ public class SearchResultsPanel extends JPanel {
 
     /**
      * Constructor.
-     * Only in place while constructors not finished
+     * Empty Placeholder.
      */
     public SearchResultsPanel() {
 
         this.setLayout(new GridLayout(0, 1));
-
-        //TODO: Search results
 
     }
 
