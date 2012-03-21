@@ -33,251 +33,267 @@ import controllers.Controller;
  */
 public class SearchBarPanel extends JPanel {
 
-    /**
-     * VersionUID.
-     */
-    private static final long serialVersionUID = -8388903742748016888L;
+	/**
+	 * VersionUID.
+	 */
+	private static final long serialVersionUID = -8388903742748016888L;
 
-    /**
-     * The search text field itself.
-     */
-    private static JTextField searchField;
+	/**
+	 * The search text field itself.
+	 */
+	private static JTextField searchField;
 
-    /**
-     * The string that shows in the search bar when nothing has been entered.
-     */
-    private static String panelSpecificPreSearchText;
+	/**
+	 * True if text has been entered in the search bar.
+	 */
+	private static boolean textEntered = false;
 
-    /**
-     * Fonts used in this panel.
-     */
-    private static Font normalSearchFont, graySearchFont;
+	/**
+	 * The string that shows in the search bar when nothing has been entered.
+	 */
+	private static String panelSpecificPreSearchText;
 
-    /**
-     * Search bar font size.
-     */
-    private final int searchFontSize = 18;
+	/**
+	 * Fonts used in this panel.
+	 */
+	private static Font normalSearchFont, graySearchFont;
 
-    /**
-     * Buttons border width.
-     */
-    private final int buttonBorderWidth = 5;
+	/**
+	 * Search bar font size.
+	 */
+	private final int searchFontSize = 18;
 
-    /**
-     * Button standard width.
-     */
-    private final int buttonWidth = 100;
+	/**
+	 * Buttons border width.
+	 */
+	private final int buttonBorderWidth = 5;
 
-    /**
-     * Button standard height.
-     */
-    private final int buttonHeight = 30;
+	/**
+	 * Button standard width.
+	 */
+	private final int buttonWidth = 100;
 
-    /**
-     * Constructor; aligns the components of the search bar panel correctly.
-     */
-    public SearchBarPanel() {
+	/**
+	 * Button standard height.
+	 */
+	private final int buttonHeight = 30;
 
-        normalSearchFont = new Font("Times New Roman", Font.BOLD,
-                searchFontSize);
+	/**
+	 * Constructor; aligns the components of the search bar panel correctly.
+	 */
+	public SearchBarPanel() {
 
-        graySearchFont = new Font("Times New Roman", Font.ITALIC,
-                searchFontSize);
+		normalSearchFont = new Font("Times New Roman", Font.BOLD,
+				searchFontSize);
 
-        this.setLayout(new BorderLayout());
+		graySearchFont = new Font("Times New Roman", Font.ITALIC,
+				searchFontSize);
 
-        /*
-         * Search entry field
-         */
-        searchField = new JTextField();
-        searchField.setFont(new Font("Times New Roman", Font.BOLD,
-                searchFontSize));
-        searchField.setBorder(PanelsManager.DEFAULTBORDER);
+		this.setLayout(new BorderLayout());
 
-        searchField.addFocusListener(new FocusListener() {
+		/*
+		 * Search entry field
+		 */
+		searchField = new JTextField();
+		searchField.setFont(new Font("Times New Roman", Font.BOLD,
+				searchFontSize));
+		searchField.setBorder(PanelsManager.DEFAULTBORDER);
 
-            @Override
-            public void focusGained(final FocusEvent arg0) {
+		searchField.addFocusListener(new FocusListener() {
 
-                /*
-                 * When the user gives the search bar focus, clear it out and
-                 * set the font to black
-                 */
-                if (searchField.getText().equals(panelSpecificPreSearchText)) {
+			@Override
+			public void focusGained(final FocusEvent arg0) {
 
-                    searchField.setText("");
-                    searchField.setForeground(Color.BLACK);
-                    searchField.setFont(normalSearchFont);
+				/*
+				 * When the user gives the search bar focus, clear it out and
+				 * set the font to black
+				 */
+				if (searchField.getText().equals(panelSpecificPreSearchText)) {
 
-                }
+					searchField.setText("");
+					searchField.setForeground(Color.BLACK);
+					searchField.setFont(normalSearchFont);
+					textEntered = true;
 
-            }
+				}
 
-            @Override
-            public void focusLost(final FocusEvent arg0) {
+			}
+
+			@Override
+			public void focusLost(final FocusEvent arg0) {
 
-                /*
-                 * When the user takes focus away from an empty searchbox, put
-                 * the placeholder text there
-                 */
-                if (searchField.getText().isEmpty()) {
+				/*
+				 * When the user takes focus away from an empty searchbox, put
+				 * the placeholder text there
+				 */
+				if (searchField.getText().isEmpty()) {
+
+					showPreSearchText();
+
+				}
+
 
-                    showPreSearchText();
-
-                }
+			}
 
-
-            }
 
+		});
+		searchField.addActionListener(new ActionListener(){
 
-        });
-        searchField.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
 
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-                trySearch();
-
-            }
-
-        });
-
-
-        /*
-         * Search start button
-         */
-        JButton searchButton = new JButton("Search");
-        searchButton.setBackground(PanelsManager.RAISEDBUTTONBLUE);
-        searchButton.setBorder(new LineBorder(searchButton.getBackground(),
-                buttonBorderWidth,
-                true));
-        searchButton.setPreferredSize(new Dimension(buttonWidth, buttonHeight));
-        searchButton.addActionListener(new ActionListener(){
+				trySearch();
 
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
+			}
 
-                trySearch();
+		});
 
-            }
 
-        });
+		/*
+		 * Search start button
+		 */
+		JButton searchButton = new JButton("Search");
+		searchButton.setBackground(PanelsManager.RAISEDBUTTONBLUE);
+		searchButton.setBorder(new LineBorder(searchButton.getBackground(),
+				buttonBorderWidth,
+				true));
+		searchButton.setPreferredSize(new Dimension(buttonWidth, buttonHeight));
+		searchButton.addActionListener(new ActionListener(){
 
-        /*
-         * Advanced search button
-         */
-        JButton advancedSearchButton = new JButton("Advanced");
-        advancedSearchButton.setBackground(PanelsManager.RAISEDBUTTONBLUE);
-        advancedSearchButton.setBorder(new LineBorder(
-                advancedSearchButton.getBackground(), buttonBorderWidth, true));
-        advancedSearchButton.setPreferredSize(new Dimension(buttonWidth,
-                buttonHeight));
-        advancedSearchButton.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
 
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
+				trySearch();
 
-                /*
-                 * Change the main panel to show the advanced search panel
-                 */
-                MainPanel.changeDisplayPanel(PanelsManager.ADVSEARCH);
+			}
 
-                /*
-                 * Deselect any selected tabs on the mode pane
-                 */
-                TabsPanel.deselectAllTabs();
+		});
 
-                /*
-                 * Change the gray text to an appropriate message
-                 * Set in PanelsManager.java
-                 */
-                SearchBarPanel.setPreSearchText(PanelsManager.ADVSEARCH);
-                SearchBarPanel.showPreSearchText();
+		/*
+		 * Advanced search button
+		 */
+		JButton advancedSearchButton = new JButton("Advanced");
+		advancedSearchButton.setBackground(PanelsManager.RAISEDBUTTONBLUE);
+		advancedSearchButton.setBorder(new LineBorder(
+				advancedSearchButton.getBackground(), buttonBorderWidth, true));
+		advancedSearchButton.setPreferredSize(new Dimension(buttonWidth,
+				buttonHeight));
+		advancedSearchButton.addActionListener(new ActionListener(){
 
-            }
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
 
-        });
+				/*
+				 * Change the main panel to show the advanced search panel
+				 */
+				MainPanel.changeDisplayPanel(PanelsManager.ADVSEARCH);
 
-        /*
-         * Panel for keeping the Buttons together
-         */
-        JPanel searchBarButtonsPanel = new JPanel();
-        searchBarButtonsPanel.setBackground(PanelsManager.SELECTEDBLUE);
-        searchBarButtonsPanel.setLayout(new FlowLayout());
-        searchBarButtonsPanel.add(searchButton);
-        searchBarButtonsPanel.add(advancedSearchButton);
+				/*
+				 * Deselect any selected tabs on the mode pane
+				 */
+				TabsPanel.deselectAllTabs();
 
-        /*
-         * This puts the buttons on the far right and allows the search bar to
-         * take up the remainder
-         */
-        this.add(searchField, BorderLayout.CENTER);
-        this.add(searchBarButtonsPanel, BorderLayout.EAST);
+				/*
+				 * Change the gray text to an appropriate message
+				 * Set in PanelsManager.java
+				 */
+				SearchBarPanel.setPreSearchText(PanelsManager.ADVSEARCH);
+				SearchBarPanel.showPreSearchText();
 
-    }
+			}
 
-    /**
-     * Attempt to search for a book.
-     */
-    private void trySearch() {
-        /*
-         * Attempt a search
-         */
+		});
 
-        Book searchBook = new Book();
-        searchBook.title = searchField.getText();
-        searchBook.author = searchField.getText();
+		/*
+		 * Panel for keeping the Buttons together
+		 */
+		JPanel searchBarButtonsPanel = new JPanel();
+		searchBarButtonsPanel.setBackground(PanelsManager.SELECTEDBLUE);
+		searchBarButtonsPanel.setLayout(new FlowLayout());
+		searchBarButtonsPanel.add(searchButton);
+		searchBarButtonsPanel.add(advancedSearchButton);
 
-        try {
+		/*
+		 * This puts the buttons on the far right and allows the search bar to
+		 * take up the remainder
+		 */
+		this.add(searchField, BorderLayout.CENTER);
+		this.add(searchBarButtonsPanel, BorderLayout.EAST);
 
-            searchBook.ISBN = Integer.parseInt(searchField.getText());
+	}
 
-        } catch (NumberFormatException nfe) {
+	/**
+	 * Attempt to search for a book.
+	 */
+	private void trySearch() {
+		/*
+		 * Attempt a search
+		 */
 
-            /*
-             * Do nothing.  Search term wasn't a number so it can't possibly
-             * be an ISBN.
-             */
+		if (searchField.getText() == "" || !textEntered) {
 
-        }
-        try {
+			JOptionPane.showMessageDialog(null, "Nothing Searched", "No Entry", JOptionPane.WARNING_MESSAGE);
 
-            ArrayList<Book> books = Controller.searchForBook(searchBook);
-            PanelsManager.newSearchResults(books);
+		}else{
 
-        } catch (Exception e) {
+			Book searchBook = new Book();
+			searchBook.title = searchField.getText();
+			searchBook.author = searchField.getText();
 
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Book Search failed\n"
-                    + "Contact tech support\n" + e.getMessage(),
-                    "Fatal Error", JOptionPane.ERROR_MESSAGE);
+			try {
 
-        }
-    }
+				searchBook.ISBN = Integer.parseInt(searchField.getText());
 
+			} catch (NumberFormatException nfe) {
 
-    /**
-     * Swap out whatever is in this search bar with the 'pre search text'
-     * associated with the current panel.
-     */
-    public static void showPreSearchText() {
+				/*
+				 * Do nothing.  Search term wasn't a number so it can't possibly
+				 * be an ISBN.
+				 */
 
-        //TODO: log4j showing intended text.
-        searchField.setText(panelSpecificPreSearchText);
-        searchField.setForeground(Color.LIGHT_GRAY);
-        searchField.setFont(graySearchFont);
+			}
+			try {
 
-    }
+				ArrayList<Book> books = Controller.searchForBook(searchBook);
+				PanelsManager.newSearchResults(books);
 
-    /**
-     * set the the 'pre search text' based on which panel is being loaded.
-     * @param panelNum - the index of the panel, as defined in
-     * PanelsManager.java
-     */
-    public static void setPreSearchText(final int panelNum) {
+			} catch (Exception e) {
 
-        panelSpecificPreSearchText = PanelsManager.getPreSearchString(panelNum);
+				e.printStackTrace();
+				JOptionPane.showMessageDialog(null, "Book Search failed\n"
+						+ "Contact tech support\n" + e.getMessage(),
+						"Fatal Error", JOptionPane.ERROR_MESSAGE);
 
-    }
+			}
+
+		}
+
+	}
+
+
+	/**
+	 * Swap out whatever is in this search bar with the 'pre search text'
+	 * associated with the current panel.
+	 */
+	public static void showPreSearchText() {
+
+		//TODO: log4j showing intended text.
+		searchField.setText(panelSpecificPreSearchText);
+		searchField.setForeground(Color.LIGHT_GRAY);
+		searchField.setFont(graySearchFont);
+		textEntered = false;
+
+	}
+
+	/**
+	 * set the the 'pre search text' based on which panel is being loaded.
+	 * @param panelNum - the index of the panel, as defined in
+	 * PanelsManager.java
+	 */
+	public static void setPreSearchText(final int panelNum) {
+
+		panelSpecificPreSearchText = PanelsManager.getPreSearchString(panelNum);
+
+	}
 
 }
