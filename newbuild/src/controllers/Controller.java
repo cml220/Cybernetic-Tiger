@@ -23,6 +23,7 @@ import exceptions.CartException;
 import exceptions.ControllerNotInitializedException;
 import exceptions.ImageLoadFailedException;
 import exceptions.IntermediateException;
+import exceptions.PaymentInfoNotInitializedException;
 import exceptions.PurchaseFailedException;
 
 /**
@@ -75,6 +76,10 @@ public final class Controller {
      */
     private static RentalsController rentalsController;
 
+    /**
+     * Payment info that is alive only while the window is open.
+     */
+    private static PaymentInfo sessionPaymentInfo;
     /**
      * Variable for keeping track of if this singleton has been initialized.
      */
@@ -195,7 +200,7 @@ public final class Controller {
      * @return PaymentInfo object containing user's payment info.
      * @throws ControllerNotInitializedException if the controller isn't loaded
      */
-    public static PaymentInfo getPaymentInfo()
+    public static PaymentInfo fetchPaymentInfo()
     throws ControllerNotInitializedException {
 
         if (!initialized) {
@@ -205,6 +210,44 @@ public final class Controller {
         }
 
         return paymentController.getPaymentInfo();
+
+    }
+
+    /**
+     * Sets the payment info for this session temporarily
+     * @param pi - the payment info.
+     */
+    public static void setSessionPaymentInfo(PaymentInfo pi) {
+
+        sessionPaymentInfo = pi;
+
+    }
+
+    /**
+     * Get a copy of the temporary payment info.
+     * @return the temporary payment info object
+     */
+    public static PaymentInfo getSessionPaymentInfo() {
+
+        return sessionPaymentInfo;
+
+    }
+
+    public static void updatePaymentInfo() throws PaymentInfoNotInitializedException, ControllerNotInitializedException {
+
+        if (!initialized) {
+
+            throw new ControllerNotInitializedException();
+
+        }
+
+        if (sessionPaymentInfo == null) {
+
+            throw new PaymentInfoNotInitializedException();
+
+        }
+        //update the payment info in the database?
+        //paymentController.updatePaymentInfo(sessionPaymentInfo);
 
     }
 

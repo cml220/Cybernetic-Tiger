@@ -128,7 +128,7 @@ public final class PanelsManager {
      * Initializes the Panels Manager by constructing the array of panels
      * and filling it with all of the panels to be used by the app.
      */
-    public static class InitTask extends SwingWorker<Void,Void> {        private void tick(String status){            progress++;            loadStatus = status;            setProgress(Math.min(progress, NUMPANELS));        }        @Override        protected Void doInBackground() throws Exception {            setProgress(0);
+    public static class InitTask extends SwingWorker<Void,Void> {        private void tick(String status){            progress++;            loadStatus = status;            setProgress(progress);        }        @Override        protected Void doInBackground() throws Exception {            setProgress(0);
             /*
              * Set the default tab to null.
              * We do this so that the program can check if the default is being
@@ -163,7 +163,7 @@ public final class PanelsManager {
             }
             panelsArray[MYCART] =
                 new CheckoutPanel();            tick("Preparing checkout process");
-            preSearchStringsArray[MYCART] = " Search My Cart";            // the catalogue, containing all the items :D            panelsArray[CATALOGUE]                        = new DisplayScrollPane(new CataloguePanel());            tick("Doing the macarena");            initialised = true;            return null;        }        @Override        public void done() {            LoadingPanel.instance.finish();        }
+            preSearchStringsArray[MYCART] = " Search My Cart";            // the catalogue, containing all the items :D            panelsArray[CATALOGUE]                        = new DisplayScrollPane(new CataloguePanel());            initialised = true;            tick("Doing the macarena");            return null;        }        @Override        public void done() {            if(!initialised) {                throw new RuntimeException("PanelsManager build thread sent"                        + " \"done\" signal too soon");            }            LoadingPanel.instance.finish();        }
     }
     public static InitTask getInitTask() {        return new InitTask();    }    public static void newSearchResults (ArrayList<Book> results) {        panelsArray[SEARCHRESULTS] = new SearchResultsPanel(results, true);    }
     /**

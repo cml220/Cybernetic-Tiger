@@ -1,5 +1,7 @@
 package gui;
 
+import exceptions.GUINoSuchPanelException;
+
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.GridLayout;
@@ -8,7 +10,7 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import exceptions.GUINoSuchPanelException;
+import controllers.Controller;
 
 public class CheckoutPanel extends DisplayPanel {
 
@@ -21,6 +23,7 @@ public class CheckoutPanel extends DisplayPanel {
     private static JPanel cartMainPanel;
     private static CheckoutActionsPanel cartActionsPanel;
     private static CheckoutProgressPanel cartProgressPanel;
+    private static CheckoutPaymentPanel checkoutPaymentPanel;
 
     public static final int CART = 0;
     public static final int PAYMENT = 1;
@@ -42,10 +45,10 @@ public class CheckoutPanel extends DisplayPanel {
          */
         JScrollPane cartContentsScrollPane = new JScrollPane(new CheckoutMyCartPanel());
         cartContentsScrollPane.getVerticalScrollBar().setUnitIncrement(SCROLLSPEED);
-        this.addIndexedPanel(cartContentsScrollPane, CART);
-        this.addIndexedPanel(new CheckoutPaymentPanel(), PAYMENT);
-        this.addIndexedPanel(new CheckoutVerifyPanel(), VERIFY);
-        this.addIndexedPanel(new CheckoutThankyouPanel(), THANKYOU);
+        CheckoutPanel.addIndexedPanel(cartContentsScrollPane, CART);
+        checkoutPaymentPanel = new CheckoutPaymentPanel();
+        CheckoutPanel.addIndexedPanel(checkoutPaymentPanel, PAYMENT);
+        CheckoutPanel.addIndexedPanel(new CheckoutThankyouPanel(), THANKYOU);
 
         this.add(cartMainPanel, BorderLayout.CENTER);
 
@@ -61,7 +64,7 @@ public class CheckoutPanel extends DisplayPanel {
 
     }
 
-    private void addIndexedPanel(final JComponent panel, final int stepNo){
+    private static void addIndexedPanel(final JComponent panel, final int stepNo){
 
         cartMainPanel.add(panel, Integer.toString(stepNo));
         totalPanelsNum++;
@@ -78,7 +81,7 @@ public class CheckoutPanel extends DisplayPanel {
         case(PAYMENT):	CheckoutActionsPanel.loadPaymentActions(); 	cartProgressPanel.loadPaymentProgress();	break;	// Payment
         case(VERIFY):	CheckoutActionsPanel.loadVerifyActions(); 	cartProgressPanel.loadVerifyProgress();		break;	// Verify Cart/Payment
         case(THANKYOU):	CheckoutActionsPanel.loadThankyouActions(); cartProgressPanel.loadThankyouProgress();	break;	// Thankyou
-        default: 		throw new IllegalArgumentException("Invalid checkout stage.");								// Throw exception, invalid checkout stage
+        default: 		throw new IllegalArgumentException("Invalid checkout stage." + inCheckoutStage);				// Throw exception, invalid checkout stage
         }
 
     }
@@ -87,19 +90,30 @@ public class CheckoutPanel extends DisplayPanel {
     public static void nextPaymentStep(){
 
         if(curPanelNum < totalPanelsNum){
-        	// if its the last step, then we want to go to home
-        	if (curPanelNum == totalPanelsNum-1) { // i.e. its the last step
-        		// goto the default panel :D
-        		PanelsManager.goToDefaultPanel();
-        	} else {
-        	
-        	
-            curPanelNum++;
-            CardLayout cl = (CardLayout) cartMainPanel.getLayout();
-            cl.show(cartMainPanel, Integer.toString(curPanelNum));
+            // if its the last step, then we want to go to home
+            if (curPanelNum >= totalPanelsNum-1) { // i.e. its the last step
+                // goto the default panel :D
+                PanelsManager.goToDefaultPanel();
+            } else {
 
-            updateStage(curPanelNum);
-        	}
+                CardLayout cl = (CardLayout) cartMainPanel.getLayout();
+
+                /*
+                 * Save payment info before proceeding
+                 */
+                if(curPanelNum == PAYMENT) {
+
+                    Controller.setSessionPaymentInfo(checkoutPaymentPanel.getPaymentInfo());
+
+                    addIndexedPanel(new CheckoutVerifyPanel(), VERIFY);
+
+                }
+                curPanelNum++;
+
+                cl.show(cartMainPanel, Integer.toString(curPanelNum));
+
+                updateStage(curPanelNum);
+            }
         }
     }
 
@@ -117,7 +131,7 @@ public class CheckoutPanel extends DisplayPanel {
 
     public static void jumpToPaymentStep(int stepNo) throws GUINoSuchPanelException{
 
-        if(stepNo > totalPanelsNum){
+        if(stepNo >= totalPanelsNum){
 
             throw new GUINoSuchPanelException();
 
