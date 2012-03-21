@@ -17,18 +17,24 @@ public class CheckoutPaymentFieldsPanel extends JPanel {
      * 
      */
     private static final long serialVersionUID = 1770411281976756228L;
+
+    /**
+     * Constants.
+     */
+    private final int MONTH = 0;
+    private final int YEAR = 1;
+    private final int CODE = 2;
+
     // member fields
-    private LongPanel expiryMonth;
-    private LongPanel expiryYear;
-    private LongPanel securityCode;
-    private LongPanel cardNumber;
-    private LongPanel name;
-    private LongPanel country;
-    private LongPanel address;
-    private LongPanel address2;
-    private LongPanel state;
-    private LongPanel zip;
-    private LongPanel phone;
+    private ThreePairsPanel cardDetails;
+    private PairPanel cardNumber;
+    private PairPanel name;
+    private PairPanel country;
+    private PairPanel address;
+    private PairPanel address2;
+    private PairPanel state;
+    private PairPanel zip;
+    private PairPanel phone;
 
     /**
      * Create the panel.
@@ -49,9 +55,7 @@ public class CheckoutPaymentFieldsPanel extends JPanel {
         if (inDisabled == true) {
 
             // Disable all the fields now
-            expiryMonth.setEnabled(false);
-            expiryYear.setEnabled(false);
-            securityCode.setEnabled(false);
+            cardDetails.setEnabled(false);
             cardNumber.setEnabled(false);
             name.setEnabled(false);
             country.setEnabled(false);
@@ -65,16 +69,25 @@ public class CheckoutPaymentFieldsPanel extends JPanel {
         // TODO: can the controller store this for me?? show the data stored locally
     }
 
-    class LongStyledTextField extends JTextField {
+    class StyledTextField extends JTextField {
 
         /**
          * ID.
          */
         private static final long serialVersionUID = 6491335439006536853L;
 
-        public LongStyledTextField() {
+        public StyledTextField(boolean isLong) {
 
-            this.setColumns(20);
+            if(isLong){
+
+                this.setColumns(30);
+
+            } else {
+
+                this.setColumns(8);
+
+            }
+
             this.setFont(new Font("Times New Roman", Font.BOLD,
                     20));
             this.setBorder(PanelsManager.FORMBORDER);
@@ -83,22 +96,24 @@ public class CheckoutPaymentFieldsPanel extends JPanel {
 
     }
 
-    class LongPanel extends JPanel {
+    class PairPanel extends JPanel {
 
         /**
          * ID.
          */
         private static final long serialVersionUID = 7541096846073319098L;
-        LongStyledTextField field;
+        StyledTextField field;
 
-        LongPanel(String value) {
+        PairPanel(String value, boolean isLong) {
 
             this.setLayout(new BorderLayout());
             this.setOpaque(false);
 
             JPanel labelPanel = new JPanel();
             labelPanel.setSize(new Dimension(100,30));
+
             labelPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+            labelPanel.setOpaque(false);
 
             JLabel label = new JLabel(value);
             label.setForeground(PanelsManager.UNSELECTEDBLUE);
@@ -107,8 +122,9 @@ public class CheckoutPaymentFieldsPanel extends JPanel {
 
             JPanel fieldPanel = new JPanel();
             fieldPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+            fieldPanel.setOpaque(false);
 
-            field = new LongStyledTextField();
+            field = new StyledTextField(isLong);
             fieldPanel.add(field);
 
             this.add(labelPanel, BorderLayout.WEST);
@@ -130,6 +146,44 @@ public class CheckoutPaymentFieldsPanel extends JPanel {
 
     }
 
+    class ThreePairsPanel extends JPanel {
+
+        /**
+         * ID.
+         */
+        private static final long serialVersionUID = -6192185986196812762L;
+        PairPanel[] panels;
+
+        ThreePairsPanel(String val1, String val2, String val3) {
+
+            panels = new PairPanel[3];
+
+            this.setLayout(new BorderLayout());
+
+            panels[MONTH] = new PairPanel(val1, false);
+            panels[YEAR] = new PairPanel(val2, false);
+            panels[CODE] = new PairPanel(val3, false);
+
+            this.add(panels[MONTH], BorderLayout.WEST);
+            this.add(panels[YEAR], BorderLayout.CENTER);
+            this.add(panels[CODE], BorderLayout.EAST);
+
+        }
+
+        public String getText(int pairNum) {
+
+            return panels[pairNum].getText();
+
+        }
+
+        public void setText(String value, int pairNum) {
+
+            panels[pairNum].setText(value);
+
+        }
+
+    }
+
     private void renderPanel()
     {
         // the little border
@@ -140,52 +194,46 @@ public class CheckoutPaymentFieldsPanel extends JPanel {
 
         // Start adding labels and fields where appropriate
         // Card
-        cardNumber = new LongPanel("Card Number: ");
+        cardNumber = new PairPanel("Card Number: ", true);
         add(cardNumber);
 
-        expiryMonth = new LongPanel("mm");
-        add(expiryMonth);
+        cardDetails = new ThreePairsPanel("mm", "yyyy", "Code");
+        add(cardDetails);
 
-        expiryYear = new LongPanel("yyyy");
-        add(expiryYear);
-
-        securityCode = new LongPanel("Security Code");
-        add(securityCode);
-
-        name = new LongPanel("Name:");
+        name = new PairPanel("Name:", true);
         add(name);
 
-        country = new LongPanel("Country:");
+        country = new PairPanel("Country:", true);
         add(country);
 
-        address = new LongPanel("Address:");
+        address = new PairPanel("Address:", true);
         add(address);
 
-        address2 = new LongPanel("");
+        address2 = new PairPanel("", true);
         add(address2);
 
-        state = new LongPanel("State:");
+        state = new PairPanel("State:", true);
         add(state);
 
-        zip = new LongPanel("Zip Code:");
+        zip = new PairPanel("Zip Code:", false);
         add(zip);
 
-        phone = new LongPanel("Phone No:");
+        phone = new PairPanel("Phone No:", false);
         add(phone);
 
     }
 
     // public getters for all the field details
     public String getExpiryMonth() {
-        return expiryMonth.getText();
+        return cardDetails.getText(MONTH);
     }
 
     public String getExpiryYear() {
-        return expiryYear.getText();
+        return cardDetails.getText(YEAR);
     }
 
     public String getSecurityCode() {
-        return securityCode.getText();
+        return cardDetails.getText(CODE);
     }
 
     public String getCardNumber() {
@@ -223,15 +271,15 @@ public class CheckoutPaymentFieldsPanel extends JPanel {
 
     // public setters for all the field details
     public void setExpiryMonth(String inExpiryMonth) {
-        this.expiryMonth.setText(inExpiryMonth);
+        this.cardDetails.setText(inExpiryMonth, MONTH);
     }
 
     public void setExpiryYear(String inExpiryYear) {
-        this.expiryYear.setText(inExpiryYear);
+        this.cardDetails.setText(inExpiryYear, YEAR);
     }
 
     public void setSecurityCode(String inSecurityCode) {
-        this.securityCode.setText(inSecurityCode);
+        this.cardDetails.setText(inSecurityCode, CODE);
     }
 
     public void setCardNumber(String inCardNumber) {

@@ -1,18 +1,17 @@
 package gui;
 
+import exceptions.ControllerNotInitializedException;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Graphics;
 import java.awt.HeadlessException;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -21,14 +20,13 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import controllers.Controller;
-import exceptions.ControllerNotInitializedException;
 
 /**
  * Panel for logging into the system.
  * @author Brad Johnson baj231 11044123
  *
  */
-public class LoginPanel extends JPanel {
+public class LoginPanel extends StyledPanel {
 
     /**
      * Label with formatting for the login page.
@@ -132,15 +130,15 @@ public class LoginPanel extends JPanel {
             return inputField.getText();
 
         }
-        
+
         /**
          * Add an action listener to the text field.
          * @param e - the event to listen for
          */
         public void addActionListener(ActionListener e){
-        	
-        	inputField.addActionListener(e);
-        	
+
+            inputField.addActionListener(e);
+
         }
 
     }
@@ -151,8 +149,8 @@ public class LoginPanel extends JPanel {
     private static final long serialVersionUID = -5100212021194753173L;
 
     private void tryLogin(final InputWithLabelPanel usernamePanel,
-			final InputWithLabelPanel passwordPanel) {
-		/*
+            final InputWithLabelPanel passwordPanel) {
+        /*
          * Try login information
          */
         try {
@@ -161,49 +159,39 @@ public class LoginPanel extends JPanel {
              * If the login info is correct, open up the program.
              */
             try {
-				if (Controller.checkLogin(usernamePanel.getText(),
-				        passwordPanel.getText())) {
+                if (Controller.checkLogin(usernamePanel.getText(),
+                        passwordPanel.getText())) {
 
-				    /*
-				     * Initialize the GUI manager
-				     */
-				    PanelsManager.initialise();
+                    LoginFrame nextFrame = new LoginFrame();
 
-				    /*
-				     * Construct the GUI
-				     */
-				    MainFrame mainFrame = new MainFrame();
-				    mainFrame.setVisible(true);
+                    LoadingPanel lPanel = new LoadingPanel();
+                    nextFrame.add(lPanel);
+                    nextFrame.setVisible(true);
 
-				    /*
-				     * Open the GUI to the default tab
-				     */
-				    PanelsManager.goToDefaultPanel();
+                    getTopLevelAncestor().setVisible(false);
 
-				    getTopLevelAncestor().setVisible(false);
+                } else {
 
-				} else {
+                    /*
+                     * If the login information didn't match anything in
+                     * the database, prompt the user.
+                     */
+                    JOptionPane.showMessageDialog(null,
+                            "Could not validate account.\nCheck your password.",
+                            "Login Error", JOptionPane.ERROR_MESSAGE);
 
-				    /*
-				     * If the login information didn't match anything in
-				     * the database, prompt the user.
-				     */
-				    JOptionPane.showMessageDialog(null,
-				            "Could not validate account.\nCheck your password.",
-				            "Login Error", JOptionPane.ERROR_MESSAGE);
-
-				}
-			} catch (HeadlessException e) {
-			    JOptionPane.showMessageDialog(null,
-			            "Error Logging In (Headless Exception from checkLogin)",
-			            "Login Error", JOptionPane.ERROR_MESSAGE);
-				e.printStackTrace();
-			} catch (SQLException e) {
-			    JOptionPane.showMessageDialog(null,
-			            "Error Logging In (SQLException from checkLogin)",
-			            "Login Error", JOptionPane.ERROR_MESSAGE);
-				e.printStackTrace();
-			}
+                }
+            } catch (HeadlessException e) {
+                JOptionPane.showMessageDialog(null,
+                        "Error Logging In (Headless Exception from checkLogin)",
+                        "Login Error", JOptionPane.ERROR_MESSAGE);
+                e.printStackTrace();
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null,
+                        "Error Logging In (SQLException from checkLogin)",
+                        "Login Error", JOptionPane.ERROR_MESSAGE);
+                e.printStackTrace();
+            }
 
             /*
              * If the controller failed to initialize, prompt the user.
@@ -215,12 +203,14 @@ public class LoginPanel extends JPanel {
                     JOptionPane.ERROR_MESSAGE);
 
         }
-	}
-    
+    }
+
     /**
      * Panel for entering login information.
      */
     public LoginPanel() {
+
+        super("bg.jpg");
 
         /*
          * Initialize the main controller.
@@ -236,27 +226,27 @@ public class LoginPanel extends JPanel {
          * A text area for the username with label.
          */
         final InputWithLabelPanel usernamePanel =
-                new InputWithLabelPanel("Username", false);
+            new InputWithLabelPanel("Username", false);
         usernamePanel.requestFocus();
 
         /*
          * A text area for the password with label.
          */
         final InputWithLabelPanel passwordPanel =
-                new InputWithLabelPanel("Password", true);
+            new InputWithLabelPanel("Password", true);
         passwordPanel.addActionListener(new ActionListener(){
 
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				
-				tryLogin(usernamePanel, passwordPanel);
-				
-			}
-        	
-        	
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+
+                tryLogin(usernamePanel, passwordPanel);
+
+            }
+
+
         });
-        
-        
+
+
         /*
          * Log in button.
          */
@@ -282,23 +272,15 @@ public class LoginPanel extends JPanel {
             @Override
             public void actionPerformed(final ActionEvent arg0) {
 
-                /*
-                 * Initialize the GUI manager
-                 */
-                PanelsManager.initialise();
-
-                /*
-                 * Construct the GUI
-                 */
-                MainFrame mainFrame = new MainFrame();
-                mainFrame.setVisible(true);
-
-                /*
-                 * Open the GUI to the default tab
-                 */
-                PanelsManager.goToDefaultPanel();
-
                 getTopLevelAncestor().setVisible(false);
+
+
+                LoginFrame nextFrame = new LoginFrame();
+
+                LoadingPanel lPanel = new LoadingPanel();
+                nextFrame.add(lPanel);
+                nextFrame.setVisible(true);
+                nextFrame.validate();
 
             }
 
@@ -329,35 +311,6 @@ public class LoginPanel extends JPanel {
          * Blank space to center the input areas.
          */
         this.add(Box.createRigidArea(new Dimension(100, 200)));
-
-    }
-
-    @Override
-    /**
-     * Draw background on the panel.
-     * @param g the default graphics on the panel
-     */
-    public void paintComponent(final Graphics g) {
-
-        Image background = null;
-
-        /*
-         * Load the image for the background
-         */
-        background = (new ImageIcon(getClass().getResource("bg.jpg"))).getImage();
-
-
-        super.paintComponent(g);
-
-        /*
-         * Paint the background
-         */
-        if (background != null) {
-
-            g.drawImage(background, 0, 0, background.getWidth(this),
-                    background.getHeight(this), this);
-
-        }
 
     }
 

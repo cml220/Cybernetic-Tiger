@@ -34,9 +34,9 @@ public class CheckoutPaymentPanel extends StyledPanel
         // Add in the payment panel with fields
         CheckoutPaymentFieldsPanel checkoutPaymentPanelNew = new CheckoutPaymentFieldsPanel();
         springLayout.putConstraint(SpringLayout.NORTH, checkoutPaymentPanelNew, 50, SpringLayout.NORTH, this);
-        springLayout.putConstraint(SpringLayout.WEST, checkoutPaymentPanelNew, 50, SpringLayout.WEST, this);
+        springLayout.putConstraint(SpringLayout.WEST, checkoutPaymentPanelNew, 150, SpringLayout.WEST, this);
         springLayout.putConstraint(SpringLayout.SOUTH, checkoutPaymentPanelNew, 470, SpringLayout.NORTH, this);
-        springLayout.putConstraint(SpringLayout.EAST, checkoutPaymentPanelNew, 810, SpringLayout.WEST, this);
+        springLayout.putConstraint(SpringLayout.EAST, checkoutPaymentPanelNew, 700, SpringLayout.WEST, this);
         checkoutPaymentPanelNew.setBorder(new EmptyBorder(0,0,0,0));
         this.add(checkoutPaymentPanelNew);
 

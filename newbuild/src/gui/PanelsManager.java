@@ -6,7 +6,7 @@
 
 package gui;
 
-import java.awt.Color;import java.sql.SQLException;import javax.swing.JComponent;import javax.swing.border.LineBorder;
+import java.awt.Color;import java.sql.SQLException;import javax.swing.JComponent;import javax.swing.SwingWorker;import javax.swing.border.LineBorder;
 
 /**
  * Singleton to store the panels used by this program as well as fonts and
@@ -106,7 +106,6 @@ public final class PanelsManager {
      * THIS MUST BE CHANGED MANUALLY
      */
     private static final int NUMPANELS = 6;
-
     /**
      * An array holding each of the panels that can go in the "search results"
      * space.
@@ -123,57 +122,50 @@ public final class PanelsManager {
      * The default 'pre search' string for panels who don't have a custom
      * string assigned to them
      */
-    private static String defaultPreSearchString = " Search Available Books";
-
+    private static String defaultPreSearchString = " Search Available Books";    /**     * Loading progress counter.     */
+    private static int progress = 0;    public static int getProgress() {        return progress;    }    /**     * A string representation of the current loading state.     */    private static String loadStatus = "Initializing NextBooks 2.0";    public static String getLoadStatus() {        return loadStatus;    }
     /**
      * Initializes the Panels Manager by constructing the array of panels
      * and filling it with all of the panels to be used by the app.
      */
-    public static void initialise() {
+    public static class InitTask extends SwingWorker<Void,Void> {        private void tick(String status){            progress++;            loadStatus = status;            setProgress(Math.min(progress, NUMPANELS));        }        @Override        protected Void doInBackground() throws Exception {            setProgress(0);
+            /*
+             * Set the default tab to null.
+             * We do this so that the program can check if the default is being
+             * set
+             * twice.
+             * This is not allowed.
+             */
+            defaultTab = null;
 
-        /*
-         * Set the default tab to null.
-         * We do this so that the program can check if the default is being
-         * set
-         * twice.
-         * This is not allowed.
-         */
-        defaultTab = null;
-
-        panelsArray = new JComponent[NUMPANELS];
-        preSearchStringsArray = new String[NUMPANELS];
-
-        /*
-         * Define each of the display panels that will be used in the GUI
-         */
-        panelsArray[MYBOOKS]
-                    = new DisplayScrollPane(new MyBooksPanel());
-        preSearchStringsArray[MYBOOKS] = " Search My Books";
-
-        panelsArray[ADVSEARCH]
-                    = new AdvSearchPanel();        preSearchStringsArray[ADVSEARCH] = " You are in the advanced search pane";
-        panelsArray[SEARCHRESULTS]
-                    = new DisplayScrollPane(new SearchResultsPanel());
-        /* TODO: Creating a test User object can potentially throw an SQLException.
-         * Once the MyAccountPanel is updated to use the current user instead of the test User,
-         * this try-catch block can be eliminated
-         * */
-        try {
-            panelsArray[MYACCOUNT]
-                        = new MyAccountPanel();
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } //new MyAccountPanel();
-
-        panelsArray[MYCART] =
-            new CheckoutPanel(); //new MyCheckoutPanel();
-        preSearchStringsArray[MYCART] = " Search My Cart";        // the catalogue, containing all the items :D        panelsArray[CATALOGUE]                    = new DisplayScrollPane(new CataloguePanel());
-
-        initialised = true;
-
+            panelsArray = new JComponent[NUMPANELS];
+            preSearchStringsArray = new String[NUMPANELS];
+            /*
+             * Define each of the display panels that will be used in the GUI
+             */
+            panelsArray[MYBOOKS]
+                        = new DisplayScrollPane(new MyBooksPanel());            tick("Loading you books");
+            preSearchStringsArray[MYBOOKS] = " Search My Books";
+            panelsArray[ADVSEARCH]
+                        = new AdvSearchPanel();            tick("Loading advanced search");            preSearchStringsArray[ADVSEARCH] = " You are in the advanced search pane";
+            panelsArray[SEARCHRESULTS]
+                        = new DisplayScrollPane(new SearchResultsPanel());            tick("Initializing search engine display");
+            /* TODO: Creating a test User object can potentially throw an SQLException.
+             * Once the MyAccountPanel is updated to use the current user instead of the test User,
+             * this try-catch block can be eliminated
+             * */
+            try {
+                panelsArray[MYACCOUNT]
+                            = new MyAccountPanel();                tick("Loading your account details");
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            panelsArray[MYCART] =
+                new CheckoutPanel();            tick("Preparing checkout process");
+            preSearchStringsArray[MYCART] = " Search My Cart";            // the catalogue, containing all the items :D            panelsArray[CATALOGUE]                        = new DisplayScrollPane(new CataloguePanel());            tick("Doing the macarena");            initialised = true;            return null;        }        @Override        public void done() {            LoadingPanel.instance.finish();        }
     }
-
+    public static InitTask getInitTask() {        return new InitTask();    }
     /**
      * Returns the desired JPanel when passed in a constant defined in this
      * class.
