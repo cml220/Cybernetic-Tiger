@@ -4,6 +4,7 @@ import model.Book;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.Properties;
 
 import javax.swing.JPanel;
 
