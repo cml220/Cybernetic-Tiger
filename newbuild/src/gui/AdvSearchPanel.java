@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.AbstractAction;
 import javax.swing.Box;
@@ -14,12 +15,15 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 
+import model.Book;
+import controllers.Controller;
+
 public class AdvSearchPanel extends StyledPanel {
 
-	/**
-	 * ID.
-	 */
-	private static final long serialVersionUID = 8285086013085907050L;
+    /**
+     * ID.
+     */
+    private static final long serialVersionUID = 8285086013085907050L;
 
 
     /**
@@ -28,8 +32,8 @@ public class AdvSearchPanel extends StyledPanel {
     private final String[] locTitles = {"Available Rentals",
             "In My Rentals",
     "In My Shopping Cart"};
-	
-	/**
+
+    /**
      * The spot where the user can enter a book's title to search.
      */
     private final LabeledInputField titleField;
@@ -46,6 +50,11 @@ public class AdvSearchPanel extends StyledPanel {
     private final LabeledInputField authorField;
 
     /**
+     * The spot where the user can enter the isbn of the book to search.
+     */
+    private final LabeledInputField isbnField;
+
+    /**
      * A choice of locations to search within.
      */
     private final JComboBox locationChoice;
@@ -55,18 +64,18 @@ public class AdvSearchPanel extends StyledPanel {
      */
     private final JButton searchBut;
 
-	
-	public AdvSearchPanel() {
-		
-		super();
-		
-		/*
+
+    public AdvSearchPanel() {
+
+        super();
+
+        /*
          * Stack components vertically
          */
         this.setLayout(new GridLayout(0, 1));
         this.setBackground(Color.WHITE);
         this.setOpaque(false);
-        
+
         JLabel infoLabel = new JLabel("Fill in the details for the book you are"
                 + " trying to find:");
         infoLabel.setForeground(PanelsManager.UNSELECTEDBLUE);
@@ -77,17 +86,19 @@ public class AdvSearchPanel extends StyledPanel {
 
         keywordField = new LabeledInputField("Keywords");
 
+        isbnField = new LabeledInputField("ISBN");
+
         /*
          * Add the potential search locations to a combo box
          */
         JLabel locationLabel = new JLabel("Search Where?");
         locationChoice = new JComboBox();
         locationChoice.setBackground(Color.WHITE);
-        
+
         for (int i = 0; i < locTitles.length; i++) {
-        	
+
             locationChoice.addItem(locTitles[i]);
-            
+
         }
 
         searchBut = new JButton("Search");
@@ -100,6 +111,7 @@ public class AdvSearchPanel extends StyledPanel {
              */
             public void actionPerformed(final ActionEvent arg0) {
 
+                Book searchBook = new Book();
                 boolean anythingSearched = false;
 
                 String message = "Not Yet Implemented\n"
@@ -111,12 +123,16 @@ public class AdvSearchPanel extends StyledPanel {
                     message = message.concat("\nTitle: "
                             + titleField.getText());
 
+                    searchBook.title = titleField.getText();
+
                 }
                 if (!authorField.getText().isEmpty()) {
 
                     anythingSearched = true;
                     message = message.concat("\nAuthor: "
                             + authorField.getText());
+
+                    searchBook.author = authorField.getText();
 
                 }
                 if (!keywordField.getText().isEmpty()) {
@@ -125,25 +141,46 @@ public class AdvSearchPanel extends StyledPanel {
                     message = message.concat("\nKeywords: "
                             + keywordField.getText());
 
+
+                }
+                if (!isbnField.getText().isEmpty()) {
+
+                    anythingSearched = true;
+                    message = message.concat("\nISBN: "
+                            + isbnField.getText());
+
+                    searchBook.ISBN = Integer.parseInt(isbnField.getText());
+
                 }
 
                 if (!anythingSearched) {
 
-                    message = message.concat("\nNothing.");
+                    JOptionPane.showMessageDialog(null, "Nothing Searched", "No Values",
+                            JOptionPane.INFORMATION_MESSAGE);
+
+                } else {
+
+
+                    try {
+
+                        ArrayList books = Controller.searchForBook(searchBook);
+                        PanelsManager.newSearchResults(books);
+
+                    } catch (Exception e) {
+
+                        e.printStackTrace();
+                        JOptionPane.showMessageDialog(null, "Book Search failed\n"
+                                + "Contact tech support\n" + e.getMessage(),
+                                "Fatal Error", JOptionPane.ERROR_MESSAGE);
+
+                    }
 
                 }
-
-                message = message.concat("\nLocation: "
-                        + locTitles[locationChoice.getSelectedIndex()]);
-
-                JOptionPane.showMessageDialog(null, message, "Prototype",
-                        JOptionPane.INFORMATION_MESSAGE);
-
             }
 
 
         });
-        
+
         /**
          * Panel for aligning the location combo box correctly.
          */
@@ -193,20 +230,21 @@ public class AdvSearchPanel extends StyledPanel {
         this.add(titleField);
         this.add(authorField);
         this.add(keywordField);
+        this.add(isbnField);
         this.add(comboPanel);
         this.add(buttonsPanel);
         this.add(Box.createRigidArea(new Dimension(200, 200)));
-		
-	}
+
+    }
 
     @Override
     /**
      * If this panel requests focus, give the cursor to the title field.
      */
     public void requestFocus() {
-    	
+
         titleField.requestFocus();
-        
+
     }
-	
+
 }

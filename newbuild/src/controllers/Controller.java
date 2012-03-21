@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -50,7 +49,10 @@ public final class Controller {
      */
     private static CartController cartController;
 
-    //private static CatalogueController catalogueController;
+    /**
+     * Controller for searching catalogue of books.
+     */
+    private static CatalogueController catalogueController;
 
     /**
      * Login controller.
@@ -95,7 +97,7 @@ public final class Controller {
 
         accountController = new AccountController();
         cartController = new CartController();
-        //catalogueController = new CatalogueController();
+        catalogueController = new CatalogueController();
         loginController = new LoginController();
         paymentController = new PaymentController();
         readerController = new ReaderController();
@@ -171,7 +173,7 @@ public final class Controller {
         //TODO: Confirm need for (or remove) username parameter
         accountController.changeUserInfo(username, user, password);
 
-    
+
     }
 
     /**
@@ -180,11 +182,11 @@ public final class Controller {
      * @throws Exception If the Controller class has not been initialized
      */
     public static void makeAdmin(String username) throws Exception {
-    	if (!initialized) {
+        if (!initialized) {
 
             throw new ControllerNotInitializedException();
         }
-    	accountController.makeAdmin(username);
+        accountController.makeAdmin(username);
     }
 
     /**
@@ -476,14 +478,21 @@ public final class Controller {
      * Fetch a list of books matching the non-null values in bookToMatch.
      * @param bookToMatch a book containing the values to search for (or nulls)
      * @return a list of books matching the non-null values in bookToMatch
+     * @throws SQLException
+     * @throws ControllerNotInitializedException
      */
-    public static LinkedList<Book> searchForBook(final Book bookToMatch) {
+    public static ArrayList<Book> searchForBook(final Book bookToMatch) throws SQLException, ControllerNotInitializedException {
+
+        if (!initialized) {
+
+            throw new ControllerNotInitializedException();
+
+        }
 
         //bookToMatch is a book with 'null' in all of the parameters which
         //haven't been specified for the search
-        //TODO:
-        //return CatalogueController.search(bookToMatch);
-        return null;
+        return catalogueController.searchByBook(bookToMatch);
+
 
     }
 
@@ -519,21 +528,21 @@ public final class Controller {
      * @return a newly constructed JPanel containing the ICEPDF reader with
      * 'book' loaded in it.
      * @throws ControllerNotInitializedException if the controller isn't loaded
-     * @throws MalformedURLException 
-     * @throws BookOpenFailed 
+     * @throws MalformedURLException
+     * @throws BookOpenFailed
      */
     public static JPanel openReader(final Book book)
-            throws ControllerNotInitializedException, MalformedURLException, BookOpenFailed {
-    	JPanel opened;
+    throws ControllerNotInitializedException, MalformedURLException, BookOpenFailed {
+        JPanel opened;
         if (!initialized) {
 
             throw new ControllerNotInitializedException();
 
         }
         try{
-        	opened = readerController.openBook(book);
+            opened = readerController.openBook(book);
         }catch(MalformedURLException e){
-        	throw new BookOpenFailed();
+            throw new BookOpenFailed();
         }
 
         return opened;

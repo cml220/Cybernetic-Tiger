@@ -7,8 +7,7 @@
 package gui;
 
 import java.awt.GridLayout;
-import java.util.LinkedList;
-import java.util.ListIterator;
+import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
@@ -44,17 +43,22 @@ public class SearchResultsPanel extends JPanel {
      * using books passed in to the constructor.
      * @param books the list of books to populate the panel with
      */
-    public SearchResultsPanel(final LinkedList<Book> books) {
+    public SearchResultsPanel(final ArrayList<Book> books, boolean jumpTo) {
 
         this.setLayout(new GridLayout(0, 1));
 
-        ListIterator<Book> bookIterator = (ListIterator<Book>) books.iterator();
         Book currentBookToAdd;
 
-        while (bookIterator.hasNext()) {
+        for (int i = 0; i < books.size(); i++) {
 
-            currentBookToAdd = bookIterator.next();
+            currentBookToAdd = books.get(i);
             this.add(new CatalogueBookPanel(currentBookToAdd));
+
+        }
+
+        if(jumpTo) {
+
+            MainPanel.changeDisplayPanel(PanelsManager.SEARCHRESULTS);
 
         }
 

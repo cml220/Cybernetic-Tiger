@@ -6,7 +6,7 @@
 
 package gui;
 
-import java.awt.Color;import java.sql.SQLException;import javax.swing.JComponent;import javax.swing.SwingWorker;import javax.swing.border.LineBorder;
+import java.awt.Color;import java.sql.SQLException;import java.util.ArrayList;import javax.swing.JComponent;import javax.swing.SwingWorker;import javax.swing.border.LineBorder;import model.Book;
 
 /**
  * Singleton to store the panels used by this program as well as fonts and
@@ -165,7 +165,7 @@ public final class PanelsManager {
                 new CheckoutPanel();            tick("Preparing checkout process");
             preSearchStringsArray[MYCART] = " Search My Cart";            // the catalogue, containing all the items :D            panelsArray[CATALOGUE]                        = new DisplayScrollPane(new CataloguePanel());            tick("Doing the macarena");            initialised = true;            return null;        }        @Override        public void done() {            LoadingPanel.instance.finish();        }
     }
-    public static InitTask getInitTask() {        return new InitTask();    }
+    public static InitTask getInitTask() {        return new InitTask();    }    public static void newSearchResults (ArrayList<Book> results) {        panelsArray[SEARCHRESULTS] = new SearchResultsPanel(results, true);    }
     /**
      * Returns the desired JPanel when passed in a constant defined in this
      * class.
