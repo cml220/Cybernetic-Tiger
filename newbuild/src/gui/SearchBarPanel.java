@@ -15,11 +15,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
+
+import model.Book;
+import controllers.Controller;
 
 /**
  * The panel containing the search field and buttons to start searches.
@@ -126,6 +131,17 @@ public class SearchBarPanel extends JPanel {
 
 
         });
+        searchField.addActionListener(new ActionListener(){
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                trySearch();
+
+            }
+
+        });
+
 
         /*
          * Search start button
@@ -136,6 +152,16 @@ public class SearchBarPanel extends JPanel {
                 buttonBorderWidth,
                 true));
         searchButton.setPreferredSize(new Dimension(buttonWidth, buttonHeight));
+        searchButton.addActionListener(new ActionListener(){
+
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+
+                trySearch();
+
+            }
+
+        });
 
         /*
          * Advanced search button
@@ -189,6 +215,46 @@ public class SearchBarPanel extends JPanel {
         this.add(searchBarButtonsPanel, BorderLayout.EAST);
 
     }
+
+    /**
+     * Attempt to search for a book.
+     */
+    private void trySearch() {
+        /*
+         * Attempt a search
+         */
+
+        Book searchBook = new Book();
+        searchBook.title = searchField.getText();
+        searchBook.author = searchField.getText();
+
+        try {
+
+            searchBook.ISBN = Integer.parseInt(searchField.getText());
+
+        } catch (NumberFormatException nfe) {
+
+            /*
+             * Do nothing.  Search term wasn't a number so it can't possibly
+             * be an ISBN.
+             */
+
+        }
+        try {
+
+            ArrayList<Book> books = Controller.searchForBook(searchBook);
+            PanelsManager.newSearchResults(books);
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Book Search failed\n"
+                    + "Contact tech support\n" + e.getMessage(),
+                    "Fatal Error", JOptionPane.ERROR_MESSAGE);
+
+        }
+    }
+
 
     /**
      * Swap out whatever is in this search bar with the 'pre search text'

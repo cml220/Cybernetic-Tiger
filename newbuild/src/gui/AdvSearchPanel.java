@@ -163,7 +163,7 @@ public class AdvSearchPanel extends StyledPanel {
 
                     try {
 
-                        ArrayList books = Controller.searchForBook(searchBook);
+                        ArrayList<Book> books = Controller.searchForBook(searchBook);
                         PanelsManager.newSearchResults(books);
 
                     } catch (Exception e) {
