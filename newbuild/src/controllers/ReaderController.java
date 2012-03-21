@@ -25,12 +25,14 @@ public class ReaderController {
 		URL url = new URL(book.pdfURL);
 		//the SwingController is an icepdf class needed
 		SwingController controller = new SwingController();
-		
+		//Create our own properties, remove the create directory message
+		Properties props = new Properties();
+		props.setProperty( PropertiesManager.PROPERTY_SHOW_UTILITY_SAVE, "false" );
+		props.setProperty( PropertiesManager.PROPERTY_SHOW_UTILITY_PRINT, "false" );
+		props.setProperty( PropertiesManager.PROPERTY_SHOW_UTILITY_OPEN, "false" );
+		props.setProperty("application.showLocalStorageDialogs",  "false" );
 		//the properties manager is needed to remove the open,print, and save functions
-        PropertiesManager properties = new PropertiesManager(System.getProperties(), ResourceBundle.getBundle(PropertiesManager.DEFAULT_MESSAGE_BUNDLE));
-        properties.setBoolean(PropertiesManager.PROPERTY_SHOW_UTILITY_OPEN, false);
-        properties.setBoolean(PropertiesManager.PROPERTY_SHOW_UTILITY_PRINT, false);
-        properties.setBoolean(PropertiesManager.PROPERTY_SHOW_UTILITY_SAVE, false);
+        PropertiesManager properties = new PropertiesManager(System.getProperties(), props, ResourceBundle.getBundle(PropertiesManager.DEFAULT_MESSAGE_BUNDLE));
 
         SwingViewBuilder factory = new SwingViewBuilder(controller, properties);
 
