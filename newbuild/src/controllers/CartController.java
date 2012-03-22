@@ -33,12 +33,16 @@ public class CartController {
 	 * @return The total dollar value of the books in the current user's cart
 	 */
 	public float getTotal() {
+		float total = 0;
 		// Get the current books in the cart
-		ArrayList<Book> cart = Controller.getCurrentUser().cart;
-		int total = 0;
-		// Go through every book, adding its price to the running total
-		for (Book b : cart) {
-			total += b.price;
+		if (Controller.getCurrentUser() != null) {
+			ArrayList<Book> cart = Controller.getCurrentUser().cart;
+			if (cart != null) {
+				// Go through every book, adding its price to the running total
+				for (Book b : cart) {
+					total += b.price;
+				}
+			}
 		}
 		return total;
 	}
