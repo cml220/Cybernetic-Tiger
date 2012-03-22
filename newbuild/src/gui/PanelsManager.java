@@ -100,12 +100,12 @@ public final class PanelsManager {
      * My cart panel.
      */
     public static final int MYCART = 4;    /**     * Catalogue panel.     */    public static final int CATALOGUE = 5;
-
+    /**     * Reader View Panel     */    public static final int BOOKS = 6;
     /**
      * how many panels the array will hold.
      * THIS MUST BE CHANGED MANUALLY
      */
-    private static final int NUMPANELS = 6;
+    private static final int NUMPANELS = 7;
     /**
      * An array holding each of the panels that can go in the "search results"
      * space.
