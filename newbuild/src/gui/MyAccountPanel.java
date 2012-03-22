@@ -114,7 +114,7 @@ public class MyAccountPanel extends StyledPanel {
         JLabel headerLabel = new JLabel("Account Details");        headerLabel.setForeground(PanelsManager.UNSELECTEDBLUE);
         // TODO: Make update buttons work
         // TODO: Make it pretty...
-        userToShow = Controller.getCurrentUser();
+        userToShow = Controller.getCurrentUser();        // Stop constructing things if the current user is null        if (userToShow == null) {        	return;        }
         userToShow.rentals = new ArrayList<Book>();        // Handle the username        JLabel usernameLabel = new JLabel("Username: " + userToShow.username);        usernameLabel.setForeground(PanelsManager.UNSELECTEDBLUE);        // Handle the password        passwordPanel = new LabeledInputField("Password:", "Update");        passwordPanel.setText("********");        passwordPanel.addActionListener(new UpdateListener(UpdateListener.PASSWORD_FIELD, passwordPanel.getText()));                // Handle the email        emailPanel = new LabeledInputField("Email:", "Update");        emailPanel.setText(userToShow.email);        emailPanel.addActionListener(new UpdateListener(UpdateListener.EMAIL_FIELD, emailPanel.getText()));
         // Handle the isAdmin flag
         JLabel isAdminLabel = new JLabel("Administrator:   " + userToShow.isAdmin);        isAdminLabel.setForeground(PanelsManager.UNSELECTEDBLUE);
