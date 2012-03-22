@@ -70,6 +70,8 @@ public class TabsPanel extends JPanel {
         // 4th Tab, "My Cart" tab
         // On click opens up the shopping cart - start of the checkout process
         setTab("My Cart", PanelsManager.MYCART);
+        
+        setTab("View Books", PanelsManager.BOOKS);
 
         //unused tabs
         while (nextTab < tabArray.length) {
