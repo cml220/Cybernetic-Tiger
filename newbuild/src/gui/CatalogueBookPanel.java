@@ -4,8 +4,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 
-import javax.swing.JOptionPane;
-
 import controllers.Controller;
 
 import model.Book;
@@ -41,21 +39,19 @@ public class CatalogueBookPanel extends BookPanel {
         super.getPrimaryButton().addActionListener(new ActionListener(){
 
             @Override
-            public void actionPerformed(ActionEvent e) {
-                // initialize controller
-            	Controller.initialize();
+            public void actionPerformed(ActionEvent e) {             
+            	
             	try {
+            		// initialize controller
+            		Controller.initialize();
             		// add the book to the cart
             		Controller.addToCart(book);
             		// TODO: remove the button to rent it
             		
             	}
             	catch (Exception e2){
-            		// TODO: possibly remove this once everything is working
-            		JOptionPane.showMessageDialog(null,
-				            "Failed to add to cart.",
-				            "Catalogue error", JOptionPane.ERROR_MESSAGE);
-            		// failed to add to cart, noo biggy ;)
+            		// failed to add to cart
+            		PanelsManager.displayError("Failed to add to cart. \nPlease contact technical support.");
             	}
             }
 		    

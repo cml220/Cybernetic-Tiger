@@ -4,8 +4,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 
-import javax.swing.JOptionPane;
-
 import controllers.Controller;
 
 import model.Book;
@@ -29,20 +27,17 @@ public class CheckoutMyCartBookPanel extends BookPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                // initialize controller
-            	Controller.initialize();
+               
             	try {
+            		 // initialize controller
+                	Controller.initialize();
             		// add the book to the cart
             		Controller.removeFromCart(book);
             		// TODO: remove the button remove it
             		
             	}
             	catch (Exception e2){
-            		// TODO: possibly remove this once everything is working
-            		JOptionPane.showMessageDialog(null,
-				            "Failed to remove from cart.",
-				            "Checkout error", JOptionPane.ERROR_MESSAGE);
-            		// failed to remove from cart
+            		PanelsManager.displayError("Failed to remove from cart. \nPlease contact technical support.");
             	}
             }
 		    

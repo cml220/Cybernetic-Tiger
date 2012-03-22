@@ -3,8 +3,6 @@ package gui;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JOptionPane;
-
 import controllers.Controller;
 import model.Book;
 
@@ -33,17 +31,16 @@ public class RentedBookPanel extends BookPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                // initialize controller
-            	Controller.initialize();
+               
             	try {
+            		// initialize controller
+                	Controller.initialize();
             		// put the book into the main panel ;) 
             		MainPanel.changeDisplayPanel(Controller.openReader(book));            		
             	}
             	catch (Exception e2){
             		// failed to display
-            		JOptionPane.showMessageDialog(null,
-				            "Failed to display book to read. Please contact technical support.",
-				            "NextBooks error", JOptionPane.ERROR_MESSAGE);            		
+            		PanelsManager.displayError("Failed to display book. \nPlease contact technical support.");  		
             	}
             }
 		    

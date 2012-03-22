@@ -6,7 +6,7 @@
 
 package gui;
 
-import java.awt.Color;import java.sql.SQLException;import java.util.ArrayList;import javax.swing.JComponent;import javax.swing.SwingWorker;import javax.swing.border.LineBorder;import model.Book;
+import java.awt.Color;import java.sql.SQLException;import java.util.ArrayList;import javax.swing.JComponent;import javax.swing.JOptionPane;import javax.swing.SwingWorker;import javax.swing.border.LineBorder;import model.Book;
 
 /**
  * Singleton to store the panels used by this program as well as fonts and
@@ -273,5 +273,5 @@ public final class PanelsManager {
         defaultTab.doClick();
         defaultTab.requestFocus();
 
-    }
+    }        public static void displayError(String errorMessage)    {    	JOptionPane.showMessageDialog(null,	            errorMessage,	            "Fatal Error", JOptionPane.ERROR_MESSAGE);        }
 }

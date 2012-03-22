@@ -198,8 +198,9 @@ public class CheckoutActionsPanel extends JPanel {
 	
 	private static void updatePrice()
 	{
-		Controller.initialize();
+		
 		try {
+			Controller.initialize();
 			totalPriceValue.setText("$" + Controller.getCartTotal());
 		}
 		catch (Exception e) {
