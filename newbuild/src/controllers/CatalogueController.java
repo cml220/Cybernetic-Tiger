@@ -28,42 +28,63 @@ public class CatalogueController {
     /**
      * Searches by all non-null fields of a given book.
      * @param book The Book object to use for searching
-     * @return All books that match the criteria of the selected book
+     * @return All books that match the criteria of the input book
      * @throws SQLException
      */
     public ArrayList<Book> searchByBook(Book book) throws SQLException {
         DatabaseProcess db = new DatabaseProcess();
+
         // Initialize the ArrayList<Book> to return
         ArrayList<Book> bookList = new ArrayList<Book>();
 
         // Use the database process getBooksBy() method to get books by all applicable fields
 
-        // ISBN is always required, so we can always search by it
+        // Check ISBN
         if (book.getBookISBN() >= 0) {
             Book bookByISBN = db.getBookByIsbn(book.getBookISBN());
-            if (!bookList.contains(bookByISBN)) {
-                bookList.add(bookByISBN);
+            if (bookByISBN != null) {
+	            if (!bookList.contains(bookByISBN)) {
+	                bookList.add(bookByISBN);
+	            }
+            }
+            else {
+            	System.out.println("Book not found by ISBN");
             }
         }
 
         // Check Title
         if (book.getBookTitle() != null) {
             ArrayList<Book> booksByTitle = db.getBooksBy(DatabaseProcess.TITLE, book.getBookTitle());
-            for (Book b : booksByTitle) {
-                if (!bookList.contains(b)) {
-                    bookList.add(b);
-                }
+            if (booksByTitle != null) {
+	            for (Book b : booksByTitle) {
+	                if (!bookList.contains(b)) {
+	                    bookList.add(b);
+	                }
+	            }
+            }
+            else {
+            	System.out.println("Book not found by Title");
             }
         }
 
         // Check Author
         if (book.getBookAuthor() != null) {
             ArrayList<Book> booksByAuthor = db.getBooksBy(DatabaseProcess.AUTHOR, book.getBookAuthor());
-            for (Book b : booksByAuthor) {
-                if (!bookList.contains(b)) {
-                    bookList.add(b);
-                }
+            if (booksByAuthor != null) {
+	            for (Book b : booksByAuthor) {
+	                if (!bookList.contains(b)) {
+	                    bookList.add(b);
+	                }
+	            }
             }
+            else {
+            	System.out.println("Book not found by Author");
+            }
+        }
+    	System.out.println("Books returned: ");
+        for (Book b: bookList)
+        {
+        	System.out.println(b.title);
         }
         return bookList;
     }
