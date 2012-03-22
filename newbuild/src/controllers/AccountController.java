@@ -42,14 +42,14 @@ public class AccountController {
 
 	/**
 	 * Searches the database for a given user, then updates that user's information based on a User object.
-	 * @param username The name of the user to search for
+	 * @param newPassword The new password to use
 	 * @param user The User object containing the information to update with
 	 * @param password The password of the user, used to ensure that an update is permissible
 	 * @throws Exception 
 	 */
-	void changeUserInfo(String username, User user, String password) throws Exception {
+	void changeUserInfo(String newPassword, User user, String password) throws Exception {
 		DatabaseProcess instance = DatabaseProcess.getInstance();
-		instance.editUserInfo(user, username, password);
+		instance.editUserInfo(user, password, newPassword);
 	}
 
 	/**

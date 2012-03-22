@@ -180,7 +180,7 @@ public class DatabaseProcessJUnit {
         try {
             booklist = db.getBooksBy(DatabaseProcess.TITLE, "THISISAUNIQUESTRING");
             assertTrue(!booklist.isEmpty());
-            log.debug("testGetBookByTitle Entered.");
+            log.debug("testGetBookByTitle Passed.");
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -299,7 +299,7 @@ public class DatabaseProcessJUnit {
             assertTrue(res);
             res = db.isNameAvailable("Test");
             assertFalse(res);
-            log.debug("testCheckNameAvailable Entered.");
+            log.debug("testCheckNameAvailable Passed.");
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -328,7 +328,7 @@ public class DatabaseProcessJUnit {
             assertTrue(res);
             res = db.isNameAvailable("Test");
             assertTrue(res);
-            log.debug("testRemoveUser Entered");
+            log.debug("testRemoveUser Passed");
 
         } catch (SQLException e) {
             // TODO Auto-generated catch block

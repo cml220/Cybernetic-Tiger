@@ -57,7 +57,7 @@ public class AdvSearchPanel extends StyledPanel {
     /**
      * A choice of locations to search within.
      */
-    private final JComboBox<String> locationChoice;
+    private final JComboBox locationChoice;
 
     /**
      * The button which starts the search.
@@ -92,7 +92,7 @@ public class AdvSearchPanel extends StyledPanel {
          * Add the potential search locations to a combo box
          */
         JLabel locationLabel = new JLabel("Search Where?");
-        locationChoice = new JComboBox<String>();
+        locationChoice = new JComboBox();
         locationChoice.setBackground(Color.WHITE);
 
         for (int i = 0; i < locTitles.length; i++) {

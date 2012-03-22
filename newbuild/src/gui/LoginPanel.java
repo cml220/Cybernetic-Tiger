@@ -159,6 +159,9 @@ public class LoginPanel extends StyledPanel {
              * If the login info is correct, open up the program.
              */
             try {
+            	// Added for debugging, so you can find the password and log in
+            	// TODO: Remove the following line before shipping
+            	// System.out.println(DatabaseProcess.getInstance().getUserPassWord(usernamePanel.getText()));
                 if (Controller.checkLogin(usernamePanel.getText(),
                         passwordPanel.getText())) {
 
