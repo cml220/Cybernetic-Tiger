@@ -6,7 +6,7 @@
 
 package gui;
 
-import java.awt.Color;import java.sql.SQLException;import java.util.ArrayList;import javax.swing.JComponent;import javax.swing.JOptionPane;import javax.swing.JPanel;import javax.swing.SwingWorker;import javax.swing.border.LineBorder;import model.Book;
+import java.awt.Color;import java.sql.SQLException;import java.util.ArrayList;import javax.swing.JComponent;import javax.swing.JOptionPane;import javax.swing.SwingWorker;import javax.swing.border.LineBorder;import model.Book;
 
 /**
  * Singleton to store the panels used by this program as well as fonts and
@@ -60,8 +60,8 @@ public final class PanelsManager {
      * Borders used throughout the program.
      */
     public static final LineBorder DEFAULTBORDER =
-        new LineBorder(PanelsManager.SELECTEDBLUE, 5);
-    /**     * Blue border for forms     */    public static final LineBorder FORMBORDER =        new LineBorder(PanelsManager.SELECTEDBLUE, 3, true);
+            new LineBorder(PanelsManager.SELECTEDBLUE, 5);
+    /**     * Blue border for forms     */    public static final LineBorder FORMBORDER =            new LineBorder(PanelsManager.SELECTEDBLUE, 3, true);
     /**
      * Fonts used throughout the program.
      */
@@ -128,42 +128,42 @@ public final class PanelsManager {
      * Initializes the Panels Manager by constructing the array of panels
      * and filling it with all of the panels to be used by the app.
      */
-    public static class InitTask extends SwingWorker<Void,Void> {        private void tick(String status){            progress++;            loadStatus = status;            setProgress(progress);        }        @Override        protected Void doInBackground() throws Exception {            setProgress(0);
-            /*
-             * Set the default tab to null.
-             * We do this so that the program can check if the default is being
-             * set
-             * twice.
-             * This is not allowed.
-             */
-            defaultTab = null;
+    public static class InitTask extends SwingWorker<Void,Void> {        private void tick(String status){            progress++;            loadStatus = status;            setProgress(progress);        }        @Override        protected Void doInBackground() throws Exception {            try {                setProgress(0);
+                /*
+                 * Set the default tab to null.
+                 * We do this so that the program can check if the default is being
+                 * set
+                 * twice.
+                 * This is not allowed.
+                 */
+                defaultTab = null;
 
-            panelsArray = new JComponent[NUMPANELS];
-            preSearchStringsArray = new String[NUMPANELS];
-            /*
-             * Define each of the display panels that will be used in the GUI
-             */            tick("Loading your books");
-            panelsArray[MYBOOKS]
+                panelsArray = new JComponent[NUMPANELS];
+                preSearchStringsArray = new String[NUMPANELS];
+                /*
+                 * Define each of the display panels that will be used in the GUI
+                 */                tick("Loading your books");
+                panelsArray[MYBOOKS]
                         = new DisplayScrollPane(new MyBooksPanel());
-            preSearchStringsArray[MYBOOKS] = " Search My Books";            tick("Loading advanced search");
-            panelsArray[ADVSEARCH]
-                        = new AdvSearchPanel();            preSearchStringsArray[ADVSEARCH] = " You are in the advanced search pane";            tick("Initializing search engine display");
-            panelsArray[SEARCHRESULTS]
-                        = new DisplayScrollPane(new SearchResultsPanel());            preSearchStringsArray[SEARCHRESULTS] = "Search Available Books";            tick("Loading your account details");
-            /* TODO: Creating a test User object can potentially throw an SQLException.
-             * Once the MyAccountPanel is updated to use the current user instead of the test User,
-             * this try-catch block can be eliminated
-             * */
-            try {
-                panelsArray[MYACCOUNT]
+                preSearchStringsArray[MYBOOKS] = " Search My Books";                tick("Loading advanced search");
+                panelsArray[ADVSEARCH]
+                        = new AdvSearchPanel();                preSearchStringsArray[ADVSEARCH] = " You are in the advanced search pane";                tick("Initializing search engine display");
+                panelsArray[SEARCHRESULTS]
+                        = new DisplayScrollPane(new SearchResultsPanel());                preSearchStringsArray[SEARCHRESULTS] = "Search Available Books";                tick("Loading your account details");
+                /* TODO: Creating a test User object can potentially throw an SQLException.
+                 * Once the MyAccountPanel is updated to use the current user instead of the test User,
+                 * this try-catch block can be eliminated
+                 * */
+                try {
+                    panelsArray[MYACCOUNT]
                             = new MyAccountPanel();
-            } catch (SQLException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-            panelsArray[MYCART] =
-                new CheckoutPanel();            tick("Preparing checkout process");
-            preSearchStringsArray[MYCART] = " Search My Cart";            // the catalogue, containing all the items :D            panelsArray[CATALOGUE]                        = new DisplayScrollPane(new CataloguePanel());            preSearchStringsArray[CATALOGUE] = " Search Available Books";            tick("Preparing book reader manager");            // the catalogue, containing all the items :D            panelsArray[BOOKS]                        = new ReaderViewPanel();            preSearchStringsArray[BOOKS] = " Search My Books";            initialised = true;            initialised = true;            tick("Doing the macarena");            return null;        }        @Override        public void done() {            if(!initialised) {                throw new RuntimeException("PanelsManager build thread sent"                        + " \"done\" signal too soon");            }            LoadingPanel.instance.finish();        }
+                } catch (SQLException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                panelsArray[MYCART] =
+                        new CheckoutPanel();                tick("Preparing checkout process");
+                preSearchStringsArray[MYCART] = " Search My Cart";                // the catalogue, containing all the items :D                panelsArray[CATALOGUE]                        = new DisplayScrollPane(new CataloguePanel());                preSearchStringsArray[CATALOGUE] = " Search Available Books";                tick("Preparing book reader manager");                // the catalogue, containing all the items :D                panelsArray[BOOKS]                        = new ReaderViewPanel();                preSearchStringsArray[BOOKS] = " Search My Books";                initialised = true;                tick("Doing the macarena");            } catch (Exception e) {                e.printStackTrace();            }            return null;        }        @Override        public void done() {            if(!initialised) {                throw new RuntimeException("PanelsManager build thread sent"                        + " \"done\" signal too soon");            }            LoadingPanel.instance.finish();        }
     }
     public static InitTask getInitTask() {        return new InitTask();    }    public static void newSearchResults (ArrayList<Book> results) {        panelsArray[SEARCHRESULTS] = new SearchResultsPanel(results, true);    }
     /**
