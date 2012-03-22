@@ -2,8 +2,7 @@ package gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import gui.ReaderViewPanel;
-import javax.swing.JOptionPane;
+
 import controllers.Controller;
 import model.Book;
 
@@ -37,8 +36,7 @@ public class RentedBookPanel extends BookPanel {
             		// initialize controller
                 	Controller.initialize();
             		// put the book into the main panel ;) 
-            		ReaderViewPanel.OpenNewBook(book);
-            		MainPanel.changeDisplayPanel(PanelsManager.BOOKS);            		
+            		MainPanel.changeDisplayPanel(Controller.openReader(book));            		
             	}
             	catch (Exception e2){
             		// failed to display
