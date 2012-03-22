@@ -26,9 +26,8 @@ public class Cart extends ArrayList<Book>{
 	public String getShopDate() {
 		return this.shopDate;
 	}
-	/*
-	 * TODO Fill out this comment This should probably throw a BookAlready
-	 */
+	
+	
 	public void addBookToCart(Book book) throws CartException {
 		if (contains(book)) {
 			throw new CartException("Book is already in cart\n");
