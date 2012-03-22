@@ -114,4 +114,26 @@ public class RemovalProcess {
         DatabaseProcess db = DatabaseProcess.getInstance();
         return !db.userHasBook(username, isbn);
     }
+    
+    /** Remove the payment info for a given user.
+     * @param username  the user for it to be removed from
+     * @return  true if removed; false otherwise
+     * @throws SQLException
+     */
+    protected final boolean removePaymentInfo(
+            final String username) throws SQLException {
+        Statement stmt = conn.createStatement();
+        stmt.execute("DELETE FROM "
+                + "tblPaymentInfo WHERE UserName=\""
+                + username + "\"");
+        ResultSet rs = stmt.executeQuery("SELECT * FROM "
+                + "tblPaymentInfo WHERE UserName=\""
+                + username + "\"");
+        if(rs.next()) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
 }

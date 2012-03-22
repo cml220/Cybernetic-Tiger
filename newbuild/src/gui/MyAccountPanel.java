@@ -115,7 +115,7 @@ public class MyAccountPanel extends StyledPanel {
         // TODO: Make update buttons work
         // TODO: Make it pretty...
         // TODO: Replace next line with userToShow = Controller.getCurrentUser()
-        userToShow = new User("testname", false, "testing");
+        userToShow = new User("testname", false, "testing", null, null, null);
         userToShow.rentals = new ArrayList<Book>();
         // TODO: Remove the following two lines entirely - adding books to the test user to test the display of rentals
         userToShow.rentals.add(new Book("testBook1", "author1", 3.14, "address1", 314, null, "testing book1"));

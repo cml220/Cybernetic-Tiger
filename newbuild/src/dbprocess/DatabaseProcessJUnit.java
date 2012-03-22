@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import org.apache.log4j.Logger;
 import model.Book;
 import model.Cart;
+import model.PaymentInfo;
 import model.User;
 
 import org.junit.Test;
@@ -89,9 +90,11 @@ public class DatabaseProcessJUnit {
     @Test
     public void testGetAdminStatus() throws SQLException {
         log.debug("testGetAdminStatus Entered.");
+        User u = new User("Test", false, "1234@google.se", 
+                new ArrayList<Book>(), new PaymentInfo(), new Cart());
         try {
             boolean res = db.getAdminStatus("Test");
-            assertEquals("isAdmin Status", false, res);
+            assertEquals("isAdmin Status", u.isAdmin, res);
             log.debug("testGetAdminStatus Passed.");
         } catch (SQLException e) {
             // TODO Auto-generated catch block
@@ -132,6 +135,7 @@ public class DatabaseProcessJUnit {
     public void testShoppingCart() throws SQLException, CartException {
         log.debug("testShoppingCart Entered.");
         User res = db.getUserInfo("Test");
+        res.cart = new Cart();
         res.cart.add(db.getBookByIsbn(2309580));
         db.saveShoppingCart(res.cart, res.getUserName(),  "2012-02-27");
         Cart c = db.getUserCart("Test");
@@ -221,7 +225,8 @@ public class DatabaseProcessJUnit {
     public void testGetBooksByUser() throws SQLException {
         log.debug("testGetBooksByUser Entered.");
         ArrayList<Book> booklist = new ArrayList<Book>();
-        User u = new User("Test", false, "1234@google.se");
+        User u = new User("Test", false, "1234@google.se",
+                new ArrayList<Book>(), new PaymentInfo(), new Cart());
         try {
             booklist = db.getBooksBy(DatabaseProcess.USERNAME, u.getUserName());
             assertTrue(!booklist.isEmpty());
@@ -329,5 +334,25 @@ public class DatabaseProcessJUnit {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }    
+    }
+    
+    @Test
+    public void testPaymentInfo() {
+        log.debug("testPaymentInfo Entered");
+        try {
+            PaymentInfo pmt = new PaymentInfo("12345","Colin","Canada",
+                    "242 A Street", "424 Nota Street", "January", "2042",
+                    "52","Saskatchewan","B0B 0B0","867-5309");
+            db.savePaymentInfo("guest", pmt);
+            pmt = db.getPaymentInfo("guest");
+            assertTrue(pmt.getCardNumber().equals("12345"));
+            pmt.setCardNumber("12346");
+            db.editPaymentInfo(pmt, "guest", "a");
+            pmt = db.getPaymentInfo("guest");
+            assertTrue(pmt.getCardNumber().equals("12346"));
+            db.removePaymentInfo("guest");         
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

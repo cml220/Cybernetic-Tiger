@@ -4,6 +4,7 @@ import java.sql.Connection;
 import org.apache.log4j.Logger;
 import java.sql.SQLException;
 
+import model.PaymentInfo;
 import model.User;
 
 /** Modification database processes.
@@ -53,15 +54,33 @@ public class ModificationProcess {
     protected final void editUserInfo(
             final User newInfo, final String passWord,
             final String newPassWord) throws Exception {
-        RemovalProcess db = RemovalProcess.getInstance(conn);
-        InsertionProcess idb = InsertionProcess.getInstance(conn);
         VerificationProcess vdb = VerificationProcess.getInstance(conn);
+        RemovalProcess rdb = RemovalProcess.getInstance(conn);
+        InsertionProcess idb = InsertionProcess.getInstance(conn);        
         if (vdb.checkUser(newInfo.getUserName(), passWord)) {
-            db.removeUser(newInfo.getUserName());
+            rdb.removeUser(newInfo.getUserName());
             idb.createUser(newInfo.getUserName(),
                     newInfo.getEmail(), newPassWord);
         } else {
             log.debug("Invalid username/password.");
+        }
+    }
+    
+    /** Edit a user's payment info.
+     * @param info      the new info to be saved
+     * @param username  the user for it to be saved to
+     * @param password  the password of that user for verification
+     * @throws SQLException failed sql methods
+     */
+    protected final void editPaymentInfo(
+            final PaymentInfo info, final String username,
+            final String password) throws SQLException {
+        VerificationProcess vdb = VerificationProcess.getInstance(conn);
+        RemovalProcess rdb = RemovalProcess.getInstance(conn);
+        InsertionProcess idb = InsertionProcess.getInstance(conn);
+        if(vdb.checkUser(username, password)) {
+            rdb.removePaymentInfo(username);
+            idb.savePaymentInfo(username, info);
         }
     }
 }

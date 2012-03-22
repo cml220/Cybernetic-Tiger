@@ -22,20 +22,14 @@ public class User {
 	
 	//		I am going to talk to Colin about new db operations to encapsulate paymentInfo(ie. check if info exists, retrieve payment info by username, etc)
 	//		and about making sure that when a user is pulled from the database that all corresponding info comes out with it.
-	public User(String username, boolean isAdmin, String email) throws SQLException
+	public User(String username, boolean isAdmin, String email, ArrayList<Book> rentals, PaymentInfo paymentInfo, Cart cart) throws SQLException
 	{
 		this.username = username;
-		//TODO DBINTERFACE
-		User userInfo = (new DatabaseProcess()).getUserInfo(username);
-			// hack so login still works below (if null etc)
-			if (userInfo != null) {
-				this.paymentInfo = userInfo.paymentInfo;
-			}
-			// end hack
-		rentals = (new DatabaseProcess()).getBooksBy(DatabaseProcess.USERNAME, username);
+		this.rentals = rentals;
+		this.paymentInfo = paymentInfo;
+		this.cart = cart;
 		this.isAdmin = isAdmin;
 		this.email = email;
-		cart = new Cart();
 	}
 	
 	public String getEmail() {
@@ -71,7 +65,7 @@ public class User {
 		return this.paymentInfo;
 	}
 	
-	public void setPaymentInfo() throws SQLException {
+	public void setPaymentInfo() throws SQLException, CartException{
 		this.paymentInfo = DatabaseProcess.getInstance().getUserInfo(this.getUserName()).getPaymentInfo();
 	}
 	
