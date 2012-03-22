@@ -6,7 +6,7 @@
 
 package gui;
 
-import java.awt.Color;import java.sql.SQLException;import java.util.ArrayList;import javax.swing.JComponent;import javax.swing.JOptionPane;import javax.swing.SwingWorker;import javax.swing.border.LineBorder;import model.Book;
+import java.awt.Color;import java.sql.SQLException;import java.util.ArrayList;import javax.swing.JComponent;import javax.swing.JOptionPane;import javax.swing.JPanel;import javax.swing.SwingWorker;import javax.swing.border.LineBorder;import model.Book;
 
 /**
  * Singleton to store the panels used by this program as well as fonts and
@@ -149,7 +149,7 @@ public final class PanelsManager {
             panelsArray[ADVSEARCH]
                         = new AdvSearchPanel();            preSearchStringsArray[ADVSEARCH] = " You are in the advanced search pane";            tick("Initializing search engine display");
             panelsArray[SEARCHRESULTS]
-                        = new DisplayScrollPane(new SearchResultsPanel());            tick("Loading your account details");
+                        = new DisplayScrollPane(new SearchResultsPanel());            preSearchStringsArray[SEARCHRESULTS] = "Search Available Books";            tick("Loading your account details");
             /* TODO: Creating a test User object can potentially throw an SQLException.
              * Once the MyAccountPanel is updated to use the current user instead of the test User,
              * this try-catch block can be eliminated
@@ -163,7 +163,7 @@ public final class PanelsManager {
             }
             panelsArray[MYCART] =
                 new CheckoutPanel();            tick("Preparing checkout process");
-            preSearchStringsArray[MYCART] = " Search My Cart";            // the catalogue, containing all the items :D            panelsArray[CATALOGUE]                        = new DisplayScrollPane(new CataloguePanel());            initialised = true;            tick("Doing the macarena");            return null;        }        @Override        public void done() {            if(!initialised) {                throw new RuntimeException("PanelsManager build thread sent"                        + " \"done\" signal too soon");            }            LoadingPanel.instance.finish();        }
+            preSearchStringsArray[MYCART] = " Search My Cart";            // the catalogue, containing all the items :D            panelsArray[CATALOGUE]                        = new DisplayScrollPane(new CataloguePanel());            preSearchStringsArray[CATALOGUE] = " Search Available Books";            tick("Preparing book reader manager");            // the catalogue, containing all the items :D            panelsArray[BOOKS]                        = new JPanel(); //TODO: Adam add your viewer here            preSearchStringsArray[BOOKS] = " Search My Books";            initialised = true;            initialised = true;            tick("Doing the macarena");            return null;        }        @Override        public void done() {            if(!initialised) {                throw new RuntimeException("PanelsManager build thread sent"                        + " \"done\" signal too soon");            }            LoadingPanel.instance.finish();        }
     }
     public static InitTask getInitTask() {        return new InitTask();    }    public static void newSearchResults (ArrayList<Book> results) {        panelsArray[SEARCHRESULTS] = new SearchResultsPanel(results, true);    }
     /**
@@ -273,5 +273,5 @@ public final class PanelsManager {
         defaultTab.doClick();
         defaultTab.requestFocus();
 
-    }        public static void displayError(String errorMessage)    {    	JOptionPane.showMessageDialog(null,	            errorMessage,	            "Fatal Error", JOptionPane.ERROR_MESSAGE);        }
+    }    public static void displayError(String errorMessage)    {        JOptionPane.showMessageDialog(null,                errorMessage,                "Fatal Error", JOptionPane.ERROR_MESSAGE);    }
 }
