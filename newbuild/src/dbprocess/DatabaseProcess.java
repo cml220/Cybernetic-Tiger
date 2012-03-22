@@ -343,21 +343,4 @@ public class DatabaseProcess {
         VerificationProcess db = VerificationProcess.getInstance(conn);
         return db.userHasBook(username, isbn);
     }
-    
-    public static void main(String[] args) {
-        DatabaseProcess db = DatabaseProcess.getInstance();
-        PaymentInfo pmt = new PaymentInfo("1234567","Colin","Canada",
-                "242 A Street", "424 Nota Street", "January", "2042",
-                "52","Saskatchewan","B0B 0B0","867-5309");
-        
-        try {
-            db.savePaymentInfo("colin", pmt);
-            pmt.setName("NotColin");
-            db.editPaymentInfo(pmt, "colin", "dtrush");
-            db.removePaymentInfo("colin");
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 }
