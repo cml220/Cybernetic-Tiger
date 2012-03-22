@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 import model.Book;
 import model.Cart;
+import model.PaymentInfo;
 import model.User;
 
 /** Getter Processes for Database.
@@ -51,6 +52,7 @@ public class GetterProcess {
      * @param username    the user whose assoc. data is to be found
      * @return    the data (as a string) if found, otherwise null
      * @throws SQLException sql method fail
+     * @throws CartException cart method fail
      */
     protected final User getUserInfo(
             final String username) throws SQLException {
@@ -65,9 +67,17 @@ public class GetterProcess {
                 + "\"" + username + "\"");
         if (rs.next()) {
             rs2.next();
+            PaymentInfo info = getPaymentInfo(username);
+            ArrayList<Book> rentals = getBooksBy(DatabaseProcess.USERNAME, username);
+            Cart cart;
+            try {
+                cart = getUserCart(username);
+            } catch (CartException ce) {
+                cart = null;
+            }
             User u;
             u = new User(rs.getString("UserName"),
-                    false, rs2.getString("email"));
+                    false, rs2.getString("email"), rentals, info, cart);
             if (rs.getString("isAdmin").equals("Y")) { u.isAdmin = true; }
             else { u.isAdmin = false; }
             return u;
@@ -166,7 +176,7 @@ public class GetterProcess {
         while (rs.next()) {
             bookList.add(new Book(rs.getString("Title"), rs.getString("Author"),
                     rs.getDouble("Price"), rs.getString("Url"),
-                    rs.getInt("ISBN"), rs.getString("picUrl"),
+                    rs.getLong("ISBN"), rs.getString("picUrl"),
                     rs.getString("Description")));
         }
         if (bookList.size() == 0) {
@@ -235,14 +245,38 @@ public class GetterProcess {
         rs = stmt.executeQuery("SELECT * FROM "
                 + "tblBook WHERE (ISBN=" + isbn + ") LIMIT 1;");
         if (rs.first()) {
-            info = "<html>Title: " + rs.getString("title")
-                    + "<br>Author: " + rs.getString("author")
-                    + "<br>ISBN: " + rs.getString("isbn")
+            info = "<html>Title: " + rs.getString("Title")
+                    + "<br>Author: " + rs.getString("Author")
+                    + "<br>ISBN: " + rs.getString("Isbn")
                     + "<br>Description: <br>"
-                    + rs.getString("description");
+                    + rs.getString("Description");
         } else {
             return "No info found!";
         }
         return info;
+    }
+    
+    /** Get the payment info for a user
+     * @param username  the user
+     * @return  the payment info if gotten; null otherwise
+     * @throws SQLException sql method fail
+     */
+    protected final PaymentInfo getPaymentInfo(
+            String username) throws SQLException {
+        Statement stmt = conn.createStatement();
+        ResultSet rs;
+        rs = stmt.executeQuery("SELECT * FROM "
+                + "tblPaymentInfo WHERE (UserName=\"" + username + "\");");
+        if(rs.next()) {
+            return new PaymentInfo(rs.getString("CardNumber"),
+                    rs.getString("UserName"),rs.getString("Country"),
+                    rs.getString("Address"),rs.getString("Address2"),
+                    rs.getString("ExpMonth"),rs.getString("ExpYear"),
+                    rs.getString("SecurityCode"),rs.getString("State"),
+                    rs.getString("ZIP"),rs.getString("Phone"));
+        }
+        else {
+            return null;
+        }
     }
 }

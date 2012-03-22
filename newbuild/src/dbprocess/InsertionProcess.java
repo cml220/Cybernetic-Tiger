@@ -11,6 +11,7 @@ import exceptions.UserAlreadyExistsException;
 
 import model.Book;
 import model.Cart;
+import model.PaymentInfo;
 
 /** Insertion database processes.
  * @author Colin
@@ -172,6 +173,34 @@ public class InsertionProcess {
                     + cartNum + ","
                     + c.get(i).getBookISBN() + ")");
         }
+    }
+    
+    /** Save a user's payment info to the db
+     * @param info  the payment info to be saved incl all fields
+     * @throws SQLException failed sql methods
+     */
+    protected final void savePaymentInfo(
+            final String username, final PaymentInfo info) 
+                    throws SQLException {
+        DatabaseProcess db = DatabaseProcess.getInstance();
+        db.removePaymentInfo(info.getName());
+        Statement stmt = conn.createStatement();
+        stmt.execute("INSERT INTO tblPaymentInfo "
+                + "(UserName,CardNumber,Name,Country,Address,Address2"
+                + ",ExpMonth,ExpYear,SecurityCode"
+                + ",State,ZIP,Phone) VALUES "
+                + "(\"" + username + "\",\""
+                + info.getCardNumber()+ "\",\""
+                + info.getName()+ "\",\""
+                + info.getCountry() + "\",\""
+                + info.getAddress() + "\",\""
+                + info.getAddress2() + "\",\""
+                + info.getExpiryMonth() + "\",\""
+                + info.getExpiryYear() + "\",\""
+                + info.getSecurityCode() + "\",\""
+                + info.getState() + "\",\""
+                + info.getZip() + "\",\""
+                + info.getPhone() + "\")");
     }
 
     /** Helper method to validate that

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import model.Book;
 import model.Cart;
+import model.PaymentInfo;
 import model.User;
 
 import com.mysql.jdbc.Connection;
@@ -76,8 +77,10 @@ public class DatabaseProcess {
      * @param user    the user whose assoc. data is to be found
      * @return    the data (as a string) if found, otherwise null
      * @throws SQLException        failed sql methods
+     * @throws CartException        cart method fail
      */
-    public final User getUserInfo(final String user) throws SQLException {
+    public final User getUserInfo(final String user) 
+            throws SQLException {
         GetterProcess db = GetterProcess.getInstance(conn);
         return db.getUserInfo(user);
     }
@@ -147,6 +150,17 @@ public class DatabaseProcess {
         GetterProcess db = GetterProcess.getInstance(conn);
         return db.getBookInfo(isbn);
     }
+    
+    /** Get the payment info for a user
+     * @param username  the user
+     * @return  the payment info if gotten; null otherwise
+     * @throws SQLException sql method fail
+     */
+    public final PaymentInfo getPaymentInfo(
+            String username) throws SQLException {
+        GetterProcess db = GetterProcess.getInstance(conn);
+        return db.getPaymentInfo(username);
+    }
 
     /** Add a book to a user's rentals.
      * @param isbn        isbn of book to be added
@@ -209,6 +223,17 @@ public class DatabaseProcess {
         InsertionProcess db = InsertionProcess.getInstance(conn);
         db.saveShoppingCart(c, username, shopdate);
     }
+    
+    /** Save a user's payment info to the db
+     * @param info  the payment info to be saved incl all fields
+     * @throws SQLException failed sql methods
+     */
+    public final void savePaymentInfo(
+            final String username, final PaymentInfo info) 
+                    throws SQLException {
+        InsertionProcess db = InsertionProcess.getInstance(conn);
+        db.savePaymentInfo(username, info);
+    }
 
     /** Edit an existing user's information incl. password, email, admin status.
      * @param user            user obj containing new info
@@ -225,6 +250,19 @@ public class DatabaseProcess {
         db.editUserInfo(user, passWord, newPassWord);
     }
 
+    /** Edit a user's payment info.
+     * @param info      the new info to be saved
+     * @param username  the user for it to be saved to
+     * @param password  the password of that user for verification
+     * @throws SQLException failed sql methods
+     */
+    public final void editPaymentInfo(
+            final PaymentInfo info, final String username,
+            final String password) throws SQLException {
+        ModificationProcess db = ModificationProcess.getInstance(conn);
+        db.editPaymentInfo(info, username, password);
+    }
+    
     /** Remove a user from the db.
      * @param username    the user to be removed
      * @return true        if the user has been removed; false otherwise
@@ -258,6 +296,17 @@ public class DatabaseProcess {
             final String userName) throws SQLException {
         RemovalProcess db = RemovalProcess.getInstance(conn);
         return db.removeShoppingCart(userName);
+    }
+    
+    /** Remove the payment info for a given user.
+     * @param username  the user for it to be removed from
+     * @return  true if removed; false otherwise
+     * @throws SQLException
+     */
+    public final boolean removePaymentInfo(
+            final String username) throws SQLException {
+        RemovalProcess db = RemovalProcess.getInstance(conn);
+        return db.removePaymentInfo(username);
     }
 
     /** Check if a user with the given login info is registered.
@@ -293,5 +342,22 @@ public class DatabaseProcess {
             final String username, final long isbn) throws SQLException {
         VerificationProcess db = VerificationProcess.getInstance(conn);
         return db.userHasBook(username, isbn);
+    }
+    
+    public static void main(String[] args) {
+        DatabaseProcess db = DatabaseProcess.getInstance();
+        PaymentInfo pmt = new PaymentInfo("1234567","Colin","Canada",
+                "242 A Street", "424 Nota Street", "January", "2042",
+                "52","Saskatchewan","B0B 0B0","867-5309");
+        
+        try {
+            db.savePaymentInfo("colin", pmt);
+            pmt.setName("NotColin");
+            db.editPaymentInfo(pmt, "colin", "dtrush");
+            db.removePaymentInfo("colin");
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
