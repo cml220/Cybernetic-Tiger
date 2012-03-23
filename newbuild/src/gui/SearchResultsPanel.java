@@ -56,12 +56,9 @@ public class SearchResultsPanel extends StyledPanel {
 
             Book currentBookToAdd;
 
-            System.out.println(books.size());
-
             for (int i = 0; i < books.size(); i++) {
 
                 currentBookToAdd = books.get(i);
-                System.out.println("HI " + currentBookToAdd.title);
                 this.add(new CatalogueBookPanel(currentBookToAdd));
 
             }
