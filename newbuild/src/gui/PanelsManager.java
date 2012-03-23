@@ -164,8 +164,8 @@ public final class PanelsManager {
                 panelsArray[MYCART] =
                         new CheckoutPanel();                tick("Preparing checkout process");
                 preSearchStringsArray[MYCART] = " Search My Cart";                // the catalogue, containing all the items :D                panelsArray[CATALOGUE]                        = new DisplayScrollPane(new CataloguePanel());                preSearchStringsArray[CATALOGUE] = " Search Available Books";                tick("Preparing book reader manager");                // the catalogue, containing all the items :D                panelsArray[BOOKS]                        = new ReaderViewPanel();                preSearchStringsArray[BOOKS] = " Search My Books";                initialised = true;                tick("Doing the macarena");            } catch (Exception e) {                e.printStackTrace();            }            return null;        }        @Override        public void done() {            if(!initialised) {                throw new RuntimeException("PanelsManager build thread sent"                        + " \"done\" signal too soon");            }            LoadingPanel.instance.finish();        }
-    }
-    public static InitTask getInitTask() {        return new InitTask();    }    public static void newSearchResults (ArrayList<Book> results) {        JComponent oldPanel = panelsArray[SEARCHRESULTS];        panelsArray[SEARCHRESULTS] = new DisplayScrollPane(new SearchResultsPanel(results));;        MainPanel.replaceDisplayPanel(oldPanel, panelsArray[SEARCHRESULTS], SEARCHRESULTS);        MainPanel.changeDisplayPanel(SEARCHRESULTS);    }
+    }    /**     * Getter for the Initialisation Task (for progress bar).     * @return The task     */
+    public static InitTask getInitTask() {        return new InitTask();    }    /**     * Makes and shows a new search results panel given some list of books.     * @param results - the search result books.     */    public static void newSearchResults (ArrayList<Book> results) {        /*         * Keep a reference of the old search results panel         * It will be needed in order to swap in the new one         */        JComponent oldPanel = panelsArray[SEARCHRESULTS];        /*         * Make a new results panel with the results from this search         */        panelsArray[SEARCHRESULTS] = new DisplayScrollPane(new SearchResultsPanel(results));;        /*         * Remove the old panel and place the new one in the layout manager in MainPanel         */        MainPanel.replaceDisplayPanel(oldPanel, panelsArray[SEARCHRESULTS], SEARCHRESULTS);        /*         * Jump to the search results         */        MainPanel.changeDisplayPanel(SEARCHRESULTS);    }
     /**
      * Returns the desired JPanel when passed in a constant defined in this
      * class.
@@ -222,7 +222,6 @@ public final class PanelsManager {
         return NUMPANELS;
 
     }
-
     /**
      * @return the 'pre search string' that goes in the searchbox before any
      * text is entered.

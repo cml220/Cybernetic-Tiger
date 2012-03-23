@@ -1,14 +1,12 @@
 package gui;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.AbstractAction;
-import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -187,7 +185,7 @@ public class AdvSearchPanel extends StyledPanel {
         InnerPanel comboPanel = new InnerPanel();
         comboPanel.add(locationLabel);
         comboPanel.add(locationChoice);
-        comboPanel.add(Box.createRigidArea(new Dimension(200, 50)));
+        //comboPanel.add(Box.createRigidArea(new Dimension(1,1)));
 
         /**
          * Panel for aligning the button correctly.
@@ -233,7 +231,7 @@ public class AdvSearchPanel extends StyledPanel {
         this.add(isbnField);
         this.add(comboPanel);
         this.add(buttonsPanel);
-        this.add(Box.createRigidArea(new Dimension(200, 200)));
+        //this.add(PanelsManager.getAlignmentBlock());
 
     }
 

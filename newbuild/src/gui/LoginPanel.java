@@ -1,9 +1,6 @@
 package gui;
 
-import exceptions.ControllerNotInitializedException;
-
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
@@ -20,6 +17,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import controllers.Controller;
+import exceptions.ControllerNotInitializedException;
 
 /**
  * Panel for logging into the system.
@@ -159,9 +157,9 @@ public class LoginPanel extends StyledPanel {
              * If the login info is correct, open up the program.
              */
             try {
-            	// Added for debugging, so you can find the password and log in
-            	// TODO: Remove the following line before shipping
-            	// System.out.println(DatabaseProcess.getInstance().getUserPassWord(usernamePanel.getText()));
+                // Added for debugging, so you can find the password and log in
+                // TODO: Remove the following line before shipping
+                // System.out.println(DatabaseProcess.getInstance().getUserPassWord(usernamePanel.getText()));
                 if (Controller.checkLogin(usernamePanel.getText(),
                         passwordPanel.getText())) {
 
@@ -229,14 +227,14 @@ public class LoginPanel extends StyledPanel {
          * A text area for the username with label.
          */
         final InputWithLabelPanel usernamePanel =
-            new InputWithLabelPanel("Username", false);
+                new InputWithLabelPanel("Username", false);
         usernamePanel.requestFocus();
 
         /*
          * A text area for the password with label.
          */
         final InputWithLabelPanel passwordPanel =
-            new InputWithLabelPanel("Password", true);
+                new InputWithLabelPanel("Password", true);
         passwordPanel.addActionListener(new ActionListener(){
 
             @Override
@@ -292,7 +290,7 @@ public class LoginPanel extends StyledPanel {
         /*
          * Blank space to center the input areas.
          */
-        this.add(Box.createRigidArea(new Dimension(100, 200)));
+        this.add(Box.createVerticalStrut(200));
 
         /*
          * Input areas.
@@ -313,7 +311,7 @@ public class LoginPanel extends StyledPanel {
         /*
          * Blank space to center the input areas.
          */
-        this.add(Box.createRigidArea(new Dimension(100, 200)));
+        this.add(Box.createVerticalStrut(200));
 
     }
 

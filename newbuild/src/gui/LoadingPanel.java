@@ -4,7 +4,6 @@ import gui.PanelsManager.InitTask;
 
 import java.awt.Color;
 import java.awt.Cursor;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -68,10 +67,10 @@ public class LoadingPanel extends StyledPanel implements PropertyChangeListener 
             /*
              * Put the panel together
              */
-            this.add(Box.createRigidArea(new Dimension(200,200)));
+            this.add(Box.createVerticalStrut(250));
             this.add(progBarPanel);
             this.add(statusPanel);
-            this.add(Box.createRigidArea(new Dimension(200,200)));
+            this.add(Box.createVerticalStrut(250));
 
             /*
              * Start initializing the Panels Manager in a separate thread

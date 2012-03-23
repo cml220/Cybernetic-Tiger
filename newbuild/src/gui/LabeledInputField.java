@@ -73,7 +73,7 @@ class LabeledInputField extends JPanel {
         /*
          * Add a uniform amount of space on the right side
          */
-        this.add(Box.createRigidArea(new Dimension(200, 50)));
+        this.add(Box.createHorizontalStrut(200));
 
     }
 

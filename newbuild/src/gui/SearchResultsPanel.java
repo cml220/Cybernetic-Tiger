@@ -6,10 +6,13 @@
 
 package gui;
 
+import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.util.ArrayList;
 
-import javax.swing.JPanel;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JLabel;
 
 import model.Book;
 
@@ -19,7 +22,7 @@ import model.Book;
  * @author Brad
  *
  */
-public class SearchResultsPanel extends JPanel {
+public class SearchResultsPanel extends StyledPanel {
 
     /**
      *
@@ -43,17 +46,38 @@ public class SearchResultsPanel extends JPanel {
      */
     public SearchResultsPanel(final ArrayList<Book> books) {
 
-        this.setLayout(new GridLayout(0, 1));
+        /*
+         * If there were matching, display the books vertically
+         */
 
-        Book currentBookToAdd;
+        if (books.size() > 0) {
 
-        System.out.println(books.size());
+            this.setLayout(new GridLayout(0, 1));
 
-        for (int i = 0; i < books.size(); i++) {
+            Book currentBookToAdd;
 
-            currentBookToAdd = books.get(i);
-            System.out.println("HI " + currentBookToAdd.title);
-            this.add(new CatalogueBookPanel(currentBookToAdd));
+            System.out.println(books.size());
+
+            for (int i = 0; i < books.size(); i++) {
+
+                currentBookToAdd = books.get(i);
+                System.out.println("HI " + currentBookToAdd.title);
+                this.add(new CatalogueBookPanel(currentBookToAdd));
+
+            }
+
+        } else {
+
+            /*
+             * If there were no matches print a message to screen.
+             */
+            this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+
+            this.add(Box.createVerticalStrut(200));
+            this.add(new JLabel("   Could not find any books."),
+                    BorderLayout.NORTH);
+            this.add(new JLabel("   Try using less specific search keywords."),
+                    BorderLayout.SOUTH);
 
         }
 
