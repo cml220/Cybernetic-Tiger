@@ -131,11 +131,23 @@ public final class Controller {
     public static void openAccount() {
     }
 
-    public static void openCart() {
+    /**
+     * Pass the current catalogue to the caller.
+     * @return current catalogue of books available for purchase
+     * @throws SQLException
+     * @throws ControllerNotInitializedException
+     */
+    public static ArrayList<Book> getCatalogue() throws SQLException, ControllerNotInitializedException {
 
-    }
 
-    public static void openCatalogue() {
+        if (!initialized) {
+
+            throw new ControllerNotInitializedException();
+
+        }
+
+        return catalogueController.getCatalogue();
+
     }
 
     /**
@@ -147,7 +159,7 @@ public final class Controller {
      * @throws SQLException if no connection to the database can be obtained
      */
     public static User getUserInfo(final String username)
-    throws ControllerNotInitializedException, SQLException {
+            throws ControllerNotInitializedException, SQLException {
 
         if (!initialized) {
 
@@ -167,7 +179,7 @@ public final class Controller {
      * @throws Exception
      */
     public static void changeUserInfo(String username, final User user, String password, String newPassWord)
-    throws Exception {
+            throws Exception {
 
         if (!initialized) {
 
@@ -201,7 +213,7 @@ public final class Controller {
      * @throws ControllerNotInitializedException if the controller isn't loaded
      */
     public static PaymentInfo fetchPaymentInfo()
-    throws ControllerNotInitializedException {
+            throws ControllerNotInitializedException {
 
         if (!initialized) {
 
@@ -257,7 +269,7 @@ public final class Controller {
      * @throws ControllerNotInitializedException if the controller isn't loaded
      */
     public static void setPaymentInfo(PaymentInfo piNew)
-    throws ControllerNotInitializedException {
+            throws ControllerNotInitializedException {
 
         if (!initialized) {
 
@@ -392,7 +404,7 @@ public final class Controller {
      * @throws ControllerNotInitializedException if the controller isn't loaded
      */
     public static void addToCart(final Book book)
-    throws CartException, ControllerNotInitializedException {
+            throws CartException, ControllerNotInitializedException {
 
         if (!initialized) {
 
@@ -411,7 +423,7 @@ public final class Controller {
      * @throws ControllerNotInitializedException if the controller isn't loaded
      */
     public static void removeFromCart(final Book book)
-    throws CartException, ControllerNotInitializedException {
+            throws CartException, ControllerNotInitializedException {
 
         if (!initialized) {
 
@@ -431,7 +443,7 @@ public final class Controller {
      * @throws ControllerNotInitializedException if the controller isn't loaded
      */
     public static ArrayList<Book> getCartContents()
-    throws CartException, ControllerNotInitializedException {
+            throws CartException, ControllerNotInitializedException {
 
         if (!initialized) {
 
@@ -451,7 +463,7 @@ public final class Controller {
      * @throws ControllerNotInitializedException
      */
     public static float getCartTotal()
-    throws CartException, ControllerNotInitializedException {
+            throws CartException, ControllerNotInitializedException {
 
         if (!initialized) {
 
@@ -470,7 +482,7 @@ public final class Controller {
      * @throws SQLException
      */
     public static ArrayList<Book> getUserBooks()
-    throws ControllerNotInitializedException, SQLException {
+            throws ControllerNotInitializedException, SQLException {
 
         if (!initialized) {
 
@@ -490,8 +502,8 @@ public final class Controller {
      * @throws ControllerNotInitializedException if the controller isn't loaded
      */
     public static JLabel loadCover(final Book book)
-    throws ImageLoadFailedException,
-    ControllerNotInitializedException {
+            throws ImageLoadFailedException,
+            ControllerNotInitializedException {
 
         if (!initialized) {
 
@@ -540,7 +552,7 @@ public final class Controller {
     }
 
     public static boolean checkLogin(String username, String password)
-    throws ControllerNotInitializedException, SQLException {
+            throws ControllerNotInitializedException, SQLException {
 
         if (!initialized) {
 
@@ -575,7 +587,7 @@ public final class Controller {
      * @throws BookOpenFailed
      */
     public static JPanel openReader(final Book book)
-    throws ControllerNotInitializedException, MalformedURLException, BookOpenFailed {
+            throws ControllerNotInitializedException, MalformedURLException, BookOpenFailed {
         JPanel opened;
         if (!initialized) {
 

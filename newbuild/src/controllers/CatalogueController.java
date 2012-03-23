@@ -15,7 +15,7 @@ public class CatalogueController {
 
     public ArrayList<Book> getCatalogue() throws SQLException {
         DatabaseProcess process = new DatabaseProcess();
-        catalogue = process.getBooksBy(DatabaseProcess.CATALOGUE, null);
+        catalogue = process.getBooksBy(DatabaseProcess.CATALOGUE, "");
         return catalogue;
     }
 
@@ -43,12 +43,12 @@ public class CatalogueController {
         if (book.getBookISBN() >= 0) {
             Book bookByISBN = db.getBookByIsbn(book.getBookISBN());
             if (bookByISBN != null) {
-	            if (!bookList.contains(bookByISBN)) {
-	                bookList.add(bookByISBN);
-	            }
+                if (!bookList.contains(bookByISBN)) {
+                    bookList.add(bookByISBN);
+                }
             }
             else {
-            	System.out.println("Book not found by ISBN");
+                System.out.println("Book not found by ISBN");
             }
         }
 
@@ -56,14 +56,14 @@ public class CatalogueController {
         if (book.getBookTitle() != null) {
             ArrayList<Book> booksByTitle = db.getBooksBy(DatabaseProcess.TITLE, book.getBookTitle());
             if (booksByTitle != null) {
-	            for (Book b : booksByTitle) {
-	                if (!bookList.contains(b)) {
-	                    bookList.add(b);
-	                }
-	            }
+                for (Book b : booksByTitle) {
+                    if (!bookList.contains(b)) {
+                        bookList.add(b);
+                    }
+                }
             }
             else {
-            	System.out.println("Book not found by Title");
+                System.out.println("Book not found by Title");
             }
         }
 
@@ -71,20 +71,20 @@ public class CatalogueController {
         if (book.getBookAuthor() != null) {
             ArrayList<Book> booksByAuthor = db.getBooksBy(DatabaseProcess.AUTHOR, book.getBookAuthor());
             if (booksByAuthor != null) {
-	            for (Book b : booksByAuthor) {
-	                if (!bookList.contains(b)) {
-	                    bookList.add(b);
-	                }
-	            }
+                for (Book b : booksByAuthor) {
+                    if (!bookList.contains(b)) {
+                        bookList.add(b);
+                    }
+                }
             }
             else {
-            	System.out.println("Book not found by Author");
+                System.out.println("Book not found by Author");
             }
         }
-    	System.out.println("Books returned: ");
+        System.out.println("Books returned: ");
         for (Book b: bookList)
         {
-        	System.out.println(b.title);
+            System.out.println(b.title);
         }
         return bookList;
     }

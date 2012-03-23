@@ -104,53 +104,56 @@ public class AdvSearchPanel extends StyledPanel {
 
             @Override
             /**
-             * Skeleton implementation
-             * TODO: Invoke search
+             * Search for a book using the fields.
              */
             public void actionPerformed(final ActionEvent arg0) {
 
                 Book searchBook = new Book();
                 boolean anythingSearched = false;
 
-                String message = "Not Yet Implemented\n"
-                        + "You Searched for:";
-
+                /*
+                 * Get Title from field
+                 */
                 if (!titleField.getText().isEmpty()) {
 
                     anythingSearched = true;
-                    message = message.concat("\nTitle: "
-                            + titleField.getText());
-
                     searchBook.title = titleField.getText();
 
                 }
+
+                /*
+                 * Get Author from field
+                 */
                 if (!authorField.getText().isEmpty()) {
 
                     anythingSearched = true;
-                    message = message.concat("\nAuthor: "
-                            + authorField.getText());
-
                     searchBook.author = authorField.getText();
 
                 }
+
+                /*
+                 * Get Keywords from field
+                 */
                 if (!keywordField.getText().isEmpty()) {
 
                     anythingSearched = true;
-                    message = message.concat("\nKeywords: "
-                            + keywordField.getText());
-
+                    searchBook.description = keywordField.getText();
 
                 }
+
+                /*
+                 * Get ISBN from field
+                 */
                 if (!isbnField.getText().isEmpty()) {
 
                     anythingSearched = true;
-                    message = message.concat("\nISBN: "
-                            + isbnField.getText());
-
                     searchBook.ISBN = Integer.parseInt(isbnField.getText());
 
                 }
 
+                /*
+                 * If all the fields were blank, don't search
+                 */
                 if (!anythingSearched) {
 
                     JOptionPane.showMessageDialog(null, "Nothing Searched", "No Values",
@@ -161,15 +164,24 @@ public class AdvSearchPanel extends StyledPanel {
 
                     try {
 
+                        /*
+                         * Perform a search
+                         */
                         ArrayList<Book> books = Controller.searchForBook(searchBook);
+
+                        /*
+                         * Show the results
+                         */
                         PanelsManager.newSearchResults(books);
 
                     } catch (Exception e) {
 
+                        /*
+                         * Print error message if error occurs
+                         */
                         e.printStackTrace();
-                        JOptionPane.showMessageDialog(null, "Book Search failed\n"
-                                + "Contact tech support\n" + e.getMessage(),
-                                "Fatal Error", JOptionPane.ERROR_MESSAGE);
+                        PanelsManager.displayError("Book Search failed\n"
+                                + "Contact tech support");
 
                     }
 

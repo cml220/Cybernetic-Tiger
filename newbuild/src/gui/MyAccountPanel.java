@@ -193,9 +193,6 @@ public class MyAccountPanel extends StyledPanel {
     /**
 
      * Constructs the panel.
-
-     * TODO: Everything
-
      * @throws SQLException I'm pretty sure this will be eliminated when testing code is removed and real code is implemented
 
      */
@@ -212,8 +209,6 @@ public class MyAccountPanel extends StyledPanel {
         headerLabel.setForeground(PanelsManager.UNSELECTEDBLUE);
 
         // TODO: Make update buttons work
-
-        // TODO: Make it pretty...
 
         userToShow = Controller.getCurrentUser();
 

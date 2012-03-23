@@ -7,13 +7,14 @@
 package gui;
 
 import java.awt.GridLayout;
+import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.ListIterator;
 
 import javax.swing.JPanel;
 
 import model.Book;
 import controllers.Controller;
+import exceptions.ControllerNotInitializedException;
 
 /**
  * A panel containing a stack of bookpanels, constructed using details from
@@ -33,49 +34,36 @@ public class CataloguePanel extends JPanel {
      * Builds a search results panel filled with book panels, constructed
      * using books passed in to the constructor.
      * @param books the list of books to populate the panel with
+     * @throws ControllerNotInitializedException
+     * @throws SQLException
      */
-    public CataloguePanel() {
+    public CataloguePanel() throws SQLException, ControllerNotInitializedException {
 
         this.setLayout(new GridLayout(0, 1));
 
-        // TODO: remove the examples below once system goes live
-        this.add(new CatalogueBookPanel(new Book("Test book", "Test author", 11.75, "http://pdfloc", 123456, "http://imgloc", "This is a test book for the next books system.")));
-        this.add(new CatalogueBookPanel(new Book("Test book", "Test author", 11.75, "http://pdfloc", 1234567, "http://imgloc", "This is a test book for the next books system.")));
-        this.add(new CatalogueBookPanel(new Book("Test book", "Test author", 11.75, "http://pdfloc", 1234568, "http://imgloc", "This is a test book for the next books system.")));
-        this.add(new CatalogueBookPanel(new Book("Test book", "Test author", 11.75, "http://pdfloc", 1234569, "http://imgloc", "This is a test book for the next books system.")));
-
-        /*
-         * Initialize the main controller.
-         */
-        Controller.initialize();
         ArrayList<Book> books = null;
 
-        // Throws exception - ControllerNOTInitalised, SQLException
-        try {
-            // search for a Null book in an effort to return all the books
-            books = Controller.searchForBook(null);
-        }
-        catch(Exception e){
-            // something has gone wrong, make sure books is set to null
-            books = null;
-        }
+        try{
 
-        ListIterator<Book> bookIterator;
+            books = Controller.getCatalogue();
 
-        // try catch block to stop the application from crashing if user has no books
-        try {
-            bookIterator = (ListIterator<Book>) books.iterator();
-        }
-        catch(Exception e) {
-            bookIterator = null;
+        } catch (Exception e) {
+
+            e.printStackTrace();
+            PanelsManager.displayError(e.getMessage());
+
         }
 
-        Book currentBookToAdd;
-        // Display all the books
-        while (bookIterator != null && bookIterator.hasNext()) {
+        if (books != null) {
 
-            currentBookToAdd = bookIterator.next();
-            this.add(new CatalogueBookPanel(currentBookToAdd));
+            Book currentBookToAdd;
+            // Display all the books
+            for (int i = 0; i < books.size(); i++) {
+
+                currentBookToAdd = books.get(i);
+                this.add(new CatalogueBookPanel(currentBookToAdd));
+
+            }
 
         }
 

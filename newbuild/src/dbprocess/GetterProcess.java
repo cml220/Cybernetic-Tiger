@@ -1,9 +1,6 @@
 package dbprocess;
 
 import java.sql.Connection;
-
-import exceptions.CartException;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -13,13 +10,14 @@ import model.Book;
 import model.Cart;
 import model.PaymentInfo;
 import model.User;
+import exceptions.CartException;
 
 /** Getter Processes for Database.
  * @author Colin
  */
 public class GetterProcess {
     /** db connection. */
-    private Connection conn;
+    private final Connection conn;
     /** process instance. */
     private static GetterProcess instance;
 
@@ -133,7 +131,7 @@ public class GetterProcess {
                     c.add((db.getBookByIsbn(isbn)));
                 }
             }
-           }
+        }
         else {
             return null;
         }
@@ -255,7 +253,7 @@ public class GetterProcess {
         }
         return info;
     }
-    
+
     /** Get the payment info for a user
      * @param username  the user
      * @return  the payment info if gotten; null otherwise

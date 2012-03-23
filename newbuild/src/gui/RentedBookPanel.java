@@ -4,7 +4,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import model.Book;
-import controllers.Controller;
 
 /**
  * A panel containing a single book and details about the book.
@@ -33,8 +32,7 @@ public class RentedBookPanel extends BookPanel {
             public void actionPerformed(ActionEvent e) {
 
                 try {
-                    // initialize controller
-                    Controller.initialize();
+
                     // put the book into the main panel ;)
                     ReaderViewPanel.OpenNewBook(book);
                     MainPanel.changeDisplayPanel(PanelsManager.BOOKS);

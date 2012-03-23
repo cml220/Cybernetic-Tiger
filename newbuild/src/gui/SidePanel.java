@@ -7,6 +7,7 @@
 package gui;
 
 import java.awt.GridLayout;
+
 import javax.swing.JPanel;
 
 /**
@@ -36,10 +37,6 @@ public class SidePanel extends JPanel {
          */
         this.add(new TabsPanel());
 
-        /*
-         * Will also add user's avatar, shopping cart, etc.
-         */
-        //TODO: Add the rest
 
     }
 

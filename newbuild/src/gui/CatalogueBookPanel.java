@@ -4,9 +4,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 
-import controllers.Controller;
-
 import model.Book;
+import controllers.Controller;
 
 /**
  * A panel containing a single book and details about the book.
@@ -39,24 +38,24 @@ public class CatalogueBookPanel extends BookPanel {
         super.getPrimaryButton().addActionListener(new ActionListener(){
 
             @Override
-            public void actionPerformed(ActionEvent e) {             
-            	
-            	try {
-            		// initialize controller
-            		Controller.initialize();
-            		// add the book to the cart
-            		Controller.addToCart(book);
-            		// TODO: remove the button to rent it
-            		
-            	}
-            	catch (Exception e2){
-            		// failed to add to cart
-            		PanelsManager.displayError("Failed to add to cart. \nPlease contact technical support.");
-            	}
+            public void actionPerformed(ActionEvent e) {
+
+                try {
+
+                    // add the book to the cart
+                    Controller.addToCart(book);
+                    // TODO: remove the button to rent it
+
+                }
+                catch (Exception e2){
+                    // failed to add to cart
+                    e2.printStackTrace();
+                    PanelsManager.displayError("Failed to add to cart. \nPlease contact technical support.");
+                }
             }
-		    
-		    
-		});        
+
+
+        });
         super.getButtonsPanel().add(super.getPrimaryButton());
 
         super.getRentalInfoLabel().setText("Price: " + df.format(book.price));

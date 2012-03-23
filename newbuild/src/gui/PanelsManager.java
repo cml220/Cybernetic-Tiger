@@ -6,7 +6,7 @@
 
 package gui;
 
-import java.awt.Color;import java.sql.SQLException;import java.util.ArrayList;import javax.swing.JComponent;import javax.swing.JOptionPane;import javax.swing.SwingWorker;import javax.swing.border.LineBorder;import model.Book;
+import java.awt.Color;import java.util.ArrayList;import javax.swing.JComponent;import javax.swing.JOptionPane;import javax.swing.SwingWorker;import javax.swing.border.LineBorder;import model.Book;
 
 /**
  * Singleton to store the panels used by this program as well as fonts and
@@ -150,17 +150,8 @@ public final class PanelsManager {
                         = new AdvSearchPanel();                preSearchStringsArray[ADVSEARCH] = " You are in the advanced search pane";                tick("Initializing search engine display");
                 panelsArray[SEARCHRESULTS]
                         = new DisplayScrollPane(new SearchResultsPanel());                preSearchStringsArray[SEARCHRESULTS] = "Search Available Books";                tick("Loading your account details");
-                /* TODO: Creating a test User object can potentially throw an SQLException.
-                 * Once the MyAccountPanel is updated to use the current user instead of the test User,
-                 * this try-catch block can be eliminated
-                 * */
-                try {
-                    panelsArray[MYACCOUNT]
-                            = new MyAccountPanel();
-                } catch (SQLException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
+                panelsArray[MYACCOUNT]
+                        = new MyAccountPanel();
                 panelsArray[MYCART] =
                         new CheckoutPanel();                tick("Preparing checkout process");
                 preSearchStringsArray[MYCART] = " Search My Cart";                // the catalogue, containing all the items :D                panelsArray[CATALOGUE]                        = new DisplayScrollPane(new CataloguePanel());                preSearchStringsArray[CATALOGUE] = " Search Available Books";                tick("Preparing book reader manager");                // the catalogue, containing all the items :D                panelsArray[BOOKS]                        = new ReaderViewPanel();                preSearchStringsArray[BOOKS] = " Search My Books";                initialised = true;                tick("Doing the macarena");            } catch (Exception e) {                e.printStackTrace();            }            return null;        }        @Override        public void done() {            if(!initialised) {                throw new RuntimeException("PanelsManager build thread sent"                        + " \"done\" signal too soon");            }            LoadingPanel.instance.finish();        }

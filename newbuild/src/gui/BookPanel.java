@@ -125,8 +125,6 @@ abstract class BookPanel extends JPanel {
         JPanel wrapPanel = new JPanel();
         wrapPanel.setPreferredSize(new Dimension(830,bookHeight));
 
-        Controller.initialize();
-
         wrapPanel.setLayout(new BorderLayout());
         wrapPanel.setBorder(new LineBorder(PanelsManager.BACKGROUNDBLUE, 1));
 
