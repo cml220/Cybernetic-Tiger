@@ -41,22 +41,19 @@ public class SearchResultsPanel extends JPanel {
      * using books passed in to the constructor.
      * @param books the list of books to populate the panel with
      */
-    public SearchResultsPanel(final ArrayList<Book> books, boolean jumpTo) {
+    public SearchResultsPanel(final ArrayList<Book> books) {
 
         this.setLayout(new GridLayout(0, 1));
 
         Book currentBookToAdd;
 
+        System.out.println(books.size());
+
         for (int i = 0; i < books.size(); i++) {
 
             currentBookToAdd = books.get(i);
+            System.out.println("HI " + currentBookToAdd.title);
             this.add(new CatalogueBookPanel(currentBookToAdd));
-
-        }
-
-        if(jumpTo) {
-
-            MainPanel.changeDisplayPanel(PanelsManager.SEARCHRESULTS);
 
         }
 

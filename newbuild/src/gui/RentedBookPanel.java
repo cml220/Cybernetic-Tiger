@@ -2,10 +2,9 @@ package gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import gui.ReaderViewPanel;
-import javax.swing.JOptionPane;
-import controllers.Controller;
+
 import model.Book;
+import controllers.Controller;
 
 /**
  * A panel containing a single book and details about the book.
@@ -32,22 +31,22 @@ public class RentedBookPanel extends BookPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-               
-            	try {
-            		// initialize controller
-                	Controller.initialize();
-            		// put the book into the main panel ;) 
-            		ReaderViewPanel.OpenNewBook(book);
-            		MainPanel.changeDisplayPanel(PanelsManager.BOOKS);            		
-            	}
-            	catch (Exception e2){
-            		// failed to display
-            		PanelsManager.displayError("Failed to display book. \nPlease contact technical support.");  		
-            	}
+
+                try {
+                    // initialize controller
+                    Controller.initialize();
+                    // put the book into the main panel ;)
+                    ReaderViewPanel.OpenNewBook(book);
+                    MainPanel.changeDisplayPanel(PanelsManager.BOOKS);
+                }
+                catch (Exception e2){
+                    // failed to display
+                    PanelsManager.displayError("Failed to display book. \nPlease contact technical support.");
+                }
             }
-		    
-		    
-		}); 
+
+
+        });
 
         super.getButtonsPanel().add(super.getPrimaryButton());
 

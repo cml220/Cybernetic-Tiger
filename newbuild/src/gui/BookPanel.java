@@ -16,17 +16,16 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
+import model.Book;
 import controllers.Controller;
 
-import model.Book;
-
-    /**
-     * The class that other book panels are based upon.
-     * Contains an image, a button, and information about the book.
-     * @author Brad
-     *
-     */
-    abstract class BookPanel extends JPanel {
+/**
+ * The class that other book panels are based upon.
+ * Contains an image, a button, and information about the book.
+ * @author Brad
+ *
+ */
+abstract class BookPanel extends JPanel {
 
     /**
      *
@@ -46,17 +45,17 @@ import model.Book;
     /**
      * The panels used to put the layout of the book panel together.
      */
-    private JPanel rentalInfoPanel, buttonsPanel;
+    private final JPanel rentalInfoPanel, buttonsPanel;
 
     /**
      * The information label.
      */
-    private BookLabel rentalInfoLabel;
+    private final BookLabel rentalInfoLabel;
 
     /**
      * The button for the primary function of the book panel.
      */
-    private JButton primaryButton;
+    private final JButton primaryButton;
 
     /**
      * A style-modified label used throughout the panel.
@@ -117,35 +116,43 @@ import model.Book;
      */
     public BookPanel(final Book book) {
         super();
-        
+
+        /*
+         * Wrap this panel with another so that it doesn't get distorted by
+         * layout managers.
+         * TODO: Find some way to get rid of the magic number 830
+         */
+        JPanel wrapPanel = new JPanel();
+        wrapPanel.setPreferredSize(new Dimension(830,bookHeight));
+
         Controller.initialize();
 
-        this.setLayout(new BorderLayout());
-        this.setBorder(new LineBorder(PanelsManager.BACKGROUNDBLUE, 1));
+        wrapPanel.setLayout(new BorderLayout());
+        wrapPanel.setBorder(new LineBorder(PanelsManager.BACKGROUNDBLUE, 1));
 
         /*
          * Make each book panel 200 pixels tall.  Let the panel its in
          * determine its width.
          */
-        this.setPreferredSize(new Dimension(this.getWidth(), bookHeight));
+        wrapPanel.setSize(new Dimension(this.getWidth(), bookHeight));
 
         /*
-         * This will be the book icon cover         * 
+         * This will be the book icon cover         *
          * Far left i.e. WEST
-         */       
-    	JLabel bookIcon;
-    	JButton bookIconError;
+         */
+        JLabel bookIcon;
+        JButton bookIconError;
         try {
-        	bookIcon = Controller.loadCover(book);            
-        	bookIcon.setPreferredSize(new Dimension(bookHeight, bookWidth));
-            this.add(bookIcon, BorderLayout.WEST);
+            bookIcon = Controller.loadCover(book);
+            bookIcon.setPreferredSize(new Dimension(bookHeight, bookWidth));
+            wrapPanel.add(bookIcon, BorderLayout.WEST);
         }
         catch(Exception e) {
-        	bookIcon = null;        	
-        	// the book icon didn't load, destroy it and start adding the replacement one
-        	bookIconError = new JButton("");            
-        	bookIconError.setPreferredSize(new Dimension(bookHeight, bookWidth));
-            this.add(bookIconError, BorderLayout.WEST);           
+            bookIcon = null;
+            // the book icon didn't load, destroy it and start adding the replacement one
+            bookIconError = new JButton("");
+            bookIconError.setPreferredSize(new Dimension(bookHeight, bookWidth));
+            wrapPanel.add(bookIconError, BorderLayout.WEST);
         }
 
         /*
@@ -202,8 +209,10 @@ import model.Book;
          * Middle panel - title, details
          * Right Panel - buttons, rental info
          */
-        this.add(middlePanel, BorderLayout.CENTER);
-        this.add(rightSidePanel, BorderLayout.EAST);
+        wrapPanel.add(middlePanel, BorderLayout.CENTER);
+        wrapPanel.add(rightSidePanel, BorderLayout.EAST);
+
+        this.add(wrapPanel);
 
     }
 

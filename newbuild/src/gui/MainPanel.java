@@ -9,6 +9,7 @@ package gui;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 /**
@@ -32,7 +33,7 @@ public class MainPanel extends JPanel {
      * The panel containing the search bar.
      */
     private static JPanel searchBarPanel;
-    
+
     // the panel count for the application to be able to add panels on the fly
     private static int panelCount;
 
@@ -79,23 +80,31 @@ public class MainPanel extends JPanel {
         PanelsManager.getPanel(choice).requestFocus();
 
     }
-    
+
     /**
      * Changes to the panel that has been passed in.
      * @param choice the index of the panel which will be swapped i
      * (See: PanelsManager)
      */
     public static void changeDisplayPanel(final JPanel panel) {
-    	// could possibly see memory problems with this, should we delete afterwards?
-    	// increase the panelCount
-    	panelCount++;
-    	
-    	// add the panel that has been passed in
+        // could possibly see memory problems with this, should we delete afterwards?
+        // increase the panelCount
+        panelCount++;
+
+        // add the panel that has been passed in
         displayPanel.add(panel, Integer.toString(panelCount));
-        
+
         // show the panel
         CardLayout cl = (CardLayout) displayPanel.getLayout();
         cl.show(displayPanel, Integer.toString(panelCount));
+
+    }
+
+    public static void replaceDisplayPanel( final JComponent origPanel, final JComponent newPanel, int index) {
+
+        CardLayout cl = (CardLayout) displayPanel.getLayout();
+        cl.removeLayoutComponent(origPanel);
+        displayPanel.add(newPanel, Integer.toString(index));
 
     }
 
