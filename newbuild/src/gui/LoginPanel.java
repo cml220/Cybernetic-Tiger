@@ -309,6 +309,12 @@ public class LoginPanel extends StyledPanel {
         this.add(buttonPanel);
 
         /*
+         * TODO: Remove this also
+         */
+        this.add(new LoginLabel("                       Skipping the login process will allow access to the GUI features"));
+        this.add(new LoginLabel("                       but account specific functions will fail."));
+
+        /*
          * Blank space to center the input areas.
          */
         this.add(Box.createVerticalStrut(200));

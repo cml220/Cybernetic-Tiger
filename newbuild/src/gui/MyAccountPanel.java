@@ -47,7 +47,7 @@ public class MyAccountPanel extends StyledPanel {
 
      */
 
-    private User userToShow;
+    private final User userToShow;
 
 
 
@@ -213,58 +213,58 @@ public class MyAccountPanel extends StyledPanel {
         userToShow = Controller.getCurrentUser();
 
         // Stop constructing things if the current user is null
-        if (userToShow == null) {
-            return;
-        }
-        userToShow.rentals = new ArrayList<Book>();
+        if (userToShow != null) {
 
-        // Handle the username
-        JLabel usernameLabel = new JLabel("Username: " + userToShow.username);
-        usernameLabel.setForeground(PanelsManager.UNSELECTEDBLUE);
+            userToShow.rentals = new ArrayList<Book>();
 
-        // Handle the password
+            // Handle the username
+            JLabel usernameLabel = new JLabel("Username: " + userToShow.username);
+            usernameLabel.setForeground(PanelsManager.UNSELECTEDBLUE);
 
-        passwordPanel = new LabeledInputField("Password:", "Update");
-        passwordPanel.setText("********");
-        passwordPanel.addActionListener(new UpdateListener(UpdateListener.PASSWORD_FIELD, passwordPanel.getText()));
+            // Handle the password
 
-        // Handle the email
+            passwordPanel = new LabeledInputField("Password:", "Update");
+            passwordPanel.setText("********");
+            passwordPanel.addActionListener(new UpdateListener(UpdateListener.PASSWORD_FIELD, passwordPanel.getText()));
 
-        emailPanel = new LabeledInputField("Email:", "Update");
-        emailPanel.setText(userToShow.email);
-        emailPanel.addActionListener(new UpdateListener(UpdateListener.EMAIL_FIELD, emailPanel.getText()));
+            // Handle the email
 
-        // Handle the isAdmin flag
+            emailPanel = new LabeledInputField("Email:", "Update");
+            emailPanel.setText(userToShow.email);
+            emailPanel.addActionListener(new UpdateListener(UpdateListener.EMAIL_FIELD, emailPanel.getText()));
 
-        JLabel isAdminLabel = new JLabel("Administrator:   " + userToShow.isAdmin);
-        isAdminLabel.setForeground(PanelsManager.UNSELECTEDBLUE);
+            // Handle the isAdmin flag
 
-        // Handle the list of book rentals
+            JLabel isAdminLabel = new JLabel("Administrator:   " + userToShow.isAdmin);
+            isAdminLabel.setForeground(PanelsManager.UNSELECTEDBLUE);
 
-        String bookList = "";
+            // Handle the list of book rentals
 
-        if (userToShow.rentals != null) {
-            for (Book b : userToShow.rentals) {
-                bookList += b.title + "\n";
+            String bookList = "";
+
+            if (userToShow.rentals != null) {
+                for (Book b : userToShow.rentals) {
+                    bookList += b.title + "\n";
+                }
             }
+
+            JLabel rentalsLabel = new JLabel("Rentals:\n" + bookList);
+            rentalsLabel.setForeground(PanelsManager.UNSELECTEDBLUE);
+
+            // Add all of the components to the overall panel
+
+            this.add(headerLabel);
+
+            this.add(usernameLabel);
+
+            this.add(passwordPanel);
+
+            this.add(emailPanel);
+
+            this.add(isAdminLabel);
+
+            this.add(rentalsLabel);
         }
-
-        JLabel rentalsLabel = new JLabel("Rentals:\n" + bookList);
-        rentalsLabel.setForeground(PanelsManager.UNSELECTEDBLUE);
-
-        // Add all of the components to the overall panel
-
-        this.add(headerLabel);
-
-        this.add(usernameLabel);
-
-        this.add(passwordPanel);
-
-        this.add(emailPanel);
-
-        this.add(isAdminLabel);
-
-        this.add(rentalsLabel);
 
     }
 

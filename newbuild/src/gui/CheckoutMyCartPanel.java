@@ -51,7 +51,7 @@ public class CheckoutMyCartPanel extends JPanel
         }
         catch(Exception e){
 
-            PanelsManager.displayError(e.getMessage());
+            PanelsManager.displayError("Failed to load shopping cart");
 
         }
 
