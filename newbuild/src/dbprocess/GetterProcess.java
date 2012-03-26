@@ -164,6 +164,11 @@ public class GetterProcess {
                     + "tblBook.ISBN=tblBookRental.BookISBN AND"
                     + " tblBookRental.UserName=\"" + query + "\";");
         }
+        else if (option == DatabaseProcess.DESCRIPTION && !query.equals("")) {
+            rs = stmt.executeQuery("SELECT * FROM "
+                    + "tblBook WHERE Description LIKE \"%"
+                    + query + "%\" ORDER BY Title;");
+        }
         else if (option == DatabaseProcess.CATALOGUE && query.equals("")) {
             rs = stmt.executeQuery("SELECT * FROM tblBook ORDER BY Title;");
         }

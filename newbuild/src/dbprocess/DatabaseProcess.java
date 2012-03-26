@@ -28,6 +28,8 @@ public class DatabaseProcess {
     public static final int USERNAME = 2;
     /** CATALOGUE flag used for getBooksBy. */
     public static final int CATALOGUE = 3;
+    /** DESCRIPTION flag used for getBooksBy. */
+    public static final int DESCRIPTION = 4;
     /** name of the database. */
     private static String dbname = "cmpt371group_CTiger";
     /** the instance of DatabaseProcess. */

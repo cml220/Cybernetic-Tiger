@@ -163,7 +163,7 @@ public class DatabaseProcessJUnit {
     public void testGetCatalogue() {
         log.debug("testGetCatalogue Entered.");
         try {
-            ArrayList<Book> booklist = db.getBooksBy(DatabaseProcess.CATALOGUE, "");;
+            ArrayList<Book> booklist = db.getBooksBy(DatabaseProcess.CATALOGUE, "");
             assertTrue(!booklist.isEmpty());
             log.debug("testGetCatalogue Passed.");
 
@@ -214,6 +214,20 @@ public class DatabaseProcessJUnit {
             assertTrue(found != null);
             assertTrue(found.equals(b));
             log.debug("testGetBookByIsbn Passed.");
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+    
+    @Test
+    public void testGetBookByDescription() {
+        log.debug("testGetBookByDescription Entered.");
+        ArrayList<Book> booklist;
+        try {
+            booklist = db.getBooksBy(DatabaseProcess.DESCRIPTION, "THISISAUNIQUESTRING");
+            assertTrue(!booklist.isEmpty());
+            log.debug("testGetBookByTitle Passed.");
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
