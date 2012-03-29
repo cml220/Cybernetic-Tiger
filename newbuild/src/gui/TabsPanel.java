@@ -104,6 +104,19 @@ public class TabsPanel extends JPanel {
             tabArray[ii].setBackground(PanelsManager.UNSELECTEDBLUE);
         }
     }
+    
+    /**
+     * @param - the location (int) of the tab in tabArray
+     * @postcond - the color of all functional tabs is "unselected blue" with the tab slected as selectedBlue
+     * PanelsManager.unselectedBlue
+     * PanelsManager.SELECTEDBLUE
+     */
+    public static void selectTab(int tabLocation) {
+    	// Call the deselectAllTabs method, so no tabs are selected
+    	deselectAllTabs();
+    	// now highlight the selected tab
+    	tabArray[tabLocation].setBackground(PanelsManager.SELECTEDBLUE);
+    }
 
     /**
      * Sets the next available tab for a specific purpose.
