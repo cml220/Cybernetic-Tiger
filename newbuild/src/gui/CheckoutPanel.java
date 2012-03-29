@@ -90,11 +90,6 @@ public class CheckoutPanel extends DisplayPanel {
     public static void nextPaymentStep(){
 
         if(curPanelNum < totalPanelsNum){
-            // if its the last step, then we want to go to home
-            if (curPanelNum >= totalPanelsNum-1) { // i.e. its the last step
-                // goto the default panel :D
-                PanelsManager.goToDefaultPanel();
-            } else {
 
                 CardLayout cl = (CardLayout) cartMainPanel.getLayout();
 
@@ -108,12 +103,23 @@ public class CheckoutPanel extends DisplayPanel {
                     addIndexedPanel(new CheckoutVerifyPanel(), VERIFY);
 
                 }
+                
+                /*
+                 * Sets the checkout back to the cart stage as it has now finished
+                 */
+                if (curPanelNum == THANKYOU) {
+                	// then we want to go to home
+                	// but first set the checkout back to stage 1 (currPanel -4)
+                	curPanelNum-=4;
+                    // goto the default panel :D
+                    PanelsManager.goToDefaultPanel();
+                }
+                
                 curPanelNum++;
 
                 cl.show(cartMainPanel, Integer.toString(curPanelNum));
 
-                updateStage(curPanelNum);
-            }
+                updateStage(curPanelNum);            
         }
     }
 
