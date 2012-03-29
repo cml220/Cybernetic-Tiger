@@ -32,9 +32,12 @@ public class RentedBookPanel extends BookPanel {
             public void actionPerformed(ActionEvent e) {
 
                 try {
+                	
 
                     // put the book into the main panel ;)
                     ReaderViewPanel.OpenNewBook(book);
+                    // set the tab to 4 corresponds to the View Books tab
+                    TabsPanel.selectTab(4);
                     MainPanel.changeDisplayPanel(PanelsManager.BOOKS);
                 }
                 catch (Exception e2){
