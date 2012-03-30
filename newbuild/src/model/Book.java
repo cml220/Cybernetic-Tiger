@@ -67,8 +67,17 @@ public class Book {
 		return description;
 	}
 
-	public boolean equals(Book other) {
-		return this.getBookISBN() == other.getBookISBN();
+	/**
+	 * Checks to see if two books are equal, using their ISBN
+	 * Changed on March 30th to take in an Object instead of a Book
+	 * So that this equals instead of the generic equals is used
+	 * By the contains method (for getting unique search results)
+	 */
+	public boolean equals(Object other) {
+		if (!(other instanceof Book)) {
+			return false;
+		}
+		return this.getBookISBN() == ((Book) other).getBookISBN();
 
 	}
 }
