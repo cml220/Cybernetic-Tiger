@@ -16,15 +16,16 @@ public class PaymentController {
      * @return True if payment is successful, false otherwise
      */
     public boolean confirmPayment() {
-        // TODO: Pass user's payment info to "Credit Card Company" ie: a dummy
-        // class and confirm "that the payment is successful"
-    	// Returning true by default, as we assume credit card payment succeeds
-    	return true;
+
+        System.out.println("Thanks for the business!");
+        System.out.println("Love, Mastercard");
+
+        return true;
     }
 
     /**
      * Adds the books in the current cart to the current user's rentals.
-     * @throws SQLException 
+     * @throws SQLException
      */
     public void addCurrentCart() throws SQLException {
         ArrayList<Book> cart = Controller.getCurrentUser().cart;
@@ -37,16 +38,16 @@ public class PaymentController {
     /**
      * @return The payment information for the current user
      */
-	public PaymentInfo getPaymentInfo() {
-		PaymentInfo info = Controller.getCurrentUser().paymentInfo;
-		return info;
-	}
+    public PaymentInfo getPaymentInfo() {
+        PaymentInfo info = Controller.getCurrentUser().paymentInfo;
+        return info;
+    }
 
-	/**
-	 * Updates the current user's payment information to be the info contained in piNew.
-	 * @param piNew The new payment information to set
-	 */
-	public void setPaymentInfo(PaymentInfo piNew) {
-		Controller.getCurrentUser().paymentInfo = piNew;
-	}
+    /**
+     * Updates the current user's payment information to be the info contained in piNew.
+     * @param piNew The new payment information to set
+     */
+    public void setPaymentInfo(PaymentInfo piNew) {
+        Controller.getCurrentUser().paymentInfo = piNew;
+    }
 }

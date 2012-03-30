@@ -33,6 +33,11 @@ abstract class BookPanel extends JPanel {
     private static final long serialVersionUID = 5401241274318892383L;
 
     /**
+     * The panel width.
+     */
+    private final int panelWidth = 830;
+
+    /**
      * The height of the book image.
      */
     private final int bookHeight = 200;
@@ -116,10 +121,9 @@ abstract class BookPanel extends JPanel {
         /*
          * Wrap this panel with another so that it doesn't get distorted by
          * layout managers.
-         * TODO: Find some way to get rid of the magic number 830
          */
         JPanel wrapPanel = new JPanel();
-        wrapPanel.setPreferredSize(new Dimension(830, bookHeight));
+        wrapPanel.setPreferredSize(new Dimension(panelWidth, bookHeight));
 
         wrapPanel.setLayout(new BorderLayout());
         wrapPanel.setBorder(new LineBorder(PanelsManager.BACKGROUNDBLUE, 1));

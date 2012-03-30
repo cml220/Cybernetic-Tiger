@@ -278,7 +278,6 @@ public class SearchBarPanel extends JPanel {
      */
     public static void showPreSearchText() {
 
-        //TODO: log4j showing intended text.
         searchField.setText(panelSpecificPreSearchText);
         searchField.setForeground(Color.LIGHT_GRAY);
         searchField.setFont(graySearchFont);

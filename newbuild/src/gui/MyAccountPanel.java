@@ -171,7 +171,7 @@ public class MyAccountPanel extends StyledPanel {
 
             try {
 
-                Controller.changeUserInfo(userToShow.username, userToShow, userPassword, newPassword);
+                Controller.changeUserInfo(userToShow, userPassword, newPassword);
             } catch (Exception e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
