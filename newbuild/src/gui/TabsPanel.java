@@ -7,6 +7,7 @@
 package gui;
 
 import java.awt.GridLayout;
+
 import javax.swing.JPanel;
 
 /**
@@ -70,7 +71,7 @@ public class TabsPanel extends JPanel {
         // 4th Tab, "My Cart" tab
         // On click opens up the shopping cart - start of the checkout process
         setTab("My Cart", PanelsManager.MYCART);
-        
+
         setTab("View Books", PanelsManager.BOOKS);
 
         //unused tabs
@@ -85,7 +86,7 @@ public class TabsPanel extends JPanel {
             this.add(tabArray[ii]);
         }
 
-        //TODO: JUNIT test, make sure only 12 panels have been added       
+        //TODO: JUNIT test, make sure only 12 panels have been added
 
         // Setting the default tab, Catalogue (tab array 0)
         PanelsManager.setDefaultPanel(tabArray[0]);
@@ -104,18 +105,20 @@ public class TabsPanel extends JPanel {
             tabArray[ii].setBackground(PanelsManager.UNSELECTEDBLUE);
         }
     }
-    
+
     /**
+     * select a tab.
      * @param - the location (int) of the tab in tabArray
-     * @postcond - the color of all functional tabs is "unselected blue" with the tab slected as selectedBlue
+     * @postcond - the color of all functional tabs is "unselected blue"
+     * with the tab slected as selectedBlue
      * PanelsManager.unselectedBlue
      * PanelsManager.SELECTEDBLUE
      */
     public static void selectTab(int tabLocation) {
-    	// Call the deselectAllTabs method, so no tabs are selected
-    	deselectAllTabs();
-    	// now highlight the selected tab
-    	tabArray[tabLocation].setBackground(PanelsManager.SELECTEDBLUE);
+        // Call the deselectAllTabs method, so no tabs are selected
+        deselectAllTabs();
+        // now highlight the selected tab
+        tabArray[tabLocation].setBackground(PanelsManager.SELECTEDBLUE);
     }
 
     /**

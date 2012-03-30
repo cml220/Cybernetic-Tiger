@@ -108,11 +108,7 @@ abstract class BookPanel extends JPanel {
 
     /**
      * Panel for displaying a single RENTED book and its information.
-     * @param title the title of the book
-     * @param desc the description of the book
-     * @param author the author of the book
-     * @param imageLocation the image address (either local or remote) of the
-     * book
+     * @param book - the book to build this panel around.
      */
     public BookPanel(final Book book) {
         super();
@@ -123,7 +119,7 @@ abstract class BookPanel extends JPanel {
          * TODO: Find some way to get rid of the magic number 830
          */
         JPanel wrapPanel = new JPanel();
-        wrapPanel.setPreferredSize(new Dimension(830,bookHeight));
+        wrapPanel.setPreferredSize(new Dimension(830, bookHeight));
 
         wrapPanel.setLayout(new BorderLayout());
         wrapPanel.setBorder(new LineBorder(PanelsManager.BACKGROUNDBLUE, 1));
@@ -140,17 +136,25 @@ abstract class BookPanel extends JPanel {
          */
         JLabel bookIcon;
         JButton bookIconError;
+
         try {
+
             bookIcon = Controller.loadCover(book);
             bookIcon.setPreferredSize(new Dimension(bookHeight, bookWidth));
             wrapPanel.add(bookIcon, BorderLayout.WEST);
-        }
-        catch(Exception e) {
+
+        } catch (Exception e) {
+
             bookIcon = null;
-            // the book icon didn't load, destroy it and start adding the replacement one
+            /*
+             * the book icon didn't load, destroy it and start adding the
+             * replacement one
+             */
             bookIconError = new JButton("");
-            bookIconError.setPreferredSize(new Dimension(bookHeight, bookWidth));
+            bookIconError.setPreferredSize(
+                    new Dimension(bookHeight, bookWidth));
             wrapPanel.add(bookIconError, BorderLayout.WEST);
+
         }
 
         /*

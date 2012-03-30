@@ -28,9 +28,9 @@ public class CheckoutMyCartBookPanel extends BookPanel {
             public void actionPerformed(ActionEvent e) {
 
                 try {
-                    // add the book to the cart
+                    // remove the book from the cart
                     Controller.removeFromCart(book);
-                    // TODO: remove the button remove it
+                    PanelsManager.updateCart(true);
 
                 }
                 catch (Exception e2){

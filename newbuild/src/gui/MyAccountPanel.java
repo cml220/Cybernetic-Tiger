@@ -109,11 +109,11 @@ public class MyAccountPanel extends StyledPanel {
 
          */
 
-        public UpdateListener(int field, String information) {
+        public UpdateListener(int iField, String sInformation) {
 
-            this.field = field;
+            this.field = iField;
 
-            this.information = information;
+            this.information = sInformation;
 
         }
 
@@ -134,7 +134,9 @@ public class MyAccountPanel extends StyledPanel {
 
             try {
 
-                userPassword = DatabaseProcess.getInstance().getUserPassWord(userToShow.username);
+                userPassword =
+                        DatabaseProcess.getInstance().getUserPassWord(
+                                userToShow.username);
 
             } catch (SQLException e1) {
 

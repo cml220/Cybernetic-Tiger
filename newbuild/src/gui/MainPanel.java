@@ -34,7 +34,9 @@ public class MainPanel extends JPanel {
      */
     private static JPanel searchBarPanel;
 
-    // the panel count for the application to be able to add panels on the fly
+    /**
+     *  the panel count for the application to be able to add panels on the fly
+     */
     private static int panelCount;
 
     /**
@@ -83,11 +85,11 @@ public class MainPanel extends JPanel {
 
     /**
      * Changes to the panel that has been passed in.
-     * @param choice the index of the panel which will be swapped i
+     * @param panel - the panel to change to.
      * (See: PanelsManager)
      */
     public static void changeDisplayPanel(final JPanel panel) {
-        // could possibly see memory problems with this, should we delete afterwards?
+
         // increase the panelCount
         panelCount++;
 
@@ -100,7 +102,14 @@ public class MainPanel extends JPanel {
 
     }
 
-    public static void replaceDisplayPanel( final JComponent origPanel, final JComponent newPanel, int index) {
+    /**
+     * Replace a panel in the cardlayout.
+     * @param origPanel the original panel
+     * @param newPanel the replacement panel
+     * @param index the index to do the swap at
+     */
+    public static void replaceDisplayPanel(final JComponent origPanel,
+            final JComponent newPanel, final int index) {
 
         CardLayout cl = (CardLayout) displayPanel.getLayout();
         cl.removeLayoutComponent(origPanel);

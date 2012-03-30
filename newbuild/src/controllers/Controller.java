@@ -128,16 +128,14 @@ public final class Controller {
      */
     private static User currentUser;
 
-    public static void openAccount() {
-    }
-
     /**
      * Pass the current catalogue to the caller.
      * @return current catalogue of books available for purchase
      * @throws SQLException
      * @throws ControllerNotInitializedException
      */
-    public static ArrayList<Book> getCatalogue() throws SQLException, ControllerNotInitializedException {
+    public static ArrayList<Book> getCatalogue() throws SQLException,
+    ControllerNotInitializedException {
 
 
         if (!initialized) {
@@ -176,10 +174,11 @@ public final class Controller {
      * @param username	the (old) name of the user who you are editing
      * @param user - the object containing the new user data.
      * @param password	the string containing the user's password
+     * @param newPassWord - the string containing the user's new password
      * @throws Exception
      */
-    public static void changeUserInfo(String username, final User user, String password, String newPassWord)
-            throws Exception {
+    public static void changeUserInfo(final String username, final User user,
+            final String password, final String newPassWord) throws Exception {
 
         if (!initialized) {
 
@@ -198,7 +197,7 @@ public final class Controller {
      * @param username The name of the user to make an admin
      * @throws Exception If the Controller class has not been initialized
      */
-    public static void makeAdmin(String username) throws Exception {
+    public static void makeAdmin(final String username) throws Exception {
         if (!initialized) {
 
             throw new ControllerNotInitializedException();
@@ -226,10 +225,10 @@ public final class Controller {
     }
 
     /**
-     * Sets the payment info for this session temporarily
+     * Sets the payment info for this session temporarily.
      * @param pi - the payment info.
      */
-    public static void setSessionPaymentInfo(PaymentInfo pi) {
+    public static void setSessionPaymentInfo(final PaymentInfo pi) {
 
         sessionPaymentInfo = pi;
 
@@ -245,7 +244,15 @@ public final class Controller {
 
     }
 
-    public static void updatePaymentInfo() throws PaymentInfoNotInitializedException, ControllerNotInitializedException {
+    /**
+     * Save the user's payment info to the database.
+     * MUST setSessionPaymentInfo FIRST
+     * @throws PaymentInfoNotInitializedException
+     * @throws ControllerNotInitializedException
+     */
+    public static void updatePaymentInfo()
+            throws PaymentInfoNotInitializedException,
+            ControllerNotInitializedException {
 
         if (!initialized) {
 
@@ -259,7 +266,7 @@ public final class Controller {
 
         }
         //update the payment info in the database?
-        //paymentController.updatePaymentInfo(sessionPaymentInfo);
+        paymentController.setPaymentInfo(sessionPaymentInfo);
 
     }
 
@@ -268,7 +275,7 @@ public final class Controller {
      * @param piNew object containing user's new payment info.
      * @throws ControllerNotInitializedException if the controller isn't loaded
      */
-    public static void setPaymentInfo(PaymentInfo piNew)
+    public static void setPaymentInfo(final PaymentInfo piNew)
             throws ControllerNotInitializedException {
 
         if (!initialized) {
@@ -288,7 +295,8 @@ public final class Controller {
      * @throws IntermediateException if the transaction failed.
      * @throws SQLException
      */
-    public static void processPurchase() throws IntermediateException, SQLException {
+    public static void processPurchase() throws IntermediateException,
+    SQLException {
 
         /*
          * Initialize the log4J logger.
@@ -387,10 +395,9 @@ public final class Controller {
 
         } catch (PurchaseFailedException pfe) {
 
-            //reverse the transaction
-            //paymentController.reversePayment;
-            //pass an error message to the GUI
-            throw new IntermediateException("Purchase failed.  Payment has been refunded");
+            //reverse the transaction (fake)
+            throw new IntermediateException("Purchase failed.  " +
+                    "Payment has been refunded");
 
         }
 
@@ -459,8 +466,8 @@ public final class Controller {
      * Get the total price of the contents of the user's cart so it can be
      * displayed in the GUI.
      * @return the total price of all items in the user's cart.
-     * @throws CartException
-     * @throws ControllerNotInitializedException
+     * @throws CartException if there is an error fetching the total from cart.
+     * @throws ControllerNotInitializedException if controller not initialised.
      */
     public static float getCartTotal()
             throws CartException, ControllerNotInitializedException {
@@ -472,6 +479,24 @@ public final class Controller {
         }
 
         return cartController.getTotal();
+
+    }
+
+    /**
+     * Save the user's cart to the database.
+     * @throws SQLException
+     * @throws ControllerNotInitializedException
+     */
+    public static void updateCart() throws SQLException,
+    ControllerNotInitializedException {
+
+        if (!initialized) {
+
+            throw new ControllerNotInitializedException();
+
+        }
+
+        cartController.saveCartToDatabase();
 
     }
 
@@ -536,7 +561,8 @@ public final class Controller {
      * @throws SQLException
      * @throws ControllerNotInitializedException
      */
-    public static ArrayList<Book> searchForBook(final Book bookToMatch) throws SQLException, ControllerNotInitializedException {
+    public static ArrayList<Book> searchForBook(final Book bookToMatch)
+            throws SQLException, ControllerNotInitializedException {
 
         if (!initialized) {
 
@@ -551,8 +577,17 @@ public final class Controller {
 
     }
 
-    public static boolean checkLogin(String username, String password)
-            throws ControllerNotInitializedException, SQLException {
+    /**
+     * Check the entered login credentials.
+     * @param username the given username
+     * @param password the given password
+     * @return true if the credentials are valid
+     * @throws ControllerNotInitializedException
+     * @throws SQLException
+     */
+    public static boolean checkLogin(final String username,
+            final String password)
+                    throws ControllerNotInitializedException, SQLException {
 
         if (!initialized) {
 
@@ -562,7 +597,7 @@ public final class Controller {
 
         boolean success = loginController.checkLogin(username, password);
 
-        if(success){
+        if (success) {
 
             currentUser = accountController.getUserInfo(username);
 
@@ -571,9 +606,6 @@ public final class Controller {
         return success;
 
 
-    }
-
-    public static void openPayment() {
     }
 
     /**
@@ -587,23 +619,27 @@ public final class Controller {
      * @throws BookOpenFailed
      */
     public static JPanel openReader(final Book book)
-            throws ControllerNotInitializedException, MalformedURLException, BookOpenFailed {
+            throws ControllerNotInitializedException, MalformedURLException,
+            BookOpenFailed {
+
         JPanel opened;
         if (!initialized) {
 
             throw new ControllerNotInitializedException();
 
         }
-        try{
+        try {
+
             opened = readerController.openBook(book);
-        }catch(MalformedURLException e){
+
+        } catch (MalformedURLException e) {
+
             throw new BookOpenFailed();
+
         }
 
         return opened;
 
     }
-    public static void openRentals() {
 
-    }
 }

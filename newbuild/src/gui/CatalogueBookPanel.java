@@ -44,6 +44,7 @@ public class CatalogueBookPanel extends BookPanel {
 
                     // add the book to the cart
                     Controller.addToCart(book);
+                    PanelsManager.updateCart(false);
                     // TODO: remove the button to rent it
 
                 }

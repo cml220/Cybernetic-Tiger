@@ -10,10 +10,10 @@ public class ImageLoadFailedException extends Exception {
     /**
      * Exception for when a controller fails to load an image.
      */
-    public ImageLoadFailedException(){
-        
+    public ImageLoadFailedException() {
+
         super("Failed to load image.");
-        
+
     }
-    
+
 }

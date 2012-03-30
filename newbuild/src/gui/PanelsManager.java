@@ -61,7 +61,7 @@ public final class PanelsManager {
      */
     public static final LineBorder DEFAULTBORDER =
             new LineBorder(PanelsManager.SELECTEDBLUE, 5);
-    /**     * Blue border for forms     */    public static final LineBorder FORMBORDER =            new LineBorder(PanelsManager.SELECTEDBLUE, 3, true);
+    /**     * Blue border for forms.     */    public static final LineBorder FORMBORDER =            new LineBorder(PanelsManager.SELECTEDBLUE, 3, true);
     /**
      * Fonts used throughout the program.
      */
@@ -100,7 +100,7 @@ public final class PanelsManager {
      * My cart panel.
      */
     public static final int MYCART = 4;    /**     * Catalogue panel.     */    public static final int CATALOGUE = 5;
-    /**     * Reader View Panel     */    public static final int BOOKS = 6;
+    /**     * Reader View Panel.     */    public static final int BOOKS = 6;
     /**
      * how many panels the array will hold.
      * THIS MUST BE CHANGED MANUALLY
@@ -114,49 +114,47 @@ public final class PanelsManager {
 
     /**
      * An array holding custom 'pre search' strings that will go in the search
-     * bar if it is empty and not selected
+     * bar if it is empty and not selected.
      */
     private static String[] preSearchStringsArray;
 
     /**
      * The default 'pre search' string for panels who don't have a custom
-     * string assigned to them
+     * string assigned to them.
      */
     private static String defaultPreSearchString = " Search Available Books";    /**     * Loading progress counter.     */
-    private static int progress = 0;    public static int getProgress() {        return progress;    }    /**     * A string representation of the current loading state.     */    private static String loadStatus = "Initializing NextBooks 2.0";    public static String getLoadStatus() {        return loadStatus;    }
+    private static int progress = 0;    /**     * Get the current loading progress.     * @return the current progress, an integer.     */    public static int getProgress() {        return progress;    }    /**     * A string representation of the current loading state.     */    private static String loadStatus = "Initializing NextBooks 2.0";    /**     * Get the current status of loading.     * @return the current status, define in InitTask.     */    public static String getLoadStatus() {        return loadStatus;    }
     /**
      * Initializes the Panels Manager by constructing the array of panels
      * and filling it with all of the panels to be used by the app.
      */
-    public static class InitTask extends SwingWorker<Void,Void> {        private void tick(String status){            progress++;            loadStatus = status;            setProgress(progress);        }        @Override        protected Void doInBackground() throws Exception {            try {                setProgress(0);
-                /*
-                 * Set the default tab to null.
-                 * We do this so that the program can check if the default is being
-                 * set
-                 * twice.
-                 * This is not allowed.
+    public static class InitTask extends SwingWorker<Void, Void> {        /**         * Update the progress bar by one "tick" and update the verbose text.         * @param status the message to show the user at this point in loading.         */        private void tick(final String status) {            progress++;            loadStatus = status;            setProgress(progress);        }        @Override        protected Void doInBackground() throws Exception {            try {                setProgress(0);
+                /*
+                 * Set the default tab to null.
+                 * We do this so that the program can check if the default is                 * being set twice.
+                 * This is not allowed.
                  */
                 defaultTab = null;
 
                 panelsArray = new JComponent[NUMPANELS];
                 preSearchStringsArray = new String[NUMPANELS];
-                /*
-                 * Define each of the display panels that will be used in the GUI
+                /*
+                 * Define each of the display panels that will be used in the                 * GUI
                  */                tick("Loading your books");
                 panelsArray[MYBOOKS]
                         = new DisplayScrollPane(new MyBooksPanel());
                 preSearchStringsArray[MYBOOKS] = " Search My Books";                tick("Loading advanced search");
                 panelsArray[ADVSEARCH]
-                        = new AdvSearchPanel();                preSearchStringsArray[ADVSEARCH] = " You are in the advanced search pane";                tick("Initializing search engine display");
+                        = new AdvSearchPanel();                preSearchStringsArray[ADVSEARCH] = " You are in the advanced" +                        "search pane";                tick("Initializing search engine display");
                 panelsArray[SEARCHRESULTS]
                         = new DisplayScrollPane(new SearchResultsPanel());                preSearchStringsArray[SEARCHRESULTS] = "Search Available Books";                tick("Loading your account details");
                 panelsArray[MYACCOUNT]
                         = new MyAccountPanel();                tick("Preparing checkout process");
                 panelsArray[MYCART] =
                         new CheckoutPanel();
-                preSearchStringsArray[MYCART] = " Search My Cart";                tick("Preparing catalogue");                // the catalogue, containing all the items :D                panelsArray[CATALOGUE]                        = new DisplayScrollPane(new CataloguePanel());                preSearchStringsArray[CATALOGUE] = " Search Available Books";                tick("Preparing book reader manager");                // the catalogue, containing all the items :D                panelsArray[BOOKS]                        = new ReaderViewPanel();                preSearchStringsArray[BOOKS] = " Search My Books";                initialised = true;                tick("Doing the macarena");            } catch (Exception e) {                e.printStackTrace();            }            return null;        }        @Override        public void done() {            if(!initialised) {                throw new RuntimeException("PanelsManager build thread sent"                        + " \"done\" signal too soon");            }            LoadingPanel.instance.finish();        }
+                preSearchStringsArray[MYCART] = " Search My Cart";                tick("Preparing catalogue");                // the catalogue, containing all the items :D                panelsArray[CATALOGUE]                        = new DisplayScrollPane(new CataloguePanel());                preSearchStringsArray[CATALOGUE] = " Search Available Books";                tick("Preparing book reader manager");                // the catalogue, containing all the items :D                panelsArray[BOOKS]                        = new ReaderViewPanel();                preSearchStringsArray[BOOKS] = " Search My Books";                initialised = true;                tick("Doing the macarena");            } catch (Exception e) {                e.printStackTrace();            }            return null;        }        @Override        public void done() {            if (!initialised) {                throw new RuntimeException("PanelsManager build thread sent"                        + " \"done\" signal too soon");            }            LoadingPanel.instance.finish();        }
     }    /**     * Getter for the Initialisation Task (for progress bar).     * @return The task     */
-    public static InitTask getInitTask() {        return new InitTask();    }    /**     * Makes and shows a new search results panel given some list of books.     * @param results - the search result books.     */    public static void newSearchResults (ArrayList<Book> results) {        /*         * Keep a reference of the old search results panel         * It will be needed in order to swap in the new one         */        JComponent oldPanel = panelsArray[SEARCHRESULTS];        /*         * Make a new results panel with the results from this search         */        panelsArray[SEARCHRESULTS] = new DisplayScrollPane(new SearchResultsPanel(results));;        /*         * Remove the old panel and place the new one in the layout manager in MainPanel         */        MainPanel.replaceDisplayPanel(oldPanel, panelsArray[SEARCHRESULTS], SEARCHRESULTS);        /*         * Jump to the search results         */        MainPanel.changeDisplayPanel(SEARCHRESULTS);    }
+    public static InitTask getInitTask() {        return new InitTask();    }    /**     * Makes and shows a new search results panel given some list of books.     * @param results - the search result books.     */    public static void newSearchResults(final ArrayList<Book> results) {        /*         * Keep a reference of the old search results panel         * It will be needed in order to swap in the new one         */        JComponent oldPanel = panelsArray[SEARCHRESULTS];        /*         * Make a new results panel with the results from this search         */        panelsArray[SEARCHRESULTS] =                new DisplayScrollPane(new SearchResultsPanel(results));        /*         * Remove the old panel and place the new one in the layout manager         * in MainPanel         */        MainPanel.replaceDisplayPanel(oldPanel, panelsArray[SEARCHRESULTS],                SEARCHRESULTS);        /*         * Jump to the search results         */        MainPanel.changeDisplayPanel(SEARCHRESULTS);    }    /**     * Makes and shows a new cart panel.     * @param removed - determines where the app focuses after the removal     */    public static void updateCart(final boolean removed) {        /*         * Keep a reference of the old search results panel         * It will be needed in order to swap in the new one         */        JComponent oldPanel = panelsArray[MYCART];        /*         * Make a new results panel with the results from this search         */        panelsArray[MYCART] = new DisplayScrollPane(new CheckoutMyCartPanel());        /*         * Remove the old panel and place the new one in the layout manager in         * MainPanel         */        MainPanel.replaceDisplayPanel(oldPanel, panelsArray[MYCART], MYCART);        if (removed) {            MainPanel.changeDisplayPanel(MYCART);        }    }    /**     * Makes a new my books panel.     */    public static void updateRentals() {        /*         * Keep a reference of the old search results panel         * It will be needed in order to swap in the new one         */        JComponent oldPanel = panelsArray[MYBOOKS];        /*         * Make a new results panel with the results from this search         */        panelsArray[MYBOOKS] = new DisplayScrollPane(new MyBooksPanel());        /*         * Remove the old panel and place the new one in the layout manager in         * MainPanel         */        MainPanel.replaceDisplayPanel(oldPanel, panelsArray[MYBOOKS], MYBOOKS);    }
     /**
      * Returns the desired JPanel when passed in a constant defined in this
      * class.
@@ -217,16 +215,13 @@ public final class PanelsManager {
      * @return the 'pre search string' that goes in the searchbox before any
      * text is entered.
      */
-    public static String getPreSearchString(int panelNum){
-
-        if(preSearchStringsArray[panelNum] == null){
+    public static String getPreSearchString(final int panelNum) {
+        if (preSearchStringsArray[panelNum] == null) {
 
             return defaultPreSearchString;
 
         }
-
-        return preSearchStringsArray[panelNum];
-
+        return preSearchStringsArray[panelNum];
     }
 
     /**
@@ -263,5 +258,5 @@ public final class PanelsManager {
         defaultTab.doClick();
         defaultTab.requestFocus();
 
-    }    public static void displayError(String errorMessage)    {        //TODO: remove this        System.out.println(errorMessage);        JOptionPane.showMessageDialog(null,                errorMessage,                "Fatal Error", JOptionPane.ERROR_MESSAGE);    }
+    }    public static void displayError(String errorMessage) {        JOptionPane.showMessageDialog(null,                errorMessage,                "Fatal Error", JOptionPane.ERROR_MESSAGE);    }
 }

@@ -16,6 +16,11 @@ import javax.swing.KeyStroke;
 import model.Book;
 import controllers.Controller;
 
+/**
+ * Panel for searching by specific criteria.
+ * @author Brad Johnson baj231 11044123
+ *
+ */
 public class AdvSearchPanel extends StyledPanel {
 
     /**
@@ -55,6 +60,7 @@ public class AdvSearchPanel extends StyledPanel {
     /**
      * A choice of locations to search within.
      */
+    @SuppressWarnings("rawtypes")
     private final JComboBox locationChoice;
 
     /**
@@ -62,7 +68,10 @@ public class AdvSearchPanel extends StyledPanel {
      */
     private final JButton searchBut;
 
-
+    /**
+     * Constructor.
+     */
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     public AdvSearchPanel() {
 
         super();
@@ -108,85 +117,11 @@ public class AdvSearchPanel extends StyledPanel {
              */
             public void actionPerformed(final ActionEvent arg0) {
 
-                Book searchBook = new Book();
-                boolean anythingSearched = false;
+                buildSearchFromForms();
 
-                /*
-                 * Get Title from field
-                 */
-                if (!titleField.getText().isEmpty()) {
-
-                    anythingSearched = true;
-                    searchBook.title = titleField.getText();
-
-                }
-
-                /*
-                 * Get Author from field
-                 */
-                if (!authorField.getText().isEmpty()) {
-
-                    anythingSearched = true;
-                    searchBook.author = authorField.getText();
-
-                }
-
-                /*
-                 * Get Keywords from field
-                 */
-                if (!keywordField.getText().isEmpty()) {
-
-                    anythingSearched = true;
-                    searchBook.description = keywordField.getText();
-
-                }
-
-                /*
-                 * Get ISBN from field
-                 */
-                if (!isbnField.getText().isEmpty()) {
-
-                    anythingSearched = true;
-                    searchBook.ISBN = Integer.parseInt(isbnField.getText());
-
-                }
-
-                /*
-                 * If all the fields were blank, don't search
-                 */
-                if (!anythingSearched) {
-
-                    JOptionPane.showMessageDialog(null, "Nothing Searched", "No Values",
-                            JOptionPane.INFORMATION_MESSAGE);
-
-                } else {
-
-
-                    try {
-
-                        /*
-                         * Perform a search
-                         */
-                        ArrayList<Book> books = Controller.searchForBook(searchBook);
-
-                        /*
-                         * Show the results
-                         */
-                        PanelsManager.newSearchResults(books);
-
-                    } catch (Exception e) {
-
-                        /*
-                         * Print error message if error occurs
-                         */
-                        e.printStackTrace();
-                        PanelsManager.displayError("Book Search failed\n"
-                                + "Contact tech support");
-
-                    }
-
-                }
             }
+
+
 
 
         });
@@ -255,6 +190,92 @@ public class AdvSearchPanel extends StyledPanel {
 
         titleField.requestFocus();
 
+    }
+
+    /**
+     * Construct a search using the advanced search fields and invoke a search.
+     */
+    private void buildSearchFromForms() {
+
+        Book searchBook = new Book();
+        boolean anythingSearched = false;
+
+        /*
+         * Get Title from field
+         */
+        if (!titleField.getText().isEmpty()) {
+
+            anythingSearched = true;
+            searchBook.title = titleField.getText();
+
+        }
+
+        /*
+         * Get Author from field
+         */
+        if (!authorField.getText().isEmpty()) {
+
+            anythingSearched = true;
+            searchBook.author = authorField.getText();
+
+        }
+
+        /*
+         * Get Keywords from field
+         */
+        if (!keywordField.getText().isEmpty()) {
+
+            anythingSearched = true;
+            searchBook.description = keywordField.getText();
+
+        }
+
+        /*
+         * Get ISBN from field
+         */
+        if (!isbnField.getText().isEmpty()) {
+
+            anythingSearched = true;
+            searchBook.ISBN = Integer.parseInt(isbnField.getText());
+
+        }
+
+        /*
+         * If all the fields were blank, don't search
+         */
+        if (!anythingSearched) {
+
+            JOptionPane.showMessageDialog(null, "Nothing Searched",
+                    "No Values", JOptionPane.INFORMATION_MESSAGE);
+
+        } else {
+
+
+            try {
+
+                /*
+                 * Perform a search
+                 */
+                ArrayList<Book> books =
+                        Controller.searchForBook(searchBook);
+
+                /*
+                 * Show the results
+                 */
+                PanelsManager.newSearchResults(books);
+
+            } catch (Exception e) {
+
+                /*
+                 * Print error message if error occurs
+                 */
+                e.printStackTrace();
+                PanelsManager.displayError("Book Search failed\n"
+                        + "Contact tech support");
+
+            }
+
+        }
     }
 
 }

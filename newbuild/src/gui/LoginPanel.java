@@ -68,6 +68,9 @@ public class LoginPanel extends StyledPanel {
          */
         private JTextField inputField;
 
+        /**
+         * Width of a standard field.
+         */
         private final int fieldWidth = 10;
 
         /**
@@ -133,7 +136,7 @@ public class LoginPanel extends StyledPanel {
          * Add an action listener to the text field.
          * @param e - the event to listen for
          */
-        public void addActionListener(ActionListener e){
+        public void addActionListener(final ActionListener e) {
 
             inputField.addActionListener(e);
 
@@ -146,6 +149,11 @@ public class LoginPanel extends StyledPanel {
      */
     private static final long serialVersionUID = -5100212021194753173L;
 
+    /**
+     * Attempt to login.
+     * @param usernamePanel
+     * @param passwordPanel
+     */
     private void tryLogin(final InputWithLabelPanel usernamePanel,
             final InputWithLabelPanel passwordPanel) {
         /*
@@ -157,9 +165,7 @@ public class LoginPanel extends StyledPanel {
              * If the login info is correct, open up the program.
              */
             try {
-                // Added for debugging, so you can find the password and log in
-                // TODO: Remove the following line before shipping
-                // System.out.println(DatabaseProcess.getInstance().getUserPassWord(usernamePanel.getText()));
+
                 if (Controller.checkLogin(usernamePanel.getText(),
                         passwordPanel.getText())) {
 
@@ -235,7 +241,7 @@ public class LoginPanel extends StyledPanel {
          */
         final InputWithLabelPanel passwordPanel =
                 new InputWithLabelPanel("Password", true);
-        passwordPanel.addActionListener(new ActionListener(){
+        passwordPanel.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent arg0) {
@@ -311,8 +317,10 @@ public class LoginPanel extends StyledPanel {
         /*
          * TODO: Remove this also
          */
-        this.add(new LoginLabel("                       Skipping the login process will allow access to the GUI features"));
-        this.add(new LoginLabel("                       but account specific functions will fail."));
+        this.add(new LoginLabel("                       Skipping " +
+                "the login process will allow access to the GUI features"));
+        this.add(new LoginLabel("                       " +
+                "but account specific functions will fail."));
 
         /*
          * Blank space to center the input areas.

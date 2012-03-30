@@ -21,13 +21,16 @@ public class StyledPanel extends DisplayPanel {
      */
     private static final long serialVersionUID = 8285086013085907050L;
 
+    /**
+     * The default background image.
+     */
     private String bgImg = "innerbg.jpg";
 
     /**
      * Constructor using a special background image.
      * @param backgroundImg - the custom image
      */
-    public StyledPanel(String backgroundImg) {
+    public StyledPanel(final String backgroundImg) {
 
         bgImg = backgroundImg;
 
@@ -36,7 +39,7 @@ public class StyledPanel extends DisplayPanel {
     /**
      * Constructor using the default background image.
      */
-    public StyledPanel() {}
+    public StyledPanel() { }
 
     /**
      * A styled panel for organizing objects within this panel.
@@ -50,8 +53,9 @@ public class StyledPanel extends DisplayPanel {
          */
         private static final long serialVersionUID = -4518288020085720362L;
 
-
-
+        /**
+         * Used by descendants.
+         */
         public InnerPanel() {
 
             this.setLayout(new FlowLayout(FlowLayout.RIGHT));

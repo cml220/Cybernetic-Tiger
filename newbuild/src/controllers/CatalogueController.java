@@ -11,7 +11,7 @@ public class CatalogueController {
     private Catalogue cat;
 
     public CatalogueController() {
-        cat = new Catalogue() ;
+        cat = new Catalogue();
     }
 
     public ArrayList<Book> getCatalogue() throws SQLException {

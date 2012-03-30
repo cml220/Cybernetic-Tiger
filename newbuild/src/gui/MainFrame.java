@@ -9,8 +9,14 @@ package gui;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.sql.SQLException;
 
 import javax.swing.JFrame;
+
+import controllers.Controller;
+import exceptions.ControllerNotInitializedException;
 
 /**
  * The main frame for the NextBooks GUI.
@@ -41,7 +47,35 @@ public class MainFrame extends JFrame {
     public MainFrame() {
 
         this.setTitle("NextBooks 2.0");
-        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+        /*
+         * When the window is closed, save the user's cart to the database.
+         */
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(final WindowEvent we) {
+
+                try {
+
+                    Controller.updateCart();
+                    System.exit(0);
+
+                } catch (SQLException e) {
+
+                    PanelsManager.displayError("Could not connect to the" +
+                            "database.\nCart not saved");
+                    e.printStackTrace();
+
+                } catch (ControllerNotInitializedException e) {
+
+                    PanelsManager.displayError("Controller not initialized.");
+                    e.printStackTrace();
+
+                }
+
+            }
+
+        });
 
         this.setSize(new Dimension(windowWidth, windowHeight));
 

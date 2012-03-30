@@ -10,7 +10,7 @@ public class PurchaseFailedException extends Exception {
     /**
      * Exception for when a controller fails to load an image.
      */
-    public PurchaseFailedException(){
+    public PurchaseFailedException() {
 
         super("Purchase transaction encountered error.");
 

@@ -34,13 +34,6 @@ public class CheckoutMyCartPanel extends JPanel
          */
         this.setLayout(new GridLayout(0,1));
 
-
-        // TODO: remove the examples below once system goes live
-        this.add(new CheckoutMyCartBookPanel(new Book("Test book", "Test author", 11.75, "http://pdfloc", 123456, "http://imgloc", "This is a test book for the next books system.")));
-        this.add(new CheckoutMyCartBookPanel(new Book("Test book", "Test author", 11.75, "http://pdfloc", 1234567, "http://imgloc", "This is a test book for the next books system.")));
-        this.add(new CheckoutMyCartBookPanel(new Book("Test book", "Test author", 11.75, "http://pdfloc", 1234568, "http://imgloc", "This is a test book for the next books system.")));
-        this.add(new CheckoutMyCartBookPanel(new Book("Test book", "Test author", 11.75, "http://pdfloc", 1234569, "http://imgloc", "This is a test book for the next books system.")));
-
         ArrayList<Book> books = null;
 
         // Throws exception - ControllerNOTInitalised, SQLException

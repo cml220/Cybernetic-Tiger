@@ -19,30 +19,32 @@ public class RentedBookPanel extends BookPanel {
 
     /**
      * Constructor;  builds a book panel for a specific book.
-     * @param book, the object of the Book
+     * @param book - the object of the Book
      */
     public RentedBookPanel(final Book book) {
 
         super(book);
 
         super.getPrimaryButton().setText("Read Now");
-        super.getPrimaryButton().addActionListener(new ActionListener(){
+        super.getPrimaryButton().addActionListener(new ActionListener() {
 
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(final ActionEvent e) {
 
                 try {
-                	
+
 
                     // put the book into the main panel ;)
                     ReaderViewPanel.OpenNewBook(book);
                     // set the tab to 4 corresponds to the View Books tab
                     TabsPanel.selectTab(4);
                     MainPanel.changeDisplayPanel(PanelsManager.BOOKS);
-                }
-                catch (Exception e2){
+                } catch (Exception e2) {
+
                     // failed to display
-                    PanelsManager.displayError("Failed to display book. \nPlease contact technical support.");
+                    PanelsManager.displayError("Failed to display book. \n" +
+                            "Please contact technical support.");
+
                 }
             }
 
@@ -51,7 +53,6 @@ public class RentedBookPanel extends BookPanel {
 
         super.getButtonsPanel().add(super.getPrimaryButton());
 
-        super.getRentalInfoLabel().setText("Days remaining: 10"); // TODO: implement this throughout the application
         super.getRentalInfoPanel().add(super.getRentalInfoLabel());
 
     }

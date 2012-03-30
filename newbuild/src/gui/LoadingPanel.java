@@ -14,18 +14,48 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 
-public class LoadingPanel extends StyledPanel implements PropertyChangeListener {
+/**
+ * Panel for displaying the loading progress.
+ * @author Brad Johnson baj231 11044123
+ *
+ */
+public class LoadingPanel extends StyledPanel
+implements PropertyChangeListener {
 
     /**
      * ID.
      */
     private static final long serialVersionUID = -7661627309702862617L;
+
+    /**
+     * Progress bar object.
+     */
     private JProgressBar progBar = null;
+
+    /**
+     * Status label.
+     */
     private JLabel status = null;
 
+    /**
+     * Instance of this panel for static manipulation.
+     */
     public static LoadingPanel instance;
 
-    public static boolean initialized = false;
+    /**
+     * Initialized status variable.
+     */
+    private static boolean initialized = false;
+
+    /**
+     * Public accessor for the initialized status var.
+     * @return the initialized status.
+     */
+    public static boolean isInitialized() {
+
+        return initialized;
+
+    }
 
     /**
      * An intermediate panel to show the user info while the program loads.
@@ -37,7 +67,7 @@ public class LoadingPanel extends StyledPanel implements PropertyChangeListener 
         status = new JLabel(PanelsManager.getLoadStatus());
         status.setForeground(Color.WHITE);
 
-        if(!initialized) {
+        if (!initialized) {
 
 
             this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
@@ -118,7 +148,7 @@ public class LoadingPanel extends StyledPanel implements PropertyChangeListener 
     /**
      * Reacts to a change in the InitTask thread.
      */
-    public void propertyChange(PropertyChangeEvent evt) {
+    public void propertyChange(final PropertyChangeEvent evt) {
 
         /*
          * Update the status displays

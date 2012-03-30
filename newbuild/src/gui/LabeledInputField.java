@@ -78,7 +78,7 @@ class LabeledInputField extends JPanel {
     }
 
     /**
-     * Constructor with button
+     * Constructor with button.
      * @param caption - the label to put beside the text entry box.
      * @param buttonCap - the label for the button
      */
@@ -109,14 +109,16 @@ class LabeledInputField extends JPanel {
         field.setColumns(40);
 
         /*
-         * Add the label and entry field and button to the panel holding the pair.
+         * Add the label and entry field and button to the panel holding the
+         * pair.
          */
         this.add(label);
         this.add(field);
         this.add(button);
 
         /*
-         * Add a uniform amount of space on the right side (minus enough space for the button)
+         * Add a uniform amount of space on the right side (minus enough
+         * space for the button)
          */
         this.add(Box.createRigidArea(new Dimension(200 - 100, 50)));
 
@@ -162,7 +164,7 @@ class LabeledInputField extends JPanel {
      * Add an action listener to the button from a public scope.
      * @param l - the actionlistener
      */
-    public void addActionListener(ActionListener l){
+    public void addActionListener(final ActionListener l) {
 
         this.button.addActionListener(l);
 
@@ -182,7 +184,7 @@ class LabeledInputField extends JPanel {
      * Set the value in the text field.
      * @param value - the string to set in the text field
      */
-    public void setText(String value) {
+    public void setText(final String value) {
 
         this.field.setText(value);
 
