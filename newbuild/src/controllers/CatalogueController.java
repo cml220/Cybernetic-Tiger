@@ -85,21 +85,17 @@ public class CatalogueController {
 
         // Check keywords
         if (book.getBookDescription() != null) {
-        	System.out.println("Description not null: " + book.getBookDescription());
         	ArrayList<Book> booksByDescription = db.getBooksBy(DatabaseProcess.DESCRIPTION, book.getBookDescription());
         	if (booksByDescription != null) {
         		for (Book b : booksByDescription) {
         			if (!bookList.contains(b)) {
-        				bookList.contains(b);
+        				bookList.add(b);
         			}
         		}
         	}
         	else {
         		System.out.println("Book not found by Description");
         	}
-        }
-        else {
-        	System.out.println("Book description is null");
         }
 
         System.out.println("Books returned: ");
