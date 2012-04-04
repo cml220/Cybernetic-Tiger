@@ -270,24 +270,15 @@ public class LoginPanel extends StyledPanel {
         });
 
         /*
-         * Button for skipping the login step.
-         * TODO: Remove this before deployment.
+         * Quit button.
          */
-        JButton debugButton = new JButton("SKIP (Debug)");
-        debugButton.addActionListener(new ActionListener() {
+        JButton quitButton = new JButton("Quit");
+        quitButton.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(final ActionEvent arg0) {
 
-                getTopLevelAncestor().setVisible(false);
-
-
-                LoginFrame nextFrame = new LoginFrame();
-
-                LoadingPanel lPanel = new LoadingPanel();
-                nextFrame.add(lPanel);
-                nextFrame.setVisible(true);
-                nextFrame.validate();
+                System.exit(0);
 
             }
 
@@ -311,16 +302,9 @@ public class LoginPanel extends StyledPanel {
         buttonPanel.setLayout(new FlowLayout());
         buttonPanel.setOpaque(false);
         buttonPanel.add(loginButton);
-        buttonPanel.add(debugButton);
+        buttonPanel.add(quitButton);
         this.add(buttonPanel);
 
-        /*
-         * TODO: Remove this also
-         */
-        this.add(new LoginLabel("                       Skipping " +
-                "the login process will allow access to the GUI features"));
-        this.add(new LoginLabel("                       " +
-                "but account specific functions will fail."));
 
         /*
          * Blank space to center the input areas.

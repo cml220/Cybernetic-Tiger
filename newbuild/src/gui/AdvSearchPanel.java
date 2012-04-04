@@ -8,7 +8,6 @@ import java.util.ArrayList;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
@@ -32,9 +31,11 @@ public class AdvSearchPanel extends StyledPanel {
     /**
      * Titles for the locations of searches.
      */
+    /* Removed for release
     private final String[] locTitles = {"Available Rentals",
             "In My Rentals",
     "In My Shopping Cart"};
+     */
 
     /**
      * The spot where the user can enter a book's title to search.
@@ -60,8 +61,10 @@ public class AdvSearchPanel extends StyledPanel {
     /**
      * A choice of locations to search within.
      */
+    /* Removed for release
     @SuppressWarnings("rawtypes")
     private final JComboBox locationChoice;
+     */
 
     /**
      * The button which starts the search.
@@ -71,7 +74,6 @@ public class AdvSearchPanel extends StyledPanel {
     /**
      * Constructor.
      */
-    @SuppressWarnings({ "unchecked", "rawtypes" })
     public AdvSearchPanel() {
 
         super();
@@ -98,6 +100,7 @@ public class AdvSearchPanel extends StyledPanel {
         /*
          * Add the potential search locations to a combo box
          */
+        /* Removed for release
         JLabel locationLabel = new JLabel("Search Where?");
         locationChoice = new JComboBox();
         locationChoice.setBackground(Color.WHITE);
@@ -107,6 +110,7 @@ public class AdvSearchPanel extends StyledPanel {
             locationChoice.addItem(locTitles[i]);
 
         }
+         */
 
         searchBut = new JButton("Search");
         searchBut.addActionListener(new ActionListener() {
@@ -129,9 +133,11 @@ public class AdvSearchPanel extends StyledPanel {
         /**
          * Panel for aligning the location combo box correctly.
          */
+        /* Removed for release
         InnerPanel comboPanel = new InnerPanel();
         comboPanel.add(locationLabel);
         comboPanel.add(locationChoice);
+         */
         //comboPanel.add(Box.createRigidArea(new Dimension(1,1)));
 
         /**
@@ -176,9 +182,13 @@ public class AdvSearchPanel extends StyledPanel {
         this.add(authorField);
         this.add(keywordField);
         this.add(isbnField);
-        this.add(comboPanel);
+
+        /*
+         * Removed for release
+         * this.add(comboPanel);
+         */
+
         this.add(buttonsPanel);
-        //this.add(PanelsManager.getAlignmentBlock());
 
     }
 
