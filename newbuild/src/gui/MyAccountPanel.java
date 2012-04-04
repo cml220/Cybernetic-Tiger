@@ -140,8 +140,6 @@ public class MyAccountPanel extends StyledPanel {
 
             } catch (SQLException e1) {
 
-                // TODO Auto-generated catch block
-
                 e1.printStackTrace();
 
             }
@@ -172,8 +170,7 @@ public class MyAccountPanel extends StyledPanel {
             try {
 
                 Controller.changeUserInfo(userToShow, userPassword, newPassword);
-            } catch (Exception e) {
-                // TODO Auto-generated catch block
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -209,8 +206,6 @@ public class MyAccountPanel extends StyledPanel {
 
         JLabel headerLabel = new JLabel("Account Details");
         headerLabel.setForeground(PanelsManager.UNSELECTEDBLUE);
-
-        // TODO: Make update buttons work
 
         userToShow = Controller.getCurrentUser();
 

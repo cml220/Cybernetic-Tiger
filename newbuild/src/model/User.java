@@ -15,20 +15,6 @@ public class User {
 	public String email;
 	public Cart cart;
 
-	// TODO: Not sure how login process goes, I envisioned we would simply check
-	// db is user login info is correct (using only strings)
-	// and then call getUserInfo to obtain a user from the database. Shouldn't
-	// the database controller concern itself with creating
-	// a the user and "attaching" its info, rentals, etc. I was thinking that
-	// the only time the user constructor is called outside dbcontroller
-	// would be when a user who is new to the system is registering, at which
-	// point there would be no paymentInfo or rentals.
-
-	// I am going to talk to Colin about new db operations to encapsulate
-	// paymentInfo(ie. check if info exists, retrieve payment info by username,
-	// etc)
-	// and about making sure that when a user is pulled from the database that
-	// all corresponding info comes out with it.
 	public User(String username, boolean isAdmin, String email,
 			ArrayList<Book> rentals, PaymentInfo paymentInfo, Cart cart) {
 		this.username = username;
