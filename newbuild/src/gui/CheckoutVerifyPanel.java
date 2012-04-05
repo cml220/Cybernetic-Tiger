@@ -32,7 +32,6 @@ public class CheckoutVerifyPanel extends StyledPanel
 
     public CheckoutVerifyPanel()
     {
-        // TODO covert layout from absolute to another layout that still works XD
         setLayout(null);
 
         // Cart label

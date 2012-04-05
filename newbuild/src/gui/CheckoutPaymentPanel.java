@@ -31,9 +31,7 @@ public class CheckoutPaymentPanel extends StyledPanel
     {
         // Set to spring layout, attempt to center the form "somewhat"
         SpringLayout springLayout = new SpringLayout();
-        setLayout(springLayout);
-
-        // TODO add in some images or something to pretty up the page
+        setLayout(springLayout);        
 
         // Add in the payment panel with fields
         checkoutPaymentPanelNew = new CheckoutPaymentFieldsPanel(false);

@@ -203,16 +203,28 @@ public class CheckoutProgressPanel extends JPanel {
 					}	
 	}
 	
+	private void setAllDisabled()
+	{
+		// Initiate the settings for all buttons
+		for (int ii=0; ii<buttonArray.length; ii++)
+		{			
+			buttonArray[ii].setEnabled(false);
+		}	
+	}	
 	
 	public void loadCartProgress()
 	{
 		// Cart
 		// nothing can be clicked
 		// Load default style first
-		this.setDefaultStyle();
+		this.setDefaultStyle();		
 				 
 		// set Cart as the current button - to be bold and italic
 		setStyleFor(buttonArray[1], Font.BOLD+Font.ITALIC);
+		
+		// just the Cart button can be clicked
+		this.setAllDisabled();
+		buttonArray[1].setEnabled(true);	
 	}
 	
 	public void loadPaymentProgress()
@@ -220,13 +232,17 @@ public class CheckoutProgressPanel extends JPanel {
 		// Payment
 		// cart can be clicked - set these to bold
 		// Load default style first
-		this.setDefaultStyle();
+		this.setDefaultStyle();		
 		
-		// !!! TODO NEED TO ADD CLICK LISTERN HERE
 		setStyleFor(buttonArray[1], Font.BOLD);
 		
 		// set Payment as the current button - to be bold and italic
 		setStyleFor(buttonArray[3], Font.BOLD+Font.ITALIC);
+		
+		// just the Cart and Payment button can be clicked
+		this.setAllDisabled();
+		buttonArray[1].setEnabled(true);
+		buttonArray[3].setEnabled(true);
 	}
 	
 	public void loadVerifyProgress()
@@ -234,15 +250,19 @@ public class CheckoutProgressPanel extends JPanel {
 		// Verify Cart/Payment
 		// cart and payment can be clicked - set these buttons to bold
 		// Load default style first
-		this.setDefaultStyle();
-		
-		// !!! TODO NEED TO ADD CLICK LISTERNS HERE		
+		this.setDefaultStyle();	
 		
 		setStyleFor(buttonArray[1], Font.BOLD);
 		setStyleFor(buttonArray[3], Font.BOLD);
 		
 		// set Verify as the current button - to be bold and italic
 		setStyleFor(buttonArray[5], Font.BOLD+Font.ITALIC);
+		
+		// just the Cart and Payment and Verify button can be clicked
+		this.setAllDisabled();
+		buttonArray[1].setEnabled(true);
+		buttonArray[3].setEnabled(true);
+		buttonArray[5].setEnabled(true);
 	}	
 	
 	
@@ -255,6 +275,10 @@ public class CheckoutProgressPanel extends JPanel {
 		
 		// set Thankyou as the current button - to be bold and italic
 		setStyleFor(buttonArray[7], Font.BOLD+Font.ITALIC);
+		
+		// just the Thankyou button can be clicked
+		this.setAllDisabled();
+		buttonArray[7].setEnabled(true);
 	}
 	
 	// changes the style of a given button without affecting the overall font

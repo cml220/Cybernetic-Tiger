@@ -105,6 +105,24 @@ public class CheckoutPanel extends DisplayPanel {
                 }
                 
                 /*
+                 * Processes the payment
+                 */
+                if (curPanelNum == VERIFY) {
+                	// then we want to go to thankyou after processing                	
+                	try {
+
+                		Controller.processPurchase();
+
+                    }
+                    catch(Exception e){
+                    	e.printStackTrace();
+
+                        PanelsManager.displayError("Failed to process purchase.");
+
+                    }
+                }
+                
+                /*
                  * Sets the checkout back to the cart stage as it has now finished
                  */
                 if (curPanelNum == THANKYOU) {
