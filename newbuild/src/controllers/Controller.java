@@ -25,6 +25,7 @@ import exceptions.ImageLoadFailedException;
 import exceptions.IntermediateException;
 import exceptions.PaymentInfoNotInitializedException;
 import exceptions.PurchaseFailedException;
+import gui.PanelsManager;
 
 /**
  * Main controller.
@@ -313,17 +314,20 @@ public final class Controller {
          */
 
         log.debug("Books in account before purchase:");
-        for (Book b : userBooksBeforePurchase) {
 
-            log.debug(b.ISBN);
+        if(!userBooksBeforePurchase.isEmpty()){
+            for (Book b : userBooksBeforePurchase) {
 
-        }
+                log.debug(b.ISBN);
 
-        /*
-         * Log the books in the user's cart before the purchase.
-         */
+            }
+        }else
 
-        log.debug("Books in cart before purchase:");
+            /*
+             * Log the books in the user's cart before the purchase.
+             */
+
+            log.debug("Books in cart before purchase:");
         for (Book b : cartBooksBeforePurchase) {
 
             log.debug(b.ISBN);
@@ -395,6 +399,22 @@ public final class Controller {
             throw new IntermediateException("Purchase failed.  " +
                     "Payment has been refunded");
 
+        } finally {
+
+            PanelsManager.updateRentals();
+
+            try{
+
+                removeCart();
+                currentUser.deleteCart();
+
+            } catch (Exception e) {
+
+                PanelsManager.displayError("Failed to clear your shopping cart.\nYou may need to clear it manually.");
+                e.printStackTrace();
+
+            }
+
         }
 
 
@@ -435,6 +455,18 @@ public final class Controller {
         }
 
         cartController.removeBookFromCart(book);
+
+    }
+
+    public static void removeCart() throws ControllerNotInitializedException, SQLException {
+
+        if (!initialized) {
+
+            throw new ControllerNotInitializedException();
+
+        }
+
+        cartController.removeShoppingCart();
 
     }
 

@@ -172,9 +172,6 @@ public class GetterProcess {
         else if (option == DatabaseProcess.CATALOGUE && query.equals("")) {
             rs = stmt.executeQuery("SELECT * FROM tblBook ORDER BY Title;");
         }
-        else {
-            return null;
-        }
         ArrayList<Book> bookList = new ArrayList<Book>();
         while (rs.next()) {
             bookList.add(new Book(rs.getString("Title"), rs.getString("Author"),
@@ -182,9 +179,7 @@ public class GetterProcess {
                     rs.getLong("ISBN"), rs.getString("picUrl"),
                     rs.getString("Description")));
         }
-        if (bookList.size() == 0) {
-            return null;
-        }
+
         return bookList;
     }
 

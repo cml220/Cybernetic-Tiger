@@ -10,7 +10,7 @@ import java.sql.Statement;
  */
 public class RemovalProcess {
     /** db connection. */
-    private Connection conn;
+    private final Connection conn;
     /** instance of class. */
     private static RemovalProcess instance;
 
@@ -114,7 +114,7 @@ public class RemovalProcess {
         DatabaseProcess db = DatabaseProcess.getInstance();
         return !db.userHasBook(username, isbn);
     }
-    
+
     /** Remove the payment info for a given user.
      * @param username  the user for it to be removed from
      * @return  true if removed; false otherwise
@@ -136,4 +136,18 @@ public class RemovalProcess {
             return true;
         }
     }
+
+    /** Remove the payment info for a given user.
+     * @param username  the user for it to be removed from
+     * @return  true if removed; false otherwise
+     * @throws SQLException
+     */
+    protected final boolean clearCart(
+            final String username) throws SQLException {
+        Statement stmt = conn.createStatement();
+        return stmt.execute("DELETE FROM "
+                + "tblCartContent WHERE CartNumber=(SELECT CartNumber FROM tblShoppingCart WHERE UserName=\"" + username + "\")");
+    }
+
+
 }

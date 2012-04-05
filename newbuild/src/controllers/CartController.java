@@ -78,4 +78,17 @@ public class CartController {
     public ArrayList<Book> getBooks() {
         return Controller.getCurrentUser().cart;
     }
+
+    /**
+     * Clear the user's shopping cart
+     * @throws SQLException
+     */
+    public void removeShoppingCart() throws SQLException {
+
+        DatabaseProcess dbp = DatabaseProcess.getInstance();
+
+        dbp.clearCart(Controller.getCurrentUser().username);
+
+
+    }
 }

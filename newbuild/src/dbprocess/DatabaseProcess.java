@@ -81,7 +81,7 @@ public class DatabaseProcess {
      * @throws SQLException        failed sql methods
      * @throws CartException        cart method fail
      */
-    public final User getUserInfo(final String user) 
+    public final User getUserInfo(final String user)
             throws SQLException {
         GetterProcess db = GetterProcess.getInstance(conn);
         return db.getUserInfo(user);
@@ -152,7 +152,7 @@ public class DatabaseProcess {
         GetterProcess db = GetterProcess.getInstance(conn);
         return db.getBookInfo(isbn);
     }
-    
+
     /** Get the payment info for a user
      * @param username  the user
      * @return  the payment info if gotten; null otherwise
@@ -207,8 +207,8 @@ public class DatabaseProcess {
      */
     public final boolean createUser(
             final String userName, final String email, final String passWord)
-            throws SQLException, NoUsernameOrPasswordException,
-                   NullUserException, UserAlreadyExistsException {
+                    throws SQLException, NoUsernameOrPasswordException,
+                    NullUserException, UserAlreadyExistsException {
         InsertionProcess db = InsertionProcess.getInstance(conn);
         return db.createUser(userName, email, passWord);
     }
@@ -225,13 +225,19 @@ public class DatabaseProcess {
         InsertionProcess db = InsertionProcess.getInstance(conn);
         db.saveShoppingCart(c, username, shopdate);
     }
-    
+
+    public final void clearCart(final String username) throws SQLException {
+        RemovalProcess db = RemovalProcess.getInstance(conn);
+        db.clearCart(username);
+    }
+
+
     /** Save a user's payment info to the db
      * @param info  the payment info to be saved incl all fields
      * @throws SQLException failed sql methods
      */
     public final void savePaymentInfo(
-            final String username, final PaymentInfo info) 
+            final String username, final PaymentInfo info)
                     throws SQLException {
         InsertionProcess db = InsertionProcess.getInstance(conn);
         db.savePaymentInfo(username, info);
@@ -264,7 +270,7 @@ public class DatabaseProcess {
         ModificationProcess db = ModificationProcess.getInstance(conn);
         db.editPaymentInfo(info, username, password);
     }
-    
+
     /** Remove a user from the db.
      * @param username    the user to be removed
      * @return true        if the user has been removed; false otherwise
@@ -299,7 +305,7 @@ public class DatabaseProcess {
         RemovalProcess db = RemovalProcess.getInstance(conn);
         return db.removeShoppingCart(userName);
     }
-    
+
     /** Remove the payment info for a given user.
      * @param username  the user for it to be removed from
      * @return  true if removed; false otherwise

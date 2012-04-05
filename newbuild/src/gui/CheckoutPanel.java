@@ -121,22 +121,25 @@ public class CheckoutPanel extends DisplayPanel {
                 }
             }
 
-            /*
-             * Sets the checkout back to the cart stage as it has now finished
-             */
-            if (curPanelNum == THANKYOU) {
-                // then we want to go to home
-                // but first set the checkout back to stage 1 (currPanel -4)
-                curPanelNum-=4;
-                // goto the default panel :D
-                PanelsManager.goToDefaultPanel();
-            }
-
             curPanelNum++;
 
             cl.show(cartMainPanel, Integer.toString(curPanelNum));
 
             updateStage(curPanelNum);
+
+            /*
+             * Sets the checkout back to the cart stage as it has now finished
+             */
+            if (curPanelNum == THANKYOU) {
+                // then we want to go to home
+                // goto the default panel :D
+                PanelsManager.goToDefaultPanel();
+
+                //rebuild my cart;
+                PanelsManager.updateCart(false);
+
+            }
+
         }
     }
 
