@@ -377,7 +377,7 @@ public final class Controller {
                 log.debug(b.ISBN);
                 if (userBooksAfterPurchase.contains(b)) {
 
-                    log.debug("Item verified as in cart.");
+                    log.debug("Item verified as in rentals.");
 
                 } else {
 
