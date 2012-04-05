@@ -1,7 +1,5 @@
 package gui;
 
-import exceptions.GUINoSuchPanelException;
-
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.GridLayout;
@@ -11,6 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import controllers.Controller;
+import exceptions.GUINoSuchPanelException;
 
 public class CheckoutPanel extends DisplayPanel {
 
@@ -30,7 +29,6 @@ public class CheckoutPanel extends DisplayPanel {
     public static final int VERIFY = 2;
     public static final int THANKYOU = 3;
     private static final int SCROLLSPEED = 20;
-
     public CheckoutPanel(){
 
         curPanelNum = 0;
@@ -44,6 +42,7 @@ public class CheckoutPanel extends DisplayPanel {
          * Add the payment panels in order
          */
         JScrollPane cartContentsScrollPane = new JScrollPane(new CheckoutMyCartPanel());
+
         cartContentsScrollPane.getVerticalScrollBar().setUnitIncrement(SCROLLSPEED);
         CheckoutPanel.addIndexedPanel(cartContentsScrollPane, CART);
         checkoutPaymentPanel = new CheckoutPaymentPanel();
@@ -91,53 +90,53 @@ public class CheckoutPanel extends DisplayPanel {
 
         if(curPanelNum < totalPanelsNum){
 
-                CardLayout cl = (CardLayout) cartMainPanel.getLayout();
+            CardLayout cl = (CardLayout) cartMainPanel.getLayout();
 
-                /*
-                 * Save payment info before proceeding
-                 */
-                if(curPanelNum == PAYMENT) {
+            /*
+             * Save payment info before proceeding
+             */
+            if(curPanelNum == PAYMENT) {
 
-                    Controller.setSessionPaymentInfo(checkoutPaymentPanel.getPaymentInfo());
+                Controller.setSessionPaymentInfo(checkoutPaymentPanel.getPaymentInfo());
 
-                    addIndexedPanel(new CheckoutVerifyPanel(), VERIFY);
+                addIndexedPanel(new CheckoutVerifyPanel(), VERIFY);
+
+            }
+
+            /*
+             * Processes the payment
+             */
+            if (curPanelNum == VERIFY) {
+                // then we want to go to thankyou after processing
+                try {
+
+                    Controller.processPurchase();
 
                 }
-                
-                /*
-                 * Processes the payment
-                 */
-                if (curPanelNum == VERIFY) {
-                	// then we want to go to thankyou after processing                	
-                	try {
+                catch(Exception e){
+                    e.printStackTrace();
 
-                		Controller.processPurchase();
+                    PanelsManager.displayError("Failed to process purchase.");
 
-                    }
-                    catch(Exception e){
-                    	e.printStackTrace();
-
-                        PanelsManager.displayError("Failed to process purchase.");
-
-                    }
                 }
-                
-                /*
-                 * Sets the checkout back to the cart stage as it has now finished
-                 */
-                if (curPanelNum == THANKYOU) {
-                	// then we want to go to home
-                	// but first set the checkout back to stage 1 (currPanel -4)
-                	curPanelNum-=4;
-                    // goto the default panel :D
-                    PanelsManager.goToDefaultPanel();
-                }
-                
-                curPanelNum++;
+            }
 
-                cl.show(cartMainPanel, Integer.toString(curPanelNum));
+            /*
+             * Sets the checkout back to the cart stage as it has now finished
+             */
+            if (curPanelNum == THANKYOU) {
+                // then we want to go to home
+                // but first set the checkout back to stage 1 (currPanel -4)
+                curPanelNum-=4;
+                // goto the default panel :D
+                PanelsManager.goToDefaultPanel();
+            }
 
-                updateStage(curPanelNum);            
+            curPanelNum++;
+
+            cl.show(cartMainPanel, Integer.toString(curPanelNum));
+
+            updateStage(curPanelNum);
         }
     }
 

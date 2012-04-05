@@ -381,14 +381,13 @@ public final class Controller {
 
                 } else {
 
-                    throw new PurchaseFailedException();
+                    System.out.println("Failed to update books");
+                    //do nothing right now
+                    //throw new PurchaseFailedException();
 
                 }
 
             }
-
-            //this is just to get rid of errors while the above is commented out
-            throw new PurchaseFailedException();
 
         } catch (PurchaseFailedException pfe) {
 
